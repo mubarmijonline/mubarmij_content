@@ -1,0 +1,123 @@
+{
+  "site": {
+    "name": "Mubarmij Online",
+    "tagline": "Technology that makes your business work better."
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "automation": "Process Automation",
+    "webDevelopment": "Web Development",
+    "mobileApps": "Mobile Apps",
+    "maintenance": "Maintenance",
+    "caseStudies": "Case Studies",
+    "pricing": "Pricing",
+    "resources": "Resources",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "bookConsultation": "Book Consultation"
+  },
+  "cta": {
+    "primary": "Book Free Consultation",
+    "secondary": "View Our Work",
+    "whatsapp": "WhatsApp Us",
+    "leadMagnet": "Get The Free Guide",
+    "demo": "Request Demo"
+  },
+  "hero": {
+    "badge": "🔥 50+ companies have saved time with us",
+    "headline": "Systems That Work So You Don't Have To. Websites That Bring You Clients.",
+    "sub": "One technical partner for your business: Process Automation + Professional Web + Mobile Apps — one team, one accountability."
+  },
+  "logoBar": {
+    "title": "Trusted by companies like:"
+  },
+  "problem": {
+    "title": "Is your company suffering from any of these?",
+    "card1Title": "Your team wastes hours in Excel",
+    "card1Body": "Instead of selling, they enter data. Instead of serving customers, they write reports manually.",
+    "card2Title": "You pay for ads and leads slip away",
+    "card2Body": "You spend on marketing but there's no CRM to capture leads, and no automatic follow-up.",
+    "card3Title": "Your website doesn't bring you clients",
+    "card3Body": "Slow, not mobile-friendly, and no one contacts you through it. Just a digital brochure.",
+    "cta": "If this is you, book a free consultation →"
+  },
+  "solutions": {
+    "title": "3 services that work together as one system",
+    "highRoi": "Highest ROI",
+    "card1Title": "Automated systems that work for you",
+    "card1Result": "✓ A client saved 80 hours of work per month",
+    "card2Title": "Websites that bring clients, not just brochures",
+    "card2Price": "🏷️ Starting from EGP 15,000",
+    "card3Title": "Mobile apps that grow your business",
+    "card3Eligibility": "For companies with a serious budget"
+  },
+  "process": {
+    "title": "From the first call to delivery — every step is transparent",
+    "step1": "Discovery Call (free — 30 minutes)",
+    "step2": "Detailed Proposal (3 business days)",
+    "step3": "Build (2–8 weeks)",
+    "step4": "Launch + 3 months of support"
+  },
+  "pricing": {
+    "title": "Transparent packages. No surprises.",
+    "starter": "WEB STARTER",
+    "starterPrice": "Starting from EGP 15,000",
+    "business": "WEB BUSINESS",
+    "businessPrice": "Starting from EGP 25,000",
+    "businessBadge": "Most popular",
+    "bundle": "AUTOMATION + WEB",
+    "bundlePrice": "Starting from EGP 45,000",
+    "bundleBadge": "Best value ⭐",
+    "customNeed": "Need a custom package? Talk to us"
+  },
+  "testimonials": {
+    "title": "What our clients say"
+  },
+  "leadMagnet": {
+    "eyebrow": "📘 Get for free",
+    "headline": "Business Owner's Guide: 10 mistakes that cost you half your customers without you noticing",
+    "sub": "PDF guide (24 pages) + practical Checklist. Delivered to your email within minutes.",
+    "form": { "name": "Name", "email": "Email", "phone": "Mobile number" },
+    "footnote": "✓ No spam   ✓ Unsubscribe any time"
+  },
+  "faq": {
+    "title": "Frequently asked questions"
+  },
+  "finalCta": {
+    "title": "Bottom line: if your company is growing, you need a technical partner who gets it.",
+    "primary": "Book your free consultation →"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "servicesLinks": "Services",
+    "newsletter": "Newsletter",
+    "newsletterPlaceholder": "Your email",
+    "subscribe": "Subscribe",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "whatsapp": {
+    "tooltip": "WhatsApp Us",
+    "prefilled": "Hello, I'd like a consultation about your services."
+  },
+  "automation": {
+    "heroTitle": "Systems that work in place of your team. 24 hours. 7 days. No vacations.",
+    "heroSub": "We build working automation that saves you hours and turns your operations from chaos to system.",
+    "checklistTitle": "Do you actually need automation?",
+    "checklistCta": "You really need automation. Book a consultation.",
+    "typesTitle": "Types of automation we build",
+    "type1": "WhatsApp Bot for sales",
+    "type2": "CRM integrated with site + ads",
+    "type3": "Workflow Automation (custom)",
+    "type4": "System Integrations",
+    "roiTitle": "ROI Calculator",
+    "roiEmployees": "Number of employees",
+    "roiHours": "Daily hours on repetitive tasks (per employee)",
+    "roiSalary": "Average monthly salary (EGP)",
+    "roiCalculate": "Calculate",
+    "roiResult": "You're losing about {loss} EGP/year. Automation can save you {save} EGP."
+  }
+}
