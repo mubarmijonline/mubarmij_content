@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Menu, X, ChevronDown } from "lucide-react";
@@ -28,23 +29,31 @@ export default function Header({ locale }: Props) {
 
   const links = [
     { href: lp("/"), label: t("home") },
-    { href: lp("/case-studies"), label: t("caseStudies") },
-    { href: lp("/pricing"), label: t("pricing") },
     { href: lp("/resources"), label: t("resources") },
     { href: lp("/blog"), label: t("blog") },
     { href: lp("/about"), label: t("about") },
+    { href: lp("/contact"), label: t("contact") },
   ];
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-bglight">
       <div className="container mx-auto flex items-center justify-between h-16 md:h-20">
-        <Link href={lp("/")} className="font-display font-extrabold text-xl text-navy-deep">
-          Mubarmij
-          <span className="text-gold">.</span>
+        <Link href={lp("/")} className="group flex items-center gap-2.5" title="MubarmiJ — Home">
+          <Image
+            src="/icon.svg"
+            alt="MubarmiJ logo"
+            width={36}
+            height={36}
+            className="rounded-lg shrink-0"
+            priority
+          />
+          <span className="font-display font-extrabold text-xl bg-gradient-to-r from-navy-deep via-navy to-gold bg-[length:200%_100%] bg-clip-text text-transparent animate-gradient-x">
+            MubarmiJ
+          </span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-6" aria-label="Main">
-          <Link href={lp("/")} className="text-sm font-semibold hover:text-gold">
+          <Link href={lp("/")} className="text-sm font-semibold hover:text-gold" title={t("home")}>
             {t("home")}
           </Link>
           <div
@@ -63,21 +72,27 @@ export default function Header({ locale }: Props) {
               <ChevronDown size={16} />
             </button>
             {servicesOpen && (
-              <div className="absolute top-full ltr:left-0 rtl:right-0 mt-2 w-64 bg-white border border-bglight rounded-lg shadow-navy py-2">
-                {services.map((s) => (
-                  <Link
-                    key={s.href}
-                    href={s.href}
-                    className="block px-4 py-2 text-sm hover:bg-bglight hover:text-gold"
-                  >
-                    {s.label}
-                  </Link>
-                ))}
+              // pt-2 keeps a visible gap while staying inside the hover area,
+              // so the dropdown no longer collapses when the cursor crosses it.
+              <div className="absolute top-full ltr:left-0 rtl:right-0 pt-2 z-50">
+                <div className="w-72 bg-white border border-bglight rounded-lg shadow-navy py-2">
+                  {services.map((s) => (
+                    <Link
+                      key={s.href}
+                      href={s.href}
+                      title={s.label}
+                      className="flex items-center w-full h-11 px-4 text-sm whitespace-nowrap overflow-hidden text-ellipsis hover:bg-bglight hover:text-gold"
+                      onClick={() => setServicesOpen(false)}
+                    >
+                      {s.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>
           {links.slice(1).map((l) => (
-            <Link key={l.href} href={l.href} className="text-sm font-semibold hover:text-gold">
+            <Link key={l.href} href={l.href} title={l.label} className="text-sm font-semibold hover:text-gold">
               {l.label}
             </Link>
           ))}
@@ -105,7 +120,7 @@ export default function Header({ locale }: Props) {
         <div className="lg:hidden border-t border-bglight bg-white">
           <div className="container mx-auto py-4 flex flex-col gap-2">
             {links.map((l) => (
-              <Link key={l.href} href={l.href} className="py-2 font-semibold" onClick={() => setOpen(false)}>
+              <Link key={l.href} href={l.href} title={l.label} className="py-2 font-semibold" onClick={() => setOpen(false)}>
                 {l.label}
               </Link>
             ))}
@@ -113,7 +128,7 @@ export default function Header({ locale }: Props) {
               <summary className="cursor-pointer font-semibold">{t("services")}</summary>
               <div className="ps-4 pt-2 flex flex-col gap-2">
                 {services.map((s) => (
-                  <Link key={s.href} href={s.href} onClick={() => setOpen(false)}>
+                  <Link key={s.href} href={s.href} title={s.label} onClick={() => setOpen(false)}>
                     {s.label}
                   </Link>
                 ))}

@@ -3,6 +3,7 @@ import { FileX2, Filter, Smartphone } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { localePath } from "@/lib/utils";
 import CTAButton from "@/components/ui/CTAButton";
+import Reveal from "@/components/effects/Reveal";
 
 export default function Problem({ locale }: { locale: Locale }) {
   const t = useTranslations("problem");
@@ -19,10 +20,11 @@ export default function Problem({ locale }: { locale: Locale }) {
           {t("title")}
         </h2>
         <div className="mt-12 grid md:grid-cols-3 gap-6">
-          {cards.map(({ Icon, title, body }) => (
-            <div
+          {cards.map(({ Icon, title, body }, idx) => (
+            <Reveal
               key={title}
-              className="rounded-xl border border-bglight bg-bglight/40 p-6 hover:shadow-navy hover:-translate-y-1 transition"
+              delayMs={idx * 100}
+              className="card-lift rounded-xl border border-bglight bg-bglight/40 p-6 hover:shadow-navy hover:border-gold/40"
             >
               <div className="w-12 h-12 rounded-lg bg-gold/10 text-gold flex items-center justify-center mb-4">
                 <Icon size={24} />
@@ -31,7 +33,7 @@ export default function Problem({ locale }: { locale: Locale }) {
                 {title}
               </h3>
               <p className="mt-2 text-navy/80 leading-relaxed">{body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
         <div className="mt-12 text-center">

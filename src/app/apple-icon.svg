@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <rect width="180" height="180" rx="32" fill="#0A1628"/>
+  <text x="86" y="118" text-anchor="middle" font-family="Poppins, Inter, system-ui, sans-serif"
+        font-size="76" font-weight="800" fill="#D4A24C" letter-spacing="-2">MJ</text>
+  <circle cx="147" cy="133" r="7" fill="#D4A24C"/>
+</svg>

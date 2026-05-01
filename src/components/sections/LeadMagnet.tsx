@@ -51,7 +51,18 @@ export default function LeadMagnet() {
             {t("eyebrow")}
           </span>
           <h2 className="mt-3 font-display rtl:font-arabic-display text-3xl md:text-4xl font-extrabold leading-tight">
-            {t("headline")}
+            {(() => {
+              const headline = t("headline");
+              const idx = headline.indexOf(":");
+              if (idx === -1) return headline;
+              return (
+                <>
+                  <span className="block">{headline.slice(0, idx + 1)}</span>
+                  {/* leading space keeps the two halves separate when scraped as plain text */}
+                  <span className="block">{" " + headline.slice(idx + 1).trim()}</span>
+                </>
+              );
+            })()}
           </h2>
           <p className="mt-4 text-white/85 leading-relaxed">{t("sub")}</p>
         </div>

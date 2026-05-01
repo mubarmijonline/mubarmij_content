@@ -26,6 +26,14 @@ export const ClientLogos: CollectionConfig = {
       type: 'text',
     },
     {
+      name: 'darkCard',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Render this logo on a dark navy card (use for logos with white/light artwork).',
+      },
+    },
+    {
       name: 'displayOnHomepage',
       type: 'checkbox',
       defaultValue: true,

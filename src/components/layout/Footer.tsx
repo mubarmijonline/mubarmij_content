@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import type { Locale } from "@/i18n/config";
@@ -14,8 +15,15 @@ export default function Footer({ locale }: { locale: Locale }) {
     <footer className="bg-navy-deep text-white">
       <div className="container mx-auto py-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <div className="font-display text-2xl font-extrabold">
-            Mubarmij<span className="text-gold">.</span>
+          <div className="mb-1 flex items-center gap-3">
+            <Image
+              src="/icon.svg"
+              alt="MubarmiJ"
+              width={40}
+              height={40}
+              className="rounded-lg shrink-0"
+            />
+            <span className="font-display text-2xl font-extrabold text-white">MubarmiJ</span>
           </div>
           <p className="mt-3 text-sm text-white/80 leading-relaxed">
             {t("site.tagline")}
@@ -29,22 +37,23 @@ export default function Footer({ locale }: { locale: Locale }) {
         <div>
           <h3 className="font-semibold mb-3">{t("footer.quickLinks")}</h3>
           <ul className="space-y-2 text-sm text-white/80">
-            <li><Link href={lp("/")}>{t("nav.home")}</Link></li>
-            <li><Link href={lp("/about")}>{t("nav.about")}</Link></li>
-            <li><Link href={lp("/case-studies")}>{t("nav.caseStudies")}</Link></li>
-            <li><Link href={lp("/pricing")}>{t("nav.pricing")}</Link></li>
-            <li><Link href={lp("/blog")}>{t("nav.blog")}</Link></li>
-            <li><Link href={lp("/contact")}>{t("nav.contact")}</Link></li>
+            <li><Link href={lp("/")} title={t("nav.home")}>{t("nav.home")}</Link></li>
+            <li><Link href={lp("/about")} title={t("nav.about")}>{t("nav.about")}</Link></li>
+            <li><Link href={lp("/resources")} title={t("nav.resources")}>{t("nav.resources")}</Link></li>
+            <li><Link href={lp("/blog")} title={t("nav.blog")}>{t("nav.blog")}</Link></li>
+            <li><Link href={lp("/contact")} title={t("nav.contact")}>{t("nav.contact")}</Link></li>
+            <li><Link href={lp("/privacy-policy")} title={t("footer.privacy")}>{t("footer.privacy")}</Link></li>
+            <li><Link href={lp("/terms-of-service")} title={t("footer.terms")}>{t("footer.terms")}</Link></li>
           </ul>
         </div>
 
         <div>
           <h3 className="font-semibold mb-3">{t("footer.servicesLinks")}</h3>
           <ul className="space-y-2 text-sm text-white/80">
-            <li><Link href={lp("/services/automation")}>{t("nav.automation")}</Link></li>
-            <li><Link href={lp("/services/web-development")}>{t("nav.webDevelopment")}</Link></li>
-            <li><Link href={lp("/services/mobile-apps")}>{t("nav.mobileApps")}</Link></li>
-            <li><Link href={lp("/services/maintenance")}>{t("nav.maintenance")}</Link></li>
+            <li><Link href={lp("/services/automation")} title={t("nav.automation")}>{t("nav.automation")}</Link></li>
+            <li><Link href={lp("/services/web-development")} title={t("nav.webDevelopment")}>{t("nav.webDevelopment")}</Link></li>
+            <li><Link href={lp("/services/mobile-apps")} title={t("nav.mobileApps")}>{t("nav.mobileApps")}</Link></li>
+            <li><Link href={lp("/services/maintenance")} title={t("nav.maintenance")}>{t("nav.maintenance")}</Link></li>
           </ul>
         </div>
 
@@ -75,10 +84,10 @@ export default function Footer({ locale }: { locale: Locale }) {
 
       <div className="border-t border-white/10">
         <div className="container mx-auto py-5 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/70">
-          <div>© {year} Mubarmij. {t("footer.rights")}</div>
+          <div>© {year} MubarmiJ {t("footer.rights")}</div>
           <div className="flex gap-4">
-            <Link href={lp("/privacy-policy")} className="hover:text-gold">{t("footer.privacy")}</Link>
-            <Link href={lp("/terms-of-service")} className="hover:text-gold">{t("footer.terms")}</Link>
+            <Link href={lp("/privacy-policy")} title={t("footer.privacy")} className="hover:text-gold">{t("footer.privacy")}</Link>
+            <Link href={lp("/terms-of-service")} title={t("footer.terms")} className="hover:text-gold">{t("footer.terms")}</Link>
           </div>
         </div>
       </div>

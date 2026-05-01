@@ -1,6 +1,6 @@
 # Mubarmij CMS
 
-Payload CMS v3 admin for the Mubarmij Online site.
+Payload CMS v3 admin for the MubarmiJ site.
 
 ## Stack
 - Next.js 16.2 + Payload 3.84

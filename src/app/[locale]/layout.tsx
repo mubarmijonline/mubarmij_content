@@ -11,6 +11,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
 import AnalyticsScripts from "@/components/layout/AnalyticsScripts";
+import VisitTracker from "@/components/layout/VisitTracker";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -50,9 +51,9 @@ export async function generateMetadata({
     metadataBase: new URL(SITE_URL),
     title: {
       default: isAr
-        ? "مبرمج أونلاين — أتمتة، مواقع، تطبيقات موبايل"
-        : "Mubarmij Online — Automation, Web & Mobile Apps",
-      template: isAr ? "%s | مبرمج أونلاين" : "%s | Mubarmij Online",
+        ? "مبرمج — أتمتة، مواقع، تطبيقات موبايل"
+        : "MubarmiJ — Automation, Web & Mobile Apps",
+      template: isAr ? "%s | مبرمج" : "%s | MubarmiJ",
     },
     description: isAr
       ? "بنبني أنظمة بتشتغل مكانك ومواقع بتجيبلك عملاء — شريك تقني واحد لشركتك."
@@ -67,10 +68,34 @@ export async function generateMetadata({
     },
     openGraph: {
       type: "website",
-      siteName: "Mubarmij Online",
+      siteName: "MubarmiJ",
       locale: isAr ? "ar_EG" : "en_US",
+      url: locale === "en" ? "/" : `/${locale}`,
+      title: isAr
+        ? "مبرمج — أتمتة، مواقع، تطبيقات موبايل"
+        : "MubarmiJ — Automation, Web & Mobile Apps",
+      description: isAr
+        ? "بنبني أنظمة بتشتغل مكانك ومواقع بتجيبلك عملاء — شريك تقني واحد لشركتك."
+        : "We build systems that work for you and websites that bring clients — one technical partner for your business.",
+      images: [
+        {
+          url: "/images/Mubarmij_logo_white_background.jpg",
+          width: 1200,
+          height: 630,
+          alt: "MubarmiJ",
+        },
+      ],
     },
-    twitter: { card: "summary_large_image" },
+    twitter: {
+      card: "summary_large_image",
+      title: isAr
+        ? "مبرمج — أتمتة، مواقع، تطبيقات موبايل"
+        : "MubarmiJ — Automation, Web & Mobile Apps",
+      description: isAr
+        ? "بنبني أنظمة بتشتغل مكانك ومواقع بتجيبلك عملاء."
+        : "We build systems that work for you and websites that bring clients.",
+      images: ["/images/Mubarmij_logo_white_background.jpg"],
+    },
     robots: { index: true, follow: true },
   };
 }
@@ -111,6 +136,7 @@ export default async function LocaleLayout({
           <WhatsAppFloat />
         </NextIntlClientProvider>
         <AnalyticsScripts />
+        <VisitTracker locale={locale} />
       </body>
     </html>
   );

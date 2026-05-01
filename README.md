@@ -1,4 +1,4 @@
-# Mubarmij Online — Next.js Rebuild
+# MubarmiJ — Next.js Rebuild
 
 Production rebuild of mubarmijonline.com — Next.js 14 (App Router), TypeScript, Tailwind, next-intl (EN default + AR/RTL).
 

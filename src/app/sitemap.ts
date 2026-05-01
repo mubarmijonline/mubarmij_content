@@ -7,8 +7,6 @@ const STATIC_PATHS = [
   "/services/web-development",
   "/services/mobile-apps",
   "/services/maintenance",
-  "/case-studies",
-  "/pricing",
   "/resources",
   "/blog",
   "/about",

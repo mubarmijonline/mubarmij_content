@@ -1,9 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { whatsappLink } from "@/lib/utils";
-import CTAButton from "@/components/ui/CTAButton";
 
 const ITEMS_AR = [
   "بنفقد leads بسبب بطء الرد",
@@ -26,12 +23,7 @@ const ITEMS_EN = [
 
 export default function AutomationChecklist({ locale }: { locale: "en" | "ar" }) {
   const t = useTranslations("automation");
-  const tCta = useTranslations("cta");
-  const tWa = useTranslations("whatsapp");
   const items = locale === "ar" ? ITEMS_AR : ITEMS_EN;
-  const [checked, setChecked] = useState<boolean[]>(items.map(() => false));
-  const count = checked.filter(Boolean).length;
-  const triggered = count >= 3;
 
   return (
     <section className="section bg-bglight">
@@ -39,36 +31,15 @@ export default function AutomationChecklist({ locale }: { locale: "en" | "ar" })
         <h2 className="section-title text-center">{t("checklistTitle")}</h2>
         <ul className="mt-10 space-y-3">
           {items.map((item, i) => (
-            <li key={i}>
-              <label className="flex items-start gap-3 rounded-lg bg-white border border-bglight p-4 cursor-pointer hover:border-gold">
-                <input
-                  type="checkbox"
-                  className="mt-1 w-5 h-5 accent-gold"
-                  checked={checked[i]}
-                  onChange={(e) => {
-                    const next = [...checked];
-                    next[i] = e.target.checked;
-                    setChecked(next);
-                  }}
-                />
-                <span className="font-medium text-navy-deep">{item}</span>
-              </label>
+            <li
+              key={i}
+              className="flex items-start gap-3 rounded-lg bg-white border border-bglight p-4"
+            >
+              <span className="mt-0.5 text-gold font-bold">-</span>
+              <span className="font-medium text-navy-deep">{item}</span>
             </li>
           ))}
         </ul>
-        {triggered && (
-          <div className="mt-8 rounded-2xl bg-navy-deep text-white p-6 text-center animate-fade-up">
-            <p className="text-lg font-semibold">{t("checklistCta")}</p>
-            <div className="mt-4 flex justify-center gap-3 flex-wrap">
-              <CTAButton href={`/${locale === "en" ? "" : locale + "/"}book-call`} variant="primary">
-                {tCta("primary")}
-              </CTAButton>
-              <CTAButton href={whatsappLink(tWa("prefilled"))} variant="whatsapp" external>
-                {tCta("whatsapp")}
-              </CTAButton>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );

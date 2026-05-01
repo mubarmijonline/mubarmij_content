@@ -5,7 +5,9 @@ export default createMiddleware({
   locales: [...locales],
   defaultLocale,
   localePrefix: "as-needed", // English at /, Arabic at /ar
-  localeDetection: true,
+  // Default is English. Do NOT auto-redirect to /ar based on Accept-Language —
+  // visitors switch via the LangToggle. This is the explicit user preference.
+  localeDetection: false,
 });
 
 export const config = {

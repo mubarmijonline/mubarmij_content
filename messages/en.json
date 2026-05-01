@@ -1,6 +1,25 @@
 {
+  "aboutShowcase": {
+    "eyebrow": "About us",
+    "heading": "We Transform Ideas Into Working Software",
+    "body": "MubarmiJ is a software studio that helps small and medium businesses across Egypt and the Gulf grow through technology. We deliver structured automation, modern web platforms and mobile apps with a hands-on, transparent process.",
+    "badge1Title": "Top Rated",
+    "badge1Sub": "Software Partner",
+    "badge2Title": "WhatsApp Verified",
+    "badge2Sub": "Official Business Account",
+    "badge2Chip": "Active",
+    "f1Title": "Goal-Oriented Delivery",
+    "f1Body": "Every project is shaped around a clear business outcome \u2014 leads, hours saved, conversion lift \u2014 not a wishlist of features.",
+    "f2Title": "Senior Engineers",
+    "f2Body": "You work directly with experienced developers who have shipped automation, web and mobile products in production for years.",
+    "f3Title": "Built To Scale",
+    "f3Body": "Modern stacks, clean code and ownership of the source means your platform keeps growing long after launch \u2014 no lock-in."
+  },
+  "welcome": {
+    "celebrate": "Welcome to MubarmiJ \u2728"
+  },
   "site": {
-    "name": "Mubarmij Online",
+    "name": "MubarmiJ",
     "tagline": "Technology that makes your business work better."
   },
   "nav": {
@@ -10,8 +29,6 @@
     "webDevelopment": "Web Development",
     "mobileApps": "Mobile Apps",
     "maintenance": "Maintenance",
-    "caseStudies": "Case Studies",
-    "pricing": "Pricing",
     "resources": "Resources",
     "blog": "Blog",
     "about": "About",
@@ -20,15 +37,16 @@
   },
   "cta": {
     "primary": "Book Free Consultation",
-    "secondary": "View Our Work",
+    "secondary": "Learn More About Us",
     "whatsapp": "WhatsApp Us",
     "leadMagnet": "Get The Free Guide",
     "demo": "Request Demo"
   },
   "hero": {
-    "badge": "🔥 50+ companies have saved time with us",
-    "headline": "Systems That Work So You Don't Have To. Websites That Bring You Clients.",
-    "sub": "One technical partner for your business: Process Automation + Professional Web + Mobile Apps — one team, one accountability."
+    "badge": "50+ companies have saved time with us",
+    "headline": "Systems That Work So You Don't Have To.\nWebsites That Bring You Clients.",
+    "subA": "One technical partner for your business: Process Automation + Professional Web + Mobile Apps.",
+    "subB": "One team, one accountability."
   },
   "logoBar": {
     "title": "Trusted by companies like:"
@@ -48,10 +66,13 @@
     "highRoi": "Highest ROI",
     "card1Title": "Automated systems that work for you",
     "card1Result": "✓ A client saved 80 hours of work per month",
+    "card1Items": ["WhatsApp Bots", "CRM Integration", "Lead Management", "Workflow Automation", "System Integrations"],
     "card2Title": "Websites that bring clients, not just brochures",
-    "card2Price": "🏷️ Starting from EGP 15,000",
+    "card2Price": "Tailored to your business",
+    "card2Items": ["Landing Pages", "Corporate Websites", "E-commerce", "Custom Dashboards", "SEO"],
     "card3Title": "Mobile apps that grow your business",
-    "card3Eligibility": "For companies with a serious budget"
+    "card3Eligibility": "For companies with a serious budget",
+    "card3Items": ["iOS + Android", "Flutter", "Full Backend", "Admin Dashboard", "App Store deployment"]
   },
   "process": {
     "title": "From the first call to delivery — every step is transparent",
@@ -78,7 +99,7 @@
   "leadMagnet": {
     "eyebrow": "📘 Get for free",
     "headline": "Business Owner's Guide: 10 mistakes that cost you half your customers without you noticing",
-    "sub": "PDF guide (24 pages) + practical Checklist. Delivered to your email within minutes.",
+    "sub": "PDF Guide + practical Checklist. Delivered to your email within minutes.",
     "form": { "name": "Name", "email": "Email", "phone": "Mobile number" },
     "footnote": "✓ No spam   ✓ Unsubscribe any time"
   },
@@ -86,7 +107,7 @@
     "title": "Frequently asked questions"
   },
   "finalCta": {
-    "title": "Bottom line: if your company is growing, you need a technical partner who gets it.",
+    "title": "If your company is growing, you need a technical partner who gets it.",
     "primary": "Book your free consultation →"
   },
   "footer": {
@@ -119,5 +140,153 @@
     "roiSalary": "Average monthly salary (EGP)",
     "roiCalculate": "Calculate",
     "roiResult": "You're losing about {loss} EGP/year. Automation can save you {save} EGP."
+  },
+  "comingSoon": {
+    "badge": "Coming Soon",
+    "title": "This page is on the way.",
+    "sub": "We're polishing it. Meanwhile, the fastest way to get answers is a free 30-minute call — or just message us on WhatsApp.",
+    "primaryCta": "Book Free Consultation",
+    "secondaryCta": "WhatsApp Us",
+    "backHome": "← Back to home"
+  },
+  "about": {
+    "title": "About Mubarmij",
+    "sub": "One technical partner that handles automation, web, and mobile — so your business runs as one system instead of five disconnected tools.",
+    "missionTitle": "Our mission",
+    "mission": "To free Egyptian and Gulf SMEs from manual, repetitive work — and give them software that actually brings clients in.",
+    "valuesTitle": "What we believe",
+    "value1Title": "Transparent pricing",
+    "value1": "You get a written proposal in 3 business days. No surprises, no scope games.",
+    "value2Title": "One accountable team",
+    "value2": "One project manager, one tech lead. You always know who to call.",
+    "value3Title": "Ship, then improve",
+    "value3": "We launch in weeks, not quarters — and iterate from real usage data.",
+    "statsTitle": "By the numbers",
+    "stat1": "50+ companies served",
+    "stat2": "3 countries (EG, KSA, UAE)",
+    "stat3": "4.9/5 average client rating"
+  },
+  "pricingPage": {
+    "title": "Transparent packages. No surprises.",
+    "sub": "Every project starts with a free 30-minute discovery call and a written proposal. Prices below are starting points — final scope is fixed in the proposal.",
+    "includesTitle": "Every package includes",
+    "include1": "Free 30-minute discovery call",
+    "include2": "Written proposal in 3 business days",
+    "include3": "Fixed price (no hourly surprises)",
+    "include4": "3 months of post-launch support",
+    "include5": "Source code and full ownership — yours",
+    "customCta": "Need something custom? Talk to us"
+  },
+  "caseStudies": {
+    "title": "Selected work",
+    "sub": "A few of the systems and sites we've shipped recently. Detailed case studies are being prepared — for the full story on any of these, book a call.",
+    "viewAll": "View detailed case studies (coming soon)"
+  },
+  "resources": {
+    "title": "Free resources",
+    "sub": "Practical guides and checklists for business owners — written by people who actually build the systems.",
+    "guide1Title": "10 mistakes that cost you half your customers",
+    "guide1Desc": "PDF guide + checklist. Free.",
+    "guide1Cta": "Get the guide",
+    "moreSoon": "More guides on the way."
+  },
+  "blog": {
+    "title": "Insights from the build floor",
+    "sub": "Short, honest posts on automation, web performance, and what we learned shipping real projects.",
+    "empty": "First posts publishing soon. In the meantime, get our free guide:"
+  },
+  "bookCall": {
+    "title": "Book your free 30-minute discovery call",
+    "sub": "You'll talk to a senior engineer (not a salesperson). We'll listen, ask sharp questions, and tell you honestly whether we can help — and roughly what it costs.",
+    "whatHappensTitle": "What happens on the call",
+    "step1": "You describe the bottleneck (10 min)",
+    "step2": "We ask questions and sketch options (15 min)",
+    "step3": "We agree on next steps — proposal, pilot, or 'not a fit, here's who is' (5 min)",
+    "channelsTitle": "Pick your channel",
+    "whatsapp": "WhatsApp (fastest)",
+    "whatsappSub": "We usually reply within an hour during business hours.",
+    "calendly": "Schedule on calendar",
+    "calendlySub": "Pick any 30-minute slot.",
+    "email": "Email",
+    "emailSub": "Best for detailed briefs and attachments.",
+    "phone": "Call",
+    "phoneSub": "Sun–Thu, 10:00–18:00 (Cairo time)."
+  },
+  "servicePage": {
+    "webDevTitle": "Web Development",
+    "webDevSub": "Marketing sites and web apps that load fast, rank on Google, and turn visitors into clients.",
+    "mobileTitle": "Mobile Apps",
+    "mobileSub": "iOS and Android apps that grow your business — built once, run everywhere, with a real backend behind them.",
+    "maintenanceTitle": "Maintenance & Support",
+    "maintenanceSub": "Monthly retainers for hosting, updates, security, and small improvements — so your software keeps earning its keep."
+  },
+  "contactPage": {
+    "title": "Contact MubarmiJ",
+    "sub": "We reply to every message — usually within one business hour during work days.",
+    "businessName": "Business name",
+    "businessNameValue": "MubarmiJ",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone / WhatsApp",
+    "hoursLabel": "Working hours",
+    "hours": "Sunday – Thursday, 10:00 – 18:00 (Cairo time)",
+    "addressLabel": "Address",
+    "address": "Cairo, Egypt — serving clients across Egypt, KSA and the UAE.",
+    "formTitle": "Send us a message",
+    "name": "Your name",
+    "email": "Your email",
+    "message": "How can we help?",
+    "send": "Send message"
+  },
+  "privacyPage": {
+    "title": "Privacy Policy",
+    "updated": "Last updated: April 28, 2026",
+    "intro": "MubarmiJ (\"we\", \"us\", \"our\") respects your privacy. This Privacy Policy explains what information we collect when you visit mubarmijonline.com or contact us, how we use it, and the choices you have.",
+    "s1Title": "1. Who we are",
+    "s1": "MubarmiJ is a software studio based in Cairo, Egypt, providing process automation, web development and mobile app services to small and medium businesses across Egypt, Saudi Arabia and the United Arab Emirates. You can reach us at info@mubarmijonline.com or +20 120 058 8803.",
+    "s2Title": "2. Information we collect",
+    "s2": "We only collect information you choose to give us — your name, email, phone number and any message details you submit through our contact, lead-magnet or newsletter forms. We also collect basic, non-identifying technical data (browser, device type, pages viewed, referrer) through privacy-friendly analytics so we can improve the website.",
+    "s3Title": "3. How we use your information",
+    "s3": "We use submitted contact details only to (a) reply to your enquiry, (b) deliver the free guide or resource you requested, (c) follow up about a project we are actively discussing, or (d) send our newsletter if you opted in. We never sell your data.",
+    "s4Title": "4. Cookies and tracking",
+    "s4": "We use a small number of cookies and pixels (Google Analytics, Meta Pixel, Microsoft Clarity, LinkedIn Insight) to measure marketing performance and improve the site. You can disable these in your browser settings at any time without affecting site functionality.",
+    "s5Title": "5. Sharing",
+    "s5": "We share data only with the service providers needed to operate the site (hosting, email delivery, analytics, CRM). These providers are bound by their own privacy commitments and only process data on our behalf.",
+    "s6Title": "6. Data retention",
+    "s6": "We keep contact and lead information for as long as needed to serve your request and our legitimate business interests, then delete it. You can request deletion at any time.",
+    "s7Title": "7. Your rights",
+    "s7": "You can ask us to access, correct, export or delete the personal data we hold about you, or unsubscribe from any marketing email. Email info@mubarmijonline.com and we will respond within 30 days.",
+    "s8Title": "8. Security",
+    "s8": "We use HTTPS across the site and limit access to personal data to the staff who need it. No system is 100% secure, but we take reasonable steps to protect your information.",
+    "s9Title": "9. Children",
+    "s9": "Our services are not directed to children under 16 and we do not knowingly collect data from them.",
+    "s10Title": "10. Changes to this policy",
+    "s10": "We may update this policy from time to time. Material changes will be posted on this page with a new \"last updated\" date.",
+    "contact": "Questions? Write to info@mubarmijonline.com."
+  },
+  "termsPage": {
+    "title": "Terms of Service",
+    "updated": "Last updated: April 28, 2026",
+    "intro": "These Terms of Service govern your use of mubarmijonline.com and any service you engage MubarmiJ to deliver. By using the website or hiring us, you agree to these terms.",
+    "s1Title": "1. About us",
+    "s1": "MubarmiJ is a software studio operating from Cairo, Egypt, providing automation, web development, mobile development and related consulting services.",
+    "s2Title": "2. Use of the website",
+    "s2": "You agree to use the website only for lawful purposes, and not to attempt to access non-public areas, scrape content at scale, or interfere with normal operation.",
+    "s3Title": "3. Intellectual property",
+    "s3": "All website content (text, design, graphics, code) is owned by MubarmiJ unless otherwise indicated, and protected by copyright. Personal, non-commercial viewing is permitted; reproduction or commercial use requires written permission.",
+    "s4Title": "4. Service engagements",
+    "s4": "Any project we deliver is governed by a separate written proposal and statement of work signed by both parties. That document defines scope, price, timeline, ownership of source code, and support terms.",
+    "s5Title": "5. Payments",
+    "s5": "Unless your proposal states otherwise, projects require a deposit before work begins, with milestone payments thereafter. Late payments may pause delivery.",
+    "s6Title": "6. Confidentiality",
+    "s6": "We treat all client business information as confidential and only share it with team members who need it to deliver the project. We are happy to sign a mutual NDA on request.",
+    "s7Title": "7. Warranties and liability",
+    "s7": "The website is provided \"as is\". To the maximum extent permitted by law, MubarmiJ is not liable for indirect or consequential damages arising from use of the website. For paid engagements, our total liability is limited to the fees paid for the specific project.",
+    "s8Title": "8. Third-party links",
+    "s8": "The website may link to third-party sites. We are not responsible for their content or privacy practices.",
+    "s9Title": "9. Termination",
+    "s9": "We may suspend or terminate access to the website at any time for misuse. Termination of paid engagements is governed by the relevant proposal.",
+    "s10Title": "10. Governing law",
+    "s10": "These terms are governed by the laws of the Arab Republic of Egypt. Any dispute will be settled in the competent Cairo courts unless otherwise agreed in writing.",
+    "contact": "Questions? Write to info@mubarmijonline.com."
   }
 }

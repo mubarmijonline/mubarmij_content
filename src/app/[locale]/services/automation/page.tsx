@@ -42,7 +42,7 @@ export default async function AutomationPage({
     serviceType: "Process Automation",
     name: t("heroTitle"),
     description: t("heroSub"),
-    provider: { "@type": "Organization", name: "Mubarmij Online" },
+    provider: { "@type": "Organization", name: "MubarmiJ" },
     areaServed: "EG",
   };
 
@@ -92,11 +92,6 @@ export default async function AutomationPage({
                 <h3 className="font-display rtl:font-arabic-display text-lg font-bold text-navy-deep">
                   {t(key)}
                 </h3>
-                <div className="mt-auto pt-5">
-                  <CTAButton href={lp("/book-call")} variant="leadmagnet" className="text-sm">
-                    {tCta("demo")}
-                  </CTAButton>
-                </div>
               </div>
             ))}
           </div>
@@ -110,20 +105,6 @@ export default async function AutomationPage({
 
       {/* PROCESS — reused */}
       <Process />
-
-      {/* TECH LOGOS */}
-      <section className="section bg-bglight">
-        <div className="container mx-auto text-center">
-          <h2 className="section-title">Tech we use</h2>
-          <div className="mt-8 flex flex-wrap justify-center gap-x-10 gap-y-4 text-navy/70 font-semibold">
-            {["n8n", "Make.com", "Zapier", "Twilio", "OpenAI API", "Google Workspace"].map(
-              (x) => (
-                <span key={x}>{x}</span>
-              ),
-            )}
-          </div>
-        </div>
-      </section>
 
       {/* FAQ */}
       <FAQ locale={locale} />

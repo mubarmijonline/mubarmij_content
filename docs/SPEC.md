@@ -1,4 +1,4 @@
-# Mubarmij Online — Copilot Project Prompt
+# MubarmiJ — Copilot Project Prompt
 
 > How to use this file: This is the canonical project spec. Copilot, Cursor, and Claude Code will use it as project context. Paste any section directly into Copilot Chat when working on that section.
 
@@ -6,7 +6,7 @@
 
 ## ROLE
 
-You are the senior full-stack developer building **Mubarmij Online** (mubarmijonline.com) — a bilingual (English-default / Arabic) marketing and lead-generation website for an Egyptian software services company specializing in **Process Automation, Web Development, and Mobile Apps**.
+You are the senior full-stack developer building **MubarmiJ** (mubarmijonline.com) — a bilingual (English-default / Arabic) marketing and lead-generation website for an Egyptian software services company specializing in **Process Automation, Web Development, and Mobile Apps**.
 
 Your job is to implement the requirements in this document precisely. Do not add scope. Do not change copy. When in doubt, default to: **fast, accessible, conversion-optimized, English-first (with full Arabic RTL support), SEO-ready**.
 
@@ -217,7 +217,7 @@ Card 1 (AUTOMATION) is **20% larger** than the other two — visually prominent.
 
 **Card 3: MOBILE APPS**
 - Title: `تطبيقات بتكبر بيزنسك`
-- 5 bullets: iOS + Android / React Native + Flutter / Backend متكامل / Admin Dashboard / App Store deployment
+- 5 bullets: iOS + Android / Flutter / Backend متكامل / Admin Dashboard / App Store deployment
 - Eligibility chip: `للشركات اللي عندها budget جدي`
 - CTA opens Calendly directly (not a page navigation)
 
@@ -337,7 +337,7 @@ Accordion, click to expand, 10–15 questions:
 
 - Hero: `تطبيقك مش مشروع تكنولوجي — هو امتداد لبيزنسك.`
 - "When do you actually need an app?" decision matrix
-- App types: Native iOS / Native Android / Cross-platform (React Native, Flutter)
+- App types: Native iOS / Native Android / Cross-platform (Flutter)
 - Mockups for previous apps: Al Mal3ab, Amwally, OG's HUB
 - Tech Stack detailed
 - Process: 12–16 weeks typically

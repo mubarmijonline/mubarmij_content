@@ -1,4 +1,4 @@
-# START HERE — Mubarmij Online (Next.js Rebuild)
+# START HERE — MubarmiJ (Next.js Rebuild)
 
 > **For the next Copilot session:** Open `/projects/mubarmij_site/_next_rewrite/` as the workspace root, then paste this entire file as the first message. Begin executing **STEP 0** below.
 
@@ -6,7 +6,7 @@
 
 ## 1. Project context
 
-You are building the production rebuild of **Mubarmij Online** (mubarmijonline.com), a marketing + lead-generation site for an Egyptian software services company. The previous version is a Flask + Jinja site at `/projects/mubarmij_site/` (kept running until this rewrite is launched).
+You are building the production rebuild of **MubarmiJ** (mubarmijonline.com), a marketing + lead-generation site for an Egyptian software services company. The previous version is a Flask + Jinja site at `/projects/mubarmij_site/` (kept running until this rewrite is launched).
 
 - **Default language: English.** Arabic available at `/ar` (RTL).
 - **Locked Arabic copy** must be used verbatim where Arabic appears (see `docs/SPEC.md`).

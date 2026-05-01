@@ -69,3 +69,105 @@ body {
     @apply font-arabic;
   }
 }
+
+/* Scroll-reveal utility used by <Reveal /> */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hover lift utility for cards */
+.card-lift {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-6px);
+}
+
+/* Animated background grid (used inside dark hero) */
+.bg-grid-drift {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridDrift 20s linear infinite;
+}
+@keyframes gridDrift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 40px, 40px 0; }
+}
+
+/* Pulsing dot for "live" badges */
+.pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 9999px;
+  background: var(--brand-gold);
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--brand-gold);
+  opacity: 0.6;
+  animation: pulseDot 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes pulseDot {
+  0% { transform: scale(1); opacity: 0.6; }
+  80%, 100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Step number glow used in Process */
+.step-glow {
+  animation: stepGlow 3s ease-in-out infinite;
+}
+@keyframes stepGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 162, 76, 0.55); }
+  50% { box-shadow: 0 0 0 14px rgba(212, 162, 76, 0); }
+}
+
+/* Indeterminate progress bar */
+.progress-rail {
+  position: relative;
+  height: 4px;
+  overflow: hidden;
+  background: rgba(212, 162, 76, 0.12);
+  border-radius: 9999px;
+}
+.progress-rail::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
+  transform: translateX(-100%);
+  animation: progressSweep 3s linear infinite;
+}
+@keyframes progressSweep {
+  to { transform: translateX(100%); }
+}
+
+/* Floating badges (used near hero/stat tiles) */
+.float-y {
+  animation: floatY 4s ease-in-out infinite;
+}
+.float-y-delay {
+  animation: floatY 4s ease-in-out 1s infinite;
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
