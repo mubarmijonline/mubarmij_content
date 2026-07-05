@@ -1,1 +1,42 @@
 /* Custom admin overrides go here. */
+
+/* ---------------------------------------------------------------------------
+   The upload field's media drawer puts the "Select N" pill at the top of
+   the list controls. Clicking that pill IS the action that confirms the
+   selection and adds the picked images to the field — there is no separate
+   "Confirm" button. Editors keep missing it because it looks like a small
+   white label. Make it obvious: bright green, pulsing, with a hint label.
+--------------------------------------------------------------------------- */
+.list-controls .pill.pill--style-white,
+.collection-list .pill.pill--style-white {
+  background: #16a34a !important;
+  color: #fff !important;
+  border: 2px solid #16a34a !important;
+  border-radius: 8px !important;
+  padding: 8px 18px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6);
+  animation: mb-pulse 1.5s ease-out infinite;
+}
+
+.list-controls .pill.pill--style-white::after,
+.collection-list .pill.pill--style-white::after {
+  content: ' \2192 click to add';
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+@keyframes mb-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(22, 163, 74, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+  }
+}

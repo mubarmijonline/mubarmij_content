@@ -1,17 +1,19 @@
 import "../globals.css";
 import type { Metadata, Viewport } from "next";
-import { Inter, Poppins, Cairo, Tajawal } from "next/font/google";
+import { Inter, Poppins, Cairo, Tajawal, IBM_Plex_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import { locales, localeDirection, type Locale } from "@/i18n/config";
 import { SITE_URL } from "@/lib/site";
-import Header from "@/components/layout/Header";
+import { PillNav } from "@/components/system";
 import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
 import AnalyticsScripts from "@/components/layout/AnalyticsScripts";
 import VisitTracker from "@/components/layout/VisitTracker";
+import SmoothScroll from "@/components/effects/SmoothScroll";
+import GsapSiteEffects from "@/components/effects/GsapSiteEffects";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,6 +35,19 @@ const tajawal = Tajawal({
   subsets: ["arabic", "latin"],
   weight: ["400", "500", "700", "800"],
   variable: "--font-tajawal",
+  display: "swap",
+});
+// v2 "Flagship": IBM Plex Mono for technical accents, IBM Plex Sans Arabic for AR.
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
+  display: "swap",
+});
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-plex-ar",
   display: "swap",
 });
 
@@ -97,6 +112,11 @@ export async function generateMetadata({
       images: ["/images/Mubarmij_logo_white_background.jpg"],
     },
     robots: { index: true, follow: true },
+    verification: {
+      other: {
+        "facebook-domain-verification": "0rdlmd70u835vavo5do8n462kxp0uc",
+      },
+    },
   };
 }
 
@@ -123,14 +143,16 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={dir}
-      className={`${inter.variable} ${poppins.variable} ${cairo.variable} ${tajawal.variable}`}
+      className={`${inter.variable} ${poppins.variable} ${cairo.variable} ${tajawal.variable} ${plexMono.variable} ${plexArabic.variable}`}
     >
       <body className={dir === "rtl" ? "font-arabic" : "font-sans"}>
+        <SmoothScroll />
         <a href="#main" className="skip-link">
           {locale === "ar" ? "تخطّ إلى المحتوى" : "Skip to content"}
         </a>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <Header locale={locale} />
+          <GsapSiteEffects />
+          <PillNav locale={locale} />
           <main id="main">{children}</main>
           <Footer locale={locale} />
           <WhatsAppFloat />

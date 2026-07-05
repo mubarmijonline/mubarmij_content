@@ -13,7 +13,11 @@ import { Testimonials } from './collections/Testimonials'
 import { ClientLogos } from './collections/ClientLogos'
 import { Resources } from './collections/Resources'
 import { AnalyticsEvents } from './collections/AnalyticsEvents'
+import { Leads } from './collections/Leads'
+import { PushDevices } from './collections/PushDevices'
+import { Reels } from './collections/Reels'
 import { trackPageviewEndpoint } from './endpoints/analyticsTrack'
+import { v1Endpoints } from './endpoints/v1'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -37,8 +41,11 @@ export default buildConfig({
     ClientLogos,
     Resources,
     AnalyticsEvents,
+    Leads,
+    PushDevices,
+    Reels,
   ],
-  endpoints: [trackPageviewEndpoint],
+  endpoints: [trackPageviewEndpoint, ...v1Endpoints],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

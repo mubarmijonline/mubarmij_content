@@ -15,19 +15,39 @@ const config: Config = {
     extend: {
       colors: {
         navy: { DEFAULT: "#1E3A5F", deep: "#0A1628" },
+        // v2 "Flagship" surfaces on dark
+        panel: "#0E1D33",
+        line: "#1E2D45",
+        bodydark: "#8DA2C0",
+        cream: "#F8FAFC",
         gold: {
           DEFAULT: "#D4A24C",
+          light: "#F4C97A",
+          ink: "#3A2A05",
+          dim: "#B98A2F",
           50: "#FBF6EC",
           100: "#F5E8CC",
           400: "#E0B976",
           500: "#D4A24C",
           600: "#B6862F",
         },
+        neutral: {
+          200: "#E2E8F0",
+          300: "#CBD5E1",
+          400: "#94A3B8",
+          500: "#64748B",
+        },
         whatsapp: "#25D366",
         bglight: "#F8FAFC",
       },
+      borderRadius: {
+        tile: "12px",
+        pill: "9999px",
+      },
       fontFamily: {
-        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "var(--font-inter)", "Inter", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
+        plexar: ["var(--font-plex-ar)", "var(--font-cairo)", "system-ui", "sans-serif"],
         display: ["var(--font-poppins)", "Poppins", "system-ui", "sans-serif"],
         arabic: ["var(--font-cairo)", "Cairo", "system-ui", "sans-serif"],
         "arabic-display": ["var(--font-tajawal)", "Tajawal", "system-ui", "sans-serif"],

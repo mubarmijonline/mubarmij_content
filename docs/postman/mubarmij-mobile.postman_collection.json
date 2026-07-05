@@ -1,0 +1,94 @@
+{
+  "info": {
+    "_postman_id": "mubarmij-mobile-v1",
+    "name": "MubarmiJ Mobile API (v1)",
+    "description": "Public API consumed by the MubarmiJ Flutter mobile app. All endpoints sit under https://www.mubarmijonline.com/api/v1/*.\n\n• Read endpoints honor the `Accept-Language` header (en|ar).\n• POST endpoints require `Content-Type: application/json` and apply per-IP rate limits (5 req / 10 min for leads; 20 req / hour for push register).\n• Mobile-app submissions should set `\"source\": \"mobile_app\"` so leads are tagged and surfaced in the admin Mobile group.\n• Honeypot field: include `\"company_url\": \"\"`. If non-empty, the submission is silently accepted but discarded.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://www.mubarmijonline.com/api" },
+    { "key": "locale",  "value": "en" }
+  ],
+  "item": [
+    {
+      "name": "Read",
+      "item": [
+        { "name": "List services", "request": { "method": "GET", "url": "{{baseUrl}}/v1/services", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "Get service detail", "request": { "method": "GET", "url": "{{baseUrl}}/v1/services/automation", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "List clients (featured)", "request": { "method": "GET", "url": "{{baseUrl}}/v1/clients?featured=true&page_size=20", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "Get client detail", "request": { "method": "GET", "url": "{{baseUrl}}/v1/clients/example-slug", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "List blog posts", "request": { "method": "GET", "url": "{{baseUrl}}/v1/blog?page=1&page_size=10", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "Get blog post detail", "request": { "method": "GET", "url": "{{baseUrl}}/v1/blog/example-post", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "FAQ", "request": { "method": "GET", "url": "{{baseUrl}}/v1/faq", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "About", "request": { "method": "GET", "url": "{{baseUrl}}/v1/about", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "Resources", "request": { "method": "GET", "url": "{{baseUrl}}/v1/resources", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "Testimonials", "request": { "method": "GET", "url": "{{baseUrl}}/v1/testimonials", "header": [{ "key": "Accept-Language", "value": "{{locale}}" }] } },
+        { "name": "OpenAPI spec", "request": { "method": "GET", "url": "{{baseUrl}}/v1/openapi.json" } }
+      ]
+    },
+    {
+      "name": "Leads",
+      "item": [
+        {
+          "name": "Contact form",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/leads/contact",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Ahmed Sample\",\n  \"email\": \"ahmed@example.com\",\n  \"phone\": \"+201200000000\",\n  \"subject\": \"automation\",\n  \"message\": \"We want to automate inventory tracking and quotation flow.\",\n  \"locale\": \"en\",\n  \"source\": \"mobile_app\",\n  \"company_url\": \"\"\n}" }
+          }
+        },
+        {
+          "name": "Guide download",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/leads/guide",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Ahmed Sample\",\n  \"email\": \"ahmed@example.com\",\n  \"guide_slug\": \"automation-checklist\",\n  \"locale\": \"en\",\n  \"source\": \"mobile_app\"\n}" }
+          }
+        },
+        {
+          "name": "Newsletter",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/leads/newsletter",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"ahmed@example.com\",\n  \"locale\": \"en\",\n  \"source\": \"mobile_app\"\n}" }
+          }
+        },
+        {
+          "name": "Consultation request",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/leads/consultation",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Ahmed Sample\",\n  \"email\": \"ahmed@example.com\",\n  \"phone\": \"+201200000000\",\n  \"preferred_channel\": \"whatsapp\",\n  \"preferred_day\": \"2030-01-15\",\n  \"preferred_time_window\": \"morning\",\n  \"topic\": \"automation\",\n  \"notes\": \"We have 30 sales reps.\",\n  \"locale\": \"en\",\n  \"source\": \"mobile_app\"\n}" }
+          }
+        },
+        {
+          "name": "ROI calculator",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/leads/roi",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"employees\": 10,\n  \"daily_hours_per_employee\": 2,\n  \"monthly_salary_egp\": 15000,\n  \"computed_monthly_savings_egp\": 21000,\n  \"computed_monthly_hours_saved\": 440,\n  \"name\": \"Ahmed Sample\",\n  \"email\": \"ahmed@example.com\",\n  \"phone\": \"+201200000000\",\n  \"locale\": \"en\",\n  \"source\": \"mobile_app\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Push",
+      "item": [
+        {
+          "name": "Register / refresh device",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/push/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"fcm_token\": \"REPLACE-WITH-REAL-FCM-TOKEN\",\n  \"platform\": \"android\",\n  \"locale\": \"en\",\n  \"app_version\": \"1.0.0\",\n  \"device_model\": \"Pixel 8\",\n  \"os_version\": \"Android 14\",\n  \"topics\": [\"blog_new_post\", \"important_news\"]\n}" }
+          }
+        }
+      ]
+    }
+  ]
+}

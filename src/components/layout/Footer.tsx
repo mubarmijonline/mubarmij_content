@@ -5,6 +5,7 @@ import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { localePath } from "@/lib/utils";
 import { CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/site";
+import NewsletterForm from "./NewsletterForm";
 
 export default function Footer({ locale }: { locale: Locale }) {
   const t = useTranslations();
@@ -59,20 +60,11 @@ export default function Footer({ locale }: { locale: Locale }) {
 
         <div>
           <h3 className="font-semibold mb-3">{t("footer.newsletter")}</h3>
-          <form className="flex gap-2" action="/api/lead" method="post">
-            <input type="hidden" name="source" value="newsletter" />
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder={t("footer.newsletterPlaceholder")}
-              className="flex-1 rounded-md px-3 py-2 text-sm text-navy-deep"
-              aria-label={t("footer.newsletterPlaceholder")}
-            />
-            <button type="submit" className="btn-primary text-sm px-4 py-2">
-              {t("footer.subscribe")}
-            </button>
-          </form>
+          <NewsletterForm
+            locale={locale}
+            placeholder={t("footer.newsletterPlaceholder")}
+            label={t("footer.subscribe")}
+          />
           <div className="flex items-center gap-3 mt-5">
             <a href="#" aria-label="Facebook" className="hover:text-gold"><Facebook size={20} /></a>
             <a href="#" aria-label="Instagram" className="hover:text-gold"><Instagram size={20} /></a>

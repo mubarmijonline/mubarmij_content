@@ -1,4 +1,4 @@
-# START HERE — MubarmiJ (Next.js Rebuild)
+# START HERE — Mubarmij Online (Next.js Rebuild)
 
 > **For the next Copilot session:** Open `/projects/mubarmij_site/_next_rewrite/` as the workspace root, then paste this entire file as the first message. Begin executing **STEP 0** below.
 
@@ -6,13 +6,15 @@
 
 ## 1. Project context
 
-You are building the production rebuild of **MubarmiJ** (mubarmijonline.com), a marketing + lead-generation site for an Egyptian software services company. The previous version is a Flask + Jinja site at `/projects/mubarmij_site/` (kept running until this rewrite is launched).
+You are building the production rebuild of **Mubarmij Online** (mubarmijonline.com), a marketing + lead-generation site for an Egyptian software services company. The previous version is a Flask + Jinja site at `/projects/mubarmij_site/` (kept running until this rewrite is launched).
 
 - **Default language: English.** Arabic available at `/ar` (RTL).
 - **Locked Arabic copy** must be used verbatim where Arabic appears (see `docs/SPEC.md`).
 - All assets, brand identity, pixel ID, and WhatsApp number are already prepared in this folder.
 
-**Read `docs/SPEC.md` in full before writing code.** It is the authoritative spec — site map, page-by-page sections, locked copy, design tokens, performance budgets, SEO/security/a11y requirements, and the 6-phase roadmap.
+**Read these two docs in full before writing code:**
+- `docs/SPEC.md` — authoritative spec: site map, page-by-page sections, locked copy, performance budgets, SEO/security/a11y requirements, 6-phase roadmap.
+- `docs/PAGES_AND_DESIGN.md` — **single build prompt for ALL pages with their design** (design system tokens, shared components, and every route's layout/design treatment). Use this as the day-to-day implementation guide; it references SPEC.md for locked copy.
 
 ---
 
