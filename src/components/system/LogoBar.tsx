@@ -50,7 +50,41 @@ function registerGsap() {
   pluginsRegistered = true;
 }
 
-/** Normalized trusted-company logo showcase with GSAP stagger reveal. */
+function Chip({ logo, k }: { logo: LogoItem; k: string }) {
+  const dimensions = LOGO_DIMENSIONS[logo.alt] ?? { width: 280, height: 140 };
+  const scale = LOGO_SCALE[logo.alt] ?? 1;
+  const img = (
+    <Image
+      src={logo.src}
+      alt={logo.alt}
+      width={dimensions.width}
+      height={dimensions.height}
+      quality={100}
+      sizes="150px"
+      className={styles.logo}
+      style={{ "--logo-scale": scale } as React.CSSProperties}
+    />
+  );
+  return logo.href ? (
+    <a
+      key={k}
+      href={logo.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={logo.alt}
+      data-dark={logo.darkCard ? "true" : undefined}
+      className={styles.chip}
+    >
+      {img}
+    </a>
+  ) : (
+    <span key={k} data-dark={logo.darkCard ? "true" : undefined} className={styles.chip} aria-label={logo.alt}>
+      {img}
+    </span>
+  );
+}
+
+/** Trusted-company logo wall — a dual-row, edge-faded marquee of legible chips. */
 export function LogoBar({ logos, eyebrow, dir = "ltr", className }: Props) {
   registerGsap();
   const sectionRef = useRef<HTMLElement>(null);
@@ -59,25 +93,16 @@ export function LogoBar({ logos, eyebrow, dir = "ltr", className }: Props) {
     () => {
       if (!sectionRef.current || typeof window === "undefined") return;
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const items = gsap.utils.toArray<HTMLElement>(".logo-item");
-      if (reduce) {
-        gsap.set(items, { autoAlpha: 1, y: 0 });
-        return;
-      }
+      const marquee = sectionRef.current.querySelector(`.${styles.marquee}`);
+      if (reduce || !marquee) return;
 
-      gsap.from(items, {
+      gsap.from(marquee, {
         opacity: 0,
-        y: 40,
-        duration: 0.6,
-        stagger: dir === "rtl" ? -0.1 : 0.1,
+        y: 32,
+        duration: 0.8,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          once: true,
-        },
+        scrollTrigger: { trigger: sectionRef.current, start: "top 82%", once: true },
       });
-
       requestAnimationFrame(() => ScrollTrigger.refresh());
     },
     { scope: sectionRef, dependencies: [dir, logos.length] },
@@ -85,44 +110,36 @@ export function LogoBar({ logos, eyebrow, dir = "ltr", className }: Props) {
 
   if (!logos.length) return null;
 
+  // Two rows drifting in opposite directions; each row duplicates its set for a seamless loop.
+  const rowA = logos;
+  const rowB = [...logos].reverse();
+
   return (
     <section ref={sectionRef} className={cn(styles.section, className)} dir={dir}>
       <div className={styles.container}>
-        {eyebrow ? (
-          <p className={styles.heading}>{eyebrow}</p>
-        ) : null}
-        <div className={styles.grid}>
-          {logos.map((logo) => {
-            const dimensions = LOGO_DIMENSIONS[logo.alt] ?? { width: 280, height: 140 };
-            const scale = LOGO_SCALE[logo.alt] ?? 1;
-            return logo.href ? (
-              <a key={logo.alt} href={logo.href} target="_blank" rel="noopener noreferrer" data-dark={logo.darkCard ? "true" : undefined} className={cn(styles.item, "logo-item")}>
-                <Image
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={dimensions.width}
-                  height={dimensions.height}
-                  quality={100}
-                  sizes="(max-width: 640px) 118px, 140px"
-                  className={styles.logo}
-                  style={{ "--logo-scale": scale } as React.CSSProperties}
-                />
-              </a>
-            ) : (
-              <span key={logo.alt} data-dark={logo.darkCard ? "true" : undefined} className={cn(styles.item, "logo-item")}>
-                <Image
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={dimensions.width}
-                  height={dimensions.height}
-                  quality={100}
-                  sizes="(max-width: 640px) 118px, 140px"
-                  className={styles.logo}
-                  style={{ "--logo-scale": scale } as React.CSSProperties}
-                />
-              </span>
-            );
-          })}
+        {eyebrow ? <p className={styles.heading}>{eyebrow}</p> : null}
+      </div>
+
+      <div className={styles.marquee}>
+        <div className={styles.row}>
+          <div className={cn(styles.track, styles.left)}>
+            {rowA.map((l, i) => (
+              <Chip key={`a1-${l.alt}-${i}`} logo={l} k={`a1-${l.alt}-${i}`} />
+            ))}
+            {rowA.map((l, i) => (
+              <Chip key={`a2-${l.alt}-${i}`} logo={l} k={`a2-${l.alt}-${i}`} />
+            ))}
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={cn(styles.track, styles.right)}>
+            {rowB.map((l, i) => (
+              <Chip key={`b1-${l.alt}-${i}`} logo={l} k={`b1-${l.alt}-${i}`} />
+            ))}
+            {rowB.map((l, i) => (
+              <Chip key={`b2-${l.alt}-${i}`} logo={l} k={`b2-${l.alt}-${i}`} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
