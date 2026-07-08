@@ -9,7 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import styles from "./LogoBar.module.css";
 
-export type LogoItem = { src: string; alt: string; href?: string };
+export type LogoItem = { src: string; alt: string; href?: string; darkCard?: boolean };
 
 type Props = {
   logos: LogoItem[];
@@ -31,15 +31,15 @@ const LOGO_DIMENSIONS: Record<string, { width: number; height: number }> = {
 };
 
 const LOGO_SCALE: Record<string, number> = {
-  "Al Mal3ab": 1.18,
-  Amwally: 1.12,
-  Eltime: 1.58,
-  Fantazia: 1.16,
-  "Masar GP": 1.12,
-  Menus: 1.55,
-  "OG's HUB": 1.45,
-  "Padel Swift": 1.62,
-  "Ramy Rafaat": 1.16,
+  "Al Mal3ab": 1.12,
+  Amwally: 1.08,
+  Eltime: 1.3,
+  Fantazia: 1.12,
+  "Masar GP": 1.08,
+  Menus: 1.32,
+  "OG's HUB": 1.28,
+  "Padel Swift": 1.34,
+  "Ramy Rafaat": 1.12,
 };
 
 let pluginsRegistered = false;
@@ -96,7 +96,7 @@ export function LogoBar({ logos, eyebrow, dir = "ltr", className }: Props) {
             const dimensions = LOGO_DIMENSIONS[logo.alt] ?? { width: 280, height: 140 };
             const scale = LOGO_SCALE[logo.alt] ?? 1;
             return logo.href ? (
-              <a key={logo.alt} href={logo.href} target="_blank" rel="noopener noreferrer" className={cn(styles.item, "logo-item")}>
+              <a key={logo.alt} href={logo.href} target="_blank" rel="noopener noreferrer" data-dark={logo.darkCard ? "true" : undefined} className={cn(styles.item, "logo-item")}>
                 <Image
                   src={logo.src}
                   alt={logo.alt}
@@ -109,7 +109,7 @@ export function LogoBar({ logos, eyebrow, dir = "ltr", className }: Props) {
                 />
               </a>
             ) : (
-              <span key={logo.alt} className={cn(styles.item, "logo-item")}>
+              <span key={logo.alt} data-dark={logo.darkCard ? "true" : undefined} className={cn(styles.item, "logo-item")}>
                 <Image
                   src={logo.src}
                   alt={logo.alt}

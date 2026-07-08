@@ -64,7 +64,7 @@ export default async function HomePage({
     clients = recent?.data ?? [];
   }
   const reels = reelsEnv?.data ?? [];
-  const logos = CLIENT_LOGOS.map((l) => ({ src: l.src, alt: l.alt }));
+  const logos = CLIENT_LOGOS.map((l) => ({ src: l.src, alt: l.alt, darkCard: l.darkCard }));
 
   return (
     <>
