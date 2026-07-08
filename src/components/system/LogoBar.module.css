@@ -65,41 +65,33 @@
   to { transform: translateX(0); }
 }
 
+/* No card — just the logo in a spacing slot. */
 .chip {
   flex: 0 0 auto;
-  height: 78px;
-  min-width: 160px;
+  height: 70px;
+  min-width: 132px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 1.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  background: #ffffff;
-  box-shadow: 0 12px 28px -18px rgba(0, 0, 0, 0.6);
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Light logos (e.g. Fantazia) get a dark chip so they stay visible. */
-.chip[data-dark="true"] {
-  background: linear-gradient(160deg, #12294d 0%, #0a1834 100%);
-  border-color: rgba(255, 255, 255, 0.16);
-}
-
-.chip:is(:hover, :focus-visible) {
-  transform: translateY(-3px);
-  border-color: rgba(212, 162, 76, 0.55);
-  box-shadow: 0 18px 34px -18px rgba(0, 0, 0, 0.65);
+  padding: 0 1.75rem;
 }
 
 .logo {
   width: auto;
   height: auto;
-  max-width: 132px;
-  max-height: 44px;
+  max-width: 140px;
+  max-height: 46px;
   object-fit: contain;
+  /* Render every logo as a uniform white mark so it reads on the dark band. */
+  filter: brightness(0) invert(1);
+  opacity: 0.72;
   transform: scale(var(--logo-scale, 1));
   transform-origin: center;
+  transition: opacity 0.3s ease;
+}
+
+.chip:is(:hover, :focus-visible) .logo {
+  opacity: 1;
 }
 
 @media (max-width: 640px) {

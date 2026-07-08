@@ -70,7 +70,6 @@ export default async function HomePage({
     <>
       <Hero locale={locale} />
       <ReelsRow locale={locale} reels={reels} showAll />
-      <LogoBar logos={logos} eyebrow={t.logos} dir={dir} />
       <FeaturedCaseStudies locale={locale} clients={clients} />
       <Solutions locale={locale} />
       <Process locale={locale} />
@@ -79,6 +78,7 @@ export default async function HomePage({
       <LeadMagnet locale={locale} />
       <FaqSection locale={locale} items={faq} />
       <Problem locale={locale} />
+      <LogoBar logos={logos} eyebrow={t.logos} dir={dir} />
       <CTAPanel
         title={t.ctaTitle}
         subtitle={t.ctaSub}
