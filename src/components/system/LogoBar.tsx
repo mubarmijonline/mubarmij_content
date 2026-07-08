@@ -1,10 +1,4 @@
-"use client";
-
-import { useRef } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { cn } from "@/lib/utils";
 import styles from "./LogoBar.module.css";
@@ -42,104 +36,47 @@ const LOGO_SCALE: Record<string, number> = {
   "Ramy Rafaat": 1.12,
 };
 
-let pluginsRegistered = false;
-
-function registerGsap() {
-  if (pluginsRegistered || typeof window === "undefined") return;
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-  pluginsRegistered = true;
-}
-
-function Chip({ logo, k }: { logo: LogoItem; k: string }) {
-  const dimensions = LOGO_DIMENSIONS[logo.alt] ?? { width: 280, height: 140 };
-  const scale = LOGO_SCALE[logo.alt] ?? 1;
-  const img = (
-    <Image
-      src={logo.src}
-      alt={logo.alt}
-      width={dimensions.width}
-      height={dimensions.height}
-      quality={100}
-      sizes="150px"
-      className={styles.logo}
-      style={{ "--logo-scale": scale } as React.CSSProperties}
-    />
-  );
-  return logo.href ? (
-    <a
-      key={k}
-      href={logo.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={logo.alt}
-      data-dark={logo.darkCard ? "true" : undefined}
-      className={styles.chip}
-    >
-      {img}
-    </a>
-  ) : (
-    <span key={k} data-dark={logo.darkCard ? "true" : undefined} className={styles.chip} aria-label={logo.alt}>
-      {img}
-    </span>
-  );
-}
-
-/** Trusted-company logo wall — a dual-row, edge-faded marquee of legible chips. */
+/** Trusted-company logos — a single clean row, each shown once. */
 export function LogoBar({ logos, eyebrow, dir = "ltr", className }: Props) {
-  registerGsap();
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      if (!sectionRef.current || typeof window === "undefined") return;
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const marquee = sectionRef.current.querySelector(`.${styles.marquee}`);
-      if (reduce || !marquee) return;
-
-      gsap.from(marquee, {
-        opacity: 0,
-        y: 32,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 82%", once: true },
-      });
-      requestAnimationFrame(() => ScrollTrigger.refresh());
-    },
-    { scope: sectionRef, dependencies: [dir, logos.length] },
-  );
-
   if (!logos.length) return null;
 
-  // Two rows drifting in opposite directions; each row duplicates its set for a seamless loop.
-  const rowA = logos;
-  const rowB = [...logos].reverse();
-
   return (
-    <section ref={sectionRef} className={cn(styles.section, className)} dir={dir}>
+    <section className={cn(styles.section, className)} dir={dir}>
       <div className={styles.container}>
         {eyebrow ? <p className={styles.heading}>{eyebrow}</p> : null}
-      </div>
-
-      <div className={styles.marquee}>
         <div className={styles.row}>
-          <div className={cn(styles.track, styles.left)}>
-            {rowA.map((l, i) => (
-              <Chip key={`a1-${l.alt}-${i}`} logo={l} k={`a1-${l.alt}-${i}`} />
-            ))}
-            {rowA.map((l, i) => (
-              <Chip key={`a2-${l.alt}-${i}`} logo={l} k={`a2-${l.alt}-${i}`} />
-            ))}
-          </div>
-        </div>
-        <div className={styles.row}>
-          <div className={cn(styles.track, styles.right)}>
-            {rowB.map((l, i) => (
-              <Chip key={`b1-${l.alt}-${i}`} logo={l} k={`b1-${l.alt}-${i}`} />
-            ))}
-            {rowB.map((l, i) => (
-              <Chip key={`b2-${l.alt}-${i}`} logo={l} k={`b2-${l.alt}-${i}`} />
-            ))}
-          </div>
+          {logos.map((logo) => {
+            const d = LOGO_DIMENSIONS[logo.alt] ?? { width: 280, height: 140 };
+            const scale = LOGO_SCALE[logo.alt] ?? 1;
+            const img = (
+              <Image
+                src={logo.src}
+                alt={logo.alt}
+                width={d.width}
+                height={d.height}
+                quality={100}
+                sizes="150px"
+                className={styles.logo}
+                style={{ "--logo-scale": scale } as React.CSSProperties}
+              />
+            );
+            return logo.href ? (
+              <a
+                key={logo.alt}
+                href={logo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={logo.alt}
+                className={styles.item}
+              >
+                {img}
+              </a>
+            ) : (
+              <span key={logo.alt} aria-label={logo.alt} className={styles.item}>
+                {img}
+              </span>
+            );
+          })}
         </div>
       </div>
     </section>

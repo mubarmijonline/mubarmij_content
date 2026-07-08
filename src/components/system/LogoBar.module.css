@@ -1,8 +1,7 @@
 .section {
   background: #0a1834;
   border-block: 1px solid rgba(255, 255, 255, 0.08);
-  padding-block: 3.25rem;
-  overflow: hidden;
+  padding-block: 3rem;
 }
 
 .container {
@@ -22,95 +21,48 @@
   color: #8b9bb8;
 }
 
-/* Dual-row marquee with faded edges */
-.marquee {
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-}
-
+/* One clean centered row; wraps to a centered second line on smaller screens. */
 .row {
-  overflow: hidden;
-}
-
-.track {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
-  width: max-content;
-  will-change: transform;
+  justify-content: center;
+  gap: 2.25rem 3rem;
 }
 
-.left {
-  animation: marqueeLeft 48s linear infinite;
-}
-
-.right {
-  animation: marqueeRight 56s linear infinite;
-}
-
-.marquee:hover .track {
-  animation-play-state: paused;
-}
-
-@keyframes marqueeLeft {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-@keyframes marqueeRight {
-  from { transform: translateX(-50%); }
-  to { transform: translateX(0); }
-}
-
-/* No card — just the logo in a spacing slot. */
-.chip {
-  flex: 0 0 auto;
-  height: 70px;
-  min-width: 132px;
+.item {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 1.75rem;
 }
 
 .logo {
   width: auto;
   height: auto;
-  max-width: 140px;
-  max-height: 46px;
+  max-width: 150px;
+  max-height: 50px;
   object-fit: contain;
-  /* Render every logo as a uniform white mark so it reads on the dark band. */
+  /* Uniform white marks so every logo reads clearly on the dark band — full strength. */
   filter: brightness(0) invert(1);
-  opacity: 0.72;
+  opacity: 1;
   transform: scale(var(--logo-scale, 1));
   transform-origin: center;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 
-.chip:is(:hover, :focus-visible) .logo {
-  opacity: 1;
+.item:is(:hover, :focus-visible) .logo {
+  opacity: 0.75;
 }
 
 @media (max-width: 640px) {
   .container {
     padding: 0 1rem;
   }
-  .chip {
-    height: 66px;
-    min-width: 132px;
-    padding: 0 1.15rem;
+  .row {
+    gap: 1.75rem 2rem;
   }
   .logo {
-    max-width: 112px;
-    max-height: 36px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .track {
-    animation: none;
+    max-width: 116px;
+    max-height: 40px;
   }
 }
