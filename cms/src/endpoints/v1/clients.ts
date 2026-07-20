@@ -5,6 +5,26 @@ import { pickLocale, pickLocalized, type V1Locale } from "./helpers/locale"
 
 const PUBLIC_BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.mubarmijonline.com"
 
+// Human-readable labels for the industry select values (matches ClientLogos options).
+const INDUSTRY_LABELS: Record<string, string> = {
+  automotive: "Automotive",
+  ecommerce: "E-Commerce",
+  hospitality: "Hospitality",
+  fnb: "Food & Beverage",
+  healthcare: "Healthcare",
+  "real-estate": "Real Estate",
+  education: "Education",
+  logistics: "Logistics",
+  retail: "Retail",
+  services: "Services",
+}
+
+function industryLabel(industry?: string, custom?: string): string {
+  if (!industry) return ""
+  if (industry === "other") return custom || "Other"
+  return INDUSTRY_LABELS[industry] || industry
+}
+
 function absMediaUrl(media: unknown): string | undefined {
   if (!media) return undefined
   // depth=1 gives full media object; depth=0 gives id string.
@@ -38,6 +58,11 @@ type CmsClient = {
   testimonialQuote?: string
   testimonialAuthor?: string
   timeline?: string
+  techStack?: { label?: string }[]
+  reelRecommended?: boolean
+  reelPriority?: string
+  reelReason?: string
+  reelBrief?: string
 }
 
 function clientSummary(c: CmsClient, locale: V1Locale, order: number) {
@@ -48,7 +73,7 @@ function clientSummary(c: CmsClient, locale: V1Locale, order: number) {
     name: c.name || "",
     tagline: c.tagline || c.shortDescription || "",
     category: c.industry || "",
-    category_label: c.industry === "other" && c.industryCustom ? c.industryCustom : (c.industry || ""),
+    category_label: industryLabel(c.industry, c.industryCustom),
     logo_url: logo,
     thumb_url: cover || logo,
     featured: Boolean(c.featured),
@@ -143,14 +168,16 @@ export const getClientEndpoint: Endpoint = {
       name: doc.name || "",
       tagline: doc.tagline || doc.shortDescription || "",
       category: doc.industry || "",
-      category_label: doc.industry === "other" && doc.industryCustom ? doc.industryCustom : (doc.industry || ""),
+      category_label: industryLabel(doc.industry, doc.industryCustom),
       hero_image_url: absMediaUrl(doc.coverImage) || absMediaUrl(doc.logo),
       logo_url: absMediaUrl(doc.logo),
       gallery,
       brief: doc.shortDescription || "",
       brief_html: briefHtml,
       results: (doc.metrics || []).map((m) => ({ metric: m.value || "", label: m.label || "" })),
-      tech_stack: [] as string[],
+      tech_stack: (doc.techStack || [])
+        .map((t) => (t?.label || "").trim())
+        .filter(Boolean),
       links: {
         live_url: doc.websiteUrl || undefined,
         play_store: undefined as string | undefined,
@@ -162,6 +189,12 @@ export const getClientEndpoint: Endpoint = {
       testimonial: doc.testimonialQuote
         ? { quote: doc.testimonialQuote, author: doc.testimonialAuthor || "" }
         : undefined,
+      reel: {
+        recommended: Boolean(doc.reelRecommended),
+        priority: doc.reelPriority || undefined,
+        reason: doc.reelReason || undefined,
+        brief: doc.reelBrief || undefined,
+      },
     }
 
     // pickLocalized used implicitly above (already filtered by locale param).

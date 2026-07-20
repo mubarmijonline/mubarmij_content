@@ -56,6 +56,7 @@ export const ClientLogos: CollectionConfig = {
       name: 'industry',
       type: 'select',
       options: [
+        { label: 'Automotive', value: 'automotive' },
         { label: 'E-commerce', value: 'ecommerce' },
         { label: 'Hospitality', value: 'hospitality' },
         { label: 'Food & Beverage', value: 'fnb' },
@@ -203,7 +204,9 @@ export const ClientLogos: CollectionConfig = {
       labels: { singular: 'Metric', plural: 'Metrics' },
       admin: { description: 'Headline numbers, e.g. "+34% conversion".' },
       fields: [
-        { name: 'label', type: 'text', localized: true, required: true },
+        // Not `required` so a single-locale import can set the English label and
+        // let other locales fall back, instead of forcing a duplicate per-locale write.
+        { name: 'label', type: 'text', localized: true },
         { name: 'value', type: 'text', required: true },
       ],
     },
@@ -226,6 +229,65 @@ export const ClientLogos: CollectionConfig = {
       type: 'text',
       localized: true,
       admin: { description: 'Project timeline, e.g. "5 weeks", "3 أسابيع".' },
+    },
+
+    // ---------- Reel recommendation (text-only; no video generated) ----------
+    {
+      name: 'reelRecommended',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'Flag that this project is a good candidate for a short vertical portfolio reel. Recommendation only — no video is generated here.',
+      },
+    },
+    {
+      name: 'reelPriority',
+      type: 'select',
+      defaultValue: 'medium',
+      options: [
+        { label: 'Low', value: 'low' },
+        { label: 'Medium', value: 'medium' },
+        { label: 'High', value: 'high' },
+      ],
+      admin: { condition: (data) => Boolean(data?.reelRecommended) },
+    },
+    {
+      name: 'reelReason',
+      type: 'textarea',
+      localized: true,
+      admin: {
+        description: 'Why a reel is recommended for this project.',
+        condition: (data) => Boolean(data?.reelRecommended),
+      },
+    },
+    {
+      name: 'reelBrief',
+      type: 'textarea',
+      localized: true,
+      admin: {
+        description: 'Creative brief for the recommended reel (stored as text only).',
+        condition: (data) => Boolean(data?.reelRecommended),
+      },
+    },
+
+    // ---------- Import provenance ----------
+    {
+      name: 'sourceUrl',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'Original URL this project was imported from (if auto-imported).',
+      },
+    },
+    {
+      name: 'importedBy',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Set automatically when a project is created via the import API.',
+      },
     },
 
     // ---------- Visibility (sidebar) ----------

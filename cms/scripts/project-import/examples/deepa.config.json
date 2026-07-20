@@ -1,0 +1,62 @@
+{
+  "name": "Deepa",
+  "slug": "deepa",
+  "websiteUrl": "https://deepa-eg.com/en",
+  "sourceUrl": "https://deepa-eg.com/en",
+  "tagline": {
+    "en": "Auto-care e-commerce platform with smart product discovery",
+    "ar": "منصة تجارة إلكترونية للعناية بالسيارات مع اختيار ذكي للمنتجات"
+  },
+  "shortDescription": {
+    "en": "Deepa helps drivers find batteries, tires, oils, wipers, and accessories with same-day delivery and installation in Greater Cairo.",
+    "ar": "Deepa تساعد السائقين يلاقوا البطاريات والإطارات والزيوت والمساحات والإكسسوارات مع توصيل وتركيب في نفس اليوم داخل القاهرة الكبرى."
+  },
+  "description": {
+    "en": "Deepa is an automotive e-commerce experience built around fast product discovery and on-site service. The website helps customers find compatible batteries and tires, browse auto-care categories, compare products and brands, and reach support through hotline or WhatsApp. The experience highlights same-day delivery across Greater Cairo, free battery installation, genuine products, and manufacturer warranty support.",
+    "ar": "Deepa تجربة تجارة إلكترونية لمنتجات وخدمات العناية بالسيارات، مبنية حول سهولة اختيار المنتج المناسب وسرعة الخدمة. الموقع يساعد العملاء يلاقوا البطاريات والإطارات المناسبة، يتصفحوا الأقسام، يقارنوا المنتجات والعلامات التجارية، ويتواصلوا مع الدعم من خلال الخط الساخن أو واتساب. التجربة تبرز التوصيل في نفس اليوم داخل القاهرة الكبرى، والتركيب المجاني للبطاريات، والمنتجات الأصلية، ودعم ضمان المصنع."
+  },
+  "services": [
+    "web"
+  ],
+  "industry": "ecommerce",
+  "techStack": [
+    "E-commerce",
+    "Smart Product Finder",
+    "Product Catalog",
+    "Bilingual UX",
+    "WhatsApp Commerce",
+    "Automotive Retail"
+  ],
+  "metrics": [
+    {
+      "label": "Shopping journey",
+      "value": "Smart finder"
+    },
+    {
+      "label": "Service model",
+      "value": "Same-day install"
+    },
+    {
+      "label": "Catalog",
+      "value": "Batteries + tires"
+    }
+  ],
+  "important": true,
+  "featured": true,
+  "displayOnHomepage": true,
+  "publishStatus": "published",
+  "importedBy": "claude_code",
+  "enhancement": "sharp",
+  "reelRecommended": true,
+  "reelPriority": "high",
+  "reelReason": {
+    "en": "Deepa has a strong visual e-commerce journey: smart product finder, category browsing, product cards, trusted brands, installation flow, and testimonials.",
+    "ar": "Deepa فيها رحلة تجارة إلكترونية بصرية قوية: اختيار ذكي للمنتجات، تصفح الأقسام، كروت المنتجات، العلامات التجارية، خطوات التركيب، وآراء العملاء."
+  },
+  "reelBrief": {
+    "en": "Create a short vertical portfolio reel showing the Deepa shopping journey. Open with the Smart Product Finder, move through batteries and tires categories, show product cards and trusted brands, then finish with same-day delivery and installation across Greater Cairo. Use MubarmiJ navy/gold framing, quick zooms, smooth section transitions, and subtle UI motion. Do not invent UI or change Deepa content.",
+    "ar": "اعمل Reel رأسي قصير يعرض رحلة التسوق في Deepa. ابدأ بـ Smart Product Finder، وبعدها أقسام البطاريات والإطارات، ثم كروت المنتجات والعلامات التجارية، واختم برسالة التوصيل والتركيب في نفس اليوم داخل القاهرة الكبرى. استخدم إطار مبرمج الكحلي والذهبي، زووم سريع، انتقالات ناعمة، وحركة بسيطة للواجهة. لا تخترع UI ولا تغيّر محتوى Deepa."
+  },
+  "address": "deepa-eg.com/en",
+  "notes": "Imported via run-import.mjs"
+}
