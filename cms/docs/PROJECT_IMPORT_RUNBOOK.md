@@ -25,7 +25,13 @@ Helper scripts live in `cms/scripts/project-import/`:
    This does everything in order: create job → capture → logo → enhance → write metadata → submit →
    sync media → verify, and prints the public URLs.
 
-Flags: `SKIP_CAPTURE=1` / `SKIP_ENHANCE=1` (reuse existing files on a re-run),
+**Reel (optional):** add a `reelPages` array to the config (`[{"path":"/en/","label":"Home"}, …]`)
+and the orchestrator builds a short vertical reel (`build-reel.mjs`: framed page montage, ken-burns +
+crossfades, MubarmiJ intro/outro) and attaches it — the Media→Reels hook auto-links it to the project,
+so it shows in the detail page's reel row. Skip with `SKIP_REEL=1`. To pin a project to the top of the
+case-studies list, set a low `order` (e.g. `-1`; the list sorts by `order` ascending).
+
+Flags: `SKIP_CAPTURE=1` / `SKIP_ENHANCE=1` / `SKIP_REEL=1` (reuse existing files on a re-run),
 `MEDIA_DEST=/…/cms/media` (copy new media to another CMS's media dir — needed in worktree dev mode),
 `PUBLIC_URL=…`. Keys come from `PROJECT_IMPORT_API_KEY` / `PROJECT_IMPORT_AGENT_KEY` (fallback `dev-*`).
 

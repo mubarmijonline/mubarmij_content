@@ -109,7 +109,9 @@ export const listClientsEndpoint: Endpoint = {
       where: where as never,
       limit: pageSize,
       page,
-      sort: "name",
+      // Order-first (ascending, matches reels/testimonials/homepage logo bar),
+      // name as tie-breaker. Set a lower `order` to pin a project to the top.
+      sort: ["order", "name"],
       depth: 1,
       locale,
       fallbackLocale: "en",

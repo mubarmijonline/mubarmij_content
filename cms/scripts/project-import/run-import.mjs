@@ -14,7 +14,7 @@
 //   MEDIA_DEST=/…/cms/media              copy new media here (worktree dev → main CMS)
 //   SKIP_CAPTURE=1 / SKIP_ENHANCE=1      reuse existing files under tmp/…/<slug>
 //   IDEMPOTENCY_KEY=<slug>-import-1      override the job idempotency key
-import { readFileSync, existsSync, mkdirSync, writeFileSync, readdirSync, copyFileSync } from 'node:fs'
+import { readFileSync, existsSync, mkdirSync, writeFileSync, readdirSync, copyFileSync, statSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -80,9 +80,20 @@ step(3, 'Prepare logo'); run('prepare-logo.mjs')
 if (process.env.SKIP_ENHANCE === '1') step(4, 'Enhance — SKIPPED')
 else { step(4, 'Enhance (MubarmiJ frame + logo tab)'); run('enhance.mjs') }
 
+// 4b) Optional reel from the project's pages
+if (process.env.SKIP_REEL !== '1' && Array.isArray(cfg.reelPages) && cfg.reelPages.length) {
+  step('4b', `Build reel from ${cfg.reelPages.length} pages`)
+  run('build-reel.mjs', {
+    PI_PAGES: JSON.stringify(cfg.reelPages),
+    PI_BRAND: cfg.brand || String(cfg.name || SLUG).toUpperCase(),
+    PI_TAGLINE: (cfg.tagline && cfg.tagline.en) || '',
+  })
+} else if (Array.isArray(cfg.reelPages)) { step('4b', 'Reel — SKIPPED') }
+
 // 5) Write metadata.json (config minus orchestration-only keys)
 step(5, 'Write metadata.json')
-const metadata = { ...cfg }; delete metadata.address; delete metadata.notes
+const metadata = { ...cfg }
+delete metadata.address; delete metadata.notes; delete metadata.reelPages; delete metadata.brand
 if (metadata.enhancement === undefined) metadata.enhancement = 'sharp'
 const metaPath = path.join(DIR, 'metadata.json')
 writeFileSync(metaPath, JSON.stringify(metadata, null, 2))
@@ -102,6 +113,12 @@ for (const [field, file] of parts) {
   if (!existsSync(p)) { console.error(`  missing enhanced file: ${file}`); process.exit(1) }
   fd.append(field, new Blob([readFileSync(p)], { type: 'image/webp' }), file)
 }
+// Optional reel video (built by build-reel.mjs). Auto-links to the project via the Media→Reels hook.
+const reelPath = process.env.PI_REEL || path.join(ENH, 'reel.mp4')
+if (existsSync(reelPath)) {
+  fd.append('reel', new Blob([readFileSync(reelPath)], { type: 'video/mp4' }), `${SLUG}-reel.mp4`)
+  console.log(`  + reel: ${reelPath}`)
+}
 const submit = await api('POST', `${CMS}/api/v1/agent/project-imports/${jobId}/result`, {
   headers: { 'Authorization': `Bearer ${AGENT_KEY}` }, body: fd,
 })
@@ -114,10 +131,15 @@ if (process.env.MEDIA_DEST) {
   const srcDir = path.join(CMS_DIR, 'media')
   let n = 0
   for (const f of readdirSync(srcDir)) {
+    const src = path.join(srcDir, f)
     const dest = path.join(process.env.MEDIA_DEST, f)
-    if (!existsSync(dest)) { try { copyFileSync(path.join(srcDir, f), dest); n++ } catch {} }
+    // Copy new files, and overwrite when the size differs (e.g. a rebuilt reel
+    // reuses the same filename). Stat-based so we don't re-copy identical files.
+    let copy = !existsSync(dest)
+    if (!copy) { try { copy = statSync(src).size !== statSync(dest).size } catch { copy = true } }
+    if (copy) { try { copyFileSync(src, dest); n++ } catch {} }
   }
-  console.log(`  copied ${n} new file(s)`)
+  console.log(`  synced ${n} file(s)`)
 }
 
 // 8) Confirm + verify links

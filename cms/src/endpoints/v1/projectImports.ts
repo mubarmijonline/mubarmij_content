@@ -301,6 +301,24 @@ export const submitProjectImportResultEndpoint: Endpoint = {
       // dedicated logo mark is supplied so the import never hard-fails.
       const resolvedLogoId = logoId || coverImageId
 
+      // Optional reel video — buffered here but uploaded AFTER the client doc
+      // exists (below), so the Media afterChange hook can link the auto-created
+      // Reels entry to this project. No video is generated server-side.
+      let reelMediaId: string | undefined
+      let reelBuf: Buffer | undefined
+      let reelExt = "mp4"
+      let reelMime = "video/mp4"
+      const reelPart = form.get("reel")
+      if (reelPart && typeof (reelPart as any).arrayBuffer === "function") {
+        const f = reelPart as File
+        const b = Buffer.from(await f.arrayBuffer())
+        if (b.length) {
+          reelBuf = b
+          reelMime = f.type || "video/mp4"
+          reelExt = (f.type || "").includes("webm") ? "webm" : "mp4"
+        }
+      }
+
       // ---- Map metadata -> client-logos fields ------------------------------
       const tagline = loc(metadata.tagline)
       const shortDescription = loc(metadata.shortDescription)
@@ -411,6 +429,37 @@ export const submitProjectImportResultEndpoint: Endpoint = {
         })
       }
 
+      // Now that the client exists, (re)attach the reel. Clean prior import reels
+      // for this project first so re-runs stay idempotent, then upload — the Media
+      // hook auto-creates a Reels entry linked to the now-existing client.
+      if (reelBuf) {
+        const priorMedia = await req.payload.find({
+          collection: "media",
+          where: { filename: { like: `${slug}-reel` } },
+          limit: 50,
+          overrideAccess: true,
+        })
+        for (const m of priorMedia.docs as any[]) {
+          const rs = await req.payload.find({
+            collection: "reels",
+            where: { videoFile: { equals: m.id } },
+            limit: 50,
+            overrideAccess: true,
+          })
+          for (const r of rs.docs as any[]) {
+            await req.payload.delete({ collection: "reels", id: r.id, overrideAccess: true }).catch(() => undefined)
+          }
+          await req.payload.delete({ collection: "media", id: m.id, overrideAccess: true }).catch(() => undefined)
+        }
+        const createdReel = await req.payload.create({
+          collection: "media",
+          data: { alt: `${name} reel` },
+          file: { data: reelBuf, mimetype: reelMime, name: `${slug}-reel.${reelExt}`, size: reelBuf.length },
+          overrideAccess: true,
+        })
+        reelMediaId = String((createdReel as any).id)
+      }
+
       const publicUrl = `${SITE_URL.replace(/\/$/, "")}/case-studies/${slug}`
 
       await req.payload.update({
@@ -438,6 +487,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
         publicUrl,
         galleryCount: galleryIds.length,
         viewports: Object.fromEntries(Object.entries(viewportIds).filter(([, v]) => v)),
+        reelMediaId: reelMediaId || null,
         reelRecommended,
         reelPriority,
         enhancement,
