@@ -27,8 +27,12 @@ let LOGO_B64 = null, LOGO_W = 0, LOGO_H = 0
 const embed = `${OUT}/logo-embed.png`
 if (existsSync(embed)) { const m = await sharp(embed).metadata(); LOGO_W = m.width; LOGO_H = m.height; LOGO_B64 = readFileSync(embed).toString('base64') }
 
-// Brand palette + canvas
+// Brand palette + canvas. Design space is 1600x1000; output is rendered at
+// PI_SCALE× (default 2 → 3200x2000) so the vector frame stays crisp and the
+// screenshots keep near-native detail. Bump PI_SCALE / PI_WEBP_QUALITY for more.
 const NAVY = '#0A1628', NAVY_SOFT = '#0E1C30', CHROME = '#122540', GOLD = '#D4A24C'
+const S = Math.max(1, Number(process.env.PI_SCALE || 2))
+const QUALITY = Math.min(100, Number(process.env.PI_WEBP_QUALITY || 92))
 const W = 1600, H = 1000, M = 78, CHROME_H = 46, RADIUS = 18
 const panelX = M, panelY = 64, panelW = W - M * 2, panelH = H - panelY - 72
 const contentW = panelW, contentH = panelH - CHROME_H
@@ -43,7 +47,7 @@ function frameSvg() {
     <rect x="${panelX + 94}" y="${panelY + 8}" width="${tabW}" height="${CHROME_H - 8}" rx="9" ry="9" fill="#FFFFFF"/>
     <image href="data:image/png;base64,${LOGO_B64}" x="${panelX + 112}" y="${panelY + (CHROME_H - logoH) / 2 + 1}"
            width="${logoW}" height="${logoH}" preserveAspectRatio="xMidYMid meet"/>` : ''
-  return Buffer.from(`<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+  return Buffer.from(`<svg width="${W * S}" height="${H * S}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
       <feDropShadow dx="0" dy="26" stdDeviation="34" flood-color="#000000" flood-opacity="0.55"/>
@@ -78,9 +82,13 @@ function roundedMaskSvg(w, h, tl, tr, br, bl) {
 async function enhance(name) {
   const inFile = `${SRC}/${name}.png`
   if (!existsSync(inFile)) { console.log(`skip (missing): ${name}`); return false }
-  const shot = await sharp(inFile).resize(contentW, contentH, { fit: 'contain', background: NAVY_SOFT }).toBuffer()
-  const rounded = await sharp(shot).composite([{ input: roundedMaskSvg(contentW, contentH, 0, 0, RADIUS, RADIUS), blend: 'dest-in' }]).png().toBuffer()
-  await sharp(frameSvg()).composite([{ input: rounded, left: panelX, top: panelY + CHROME_H }]).webp({ quality: 90 }).toFile(`${OUT}/${name}.webp`)
+  const cw = Math.round(contentW * S), ch = Math.round(contentH * S)
+  const shot = await sharp(inFile).resize(cw, ch, { fit: 'contain', background: NAVY_SOFT }).toBuffer()
+  const rounded = await sharp(shot).composite([{ input: roundedMaskSvg(cw, ch, 0, 0, Math.round(RADIUS * S), Math.round(RADIUS * S)), blend: 'dest-in' }]).png().toBuffer()
+  await sharp(frameSvg())
+    .composite([{ input: rounded, left: Math.round(panelX * S), top: Math.round((panelY + CHROME_H) * S) }])
+    .webp({ quality: QUALITY })
+    .toFile(`${OUT}/${name}.webp`)
   console.log(`enhanced ${name}`); return true
 }
 
