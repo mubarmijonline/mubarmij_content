@@ -120,7 +120,7 @@ export const createProjectImportEndpoint: Endpoint = {
 
     // Idempotency: same key -> return the existing job untouched.
     if (idempotencyKey) {
-      const existing = await req.payload.find({
+      const existing = await (req.payload as any).find({
         collection: "project-imports",
         where: { idempotencyKey: { equals: idempotencyKey } },
         limit: 1,
@@ -140,7 +140,7 @@ export const createProjectImportEndpoint: Endpoint = {
       }
     }
 
-    const job = await req.payload.create({
+    const job = await (req.payload as any).create({
       collection: "project-imports",
       data: {
         name: typeof body.name === "string" ? body.name : undefined,
@@ -176,7 +176,7 @@ export const getProjectImportEndpoint: Endpoint = {
 
     let job: any
     try {
-      job = await req.payload.findByID({ collection: "project-imports", id: jobId, overrideAccess: true })
+      job = await (req.payload as any).findByID({ collection: "project-imports", id: jobId, overrideAccess: true })
     } catch {
       return fail("NOT_FOUND", `Job not found: ${jobId}`)
     }
@@ -215,7 +215,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
 
     let job: any
     try {
-      job = await req.payload.findByID({ collection: "project-imports", id: jobId, overrideAccess: true })
+      job = await (req.payload as any).findByID({ collection: "project-imports", id: jobId, overrideAccess: true })
     } catch {
       return fail("NOT_FOUND", `Job not found: ${jobId}`)
     }
@@ -257,7 +257,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
     const enhancement = String(metadata.enhancement || jobParams.enhancement || "sharp")
 
     try {
-      await req.payload.update({
+      await (req.payload as any).update({
         collection: "project-imports",
         id: jobId,
         data: { status: "processing" },
@@ -271,7 +271,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
         const file = part as File
         const buf = Buffer.from(await file.arrayBuffer())
         if (!buf.length) return undefined
-        const created = await req.payload.create({
+        const created = await (req.payload as any).create({
           collection: "media",
           data: { alt: `${altBase}` },
           file: {
@@ -389,7 +389,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
       }
 
       // Upsert by slug.
-      const existing = await req.payload.find({
+      const existing = await (req.payload as any).find({
         collection: "client-logos",
         where: { slug: { equals: slug } },
         limit: 1,
@@ -399,7 +399,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
 
       let projectId: string
       if (priorDoc) {
-        const updated = await req.payload.update({
+        const updated = await (req.payload as any).update({
           collection: "client-logos",
           id: priorDoc.id,
           data: baseData,
@@ -408,7 +408,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
         })
         projectId = String((updated as any).id)
       } else {
-        const created = await req.payload.create({
+        const created = await (req.payload as any).create({
           collection: "client-logos",
           data: baseData,
           locale: "en",
@@ -429,7 +429,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
       // labels are set once in the base (en) write; other locales fall back via
       // fallbackLocale: "en" on read.
       if (Object.keys(arData).length) {
-        await req.payload.update({
+        await (req.payload as any).update({
           collection: "client-logos",
           id: projectId,
           data: arData,
@@ -442,25 +442,25 @@ export const submitProjectImportResultEndpoint: Endpoint = {
       // for this project first so re-runs stay idempotent, then upload — the Media
       // hook auto-creates a Reels entry linked to the now-existing client.
       if (reelBuf) {
-        const priorMedia = await req.payload.find({
+        const priorMedia = await (req.payload as any).find({
           collection: "media",
           where: { filename: { like: `${slug}-reel` } },
           limit: 50,
           overrideAccess: true,
         })
         for (const m of priorMedia.docs as any[]) {
-          const rs = await req.payload.find({
+          const rs = await (req.payload as any).find({
             collection: "reels",
             where: { videoFile: { equals: m.id } },
             limit: 50,
             overrideAccess: true,
           })
           for (const r of rs.docs as any[]) {
-            await req.payload.delete({ collection: "reels", id: r.id, overrideAccess: true }).catch(() => undefined)
+            await (req.payload as any).delete({ collection: "reels", id: r.id, overrideAccess: true }).catch(() => undefined)
           }
-          await req.payload.delete({ collection: "media", id: m.id, overrideAccess: true }).catch(() => undefined)
+          await (req.payload as any).delete({ collection: "media", id: m.id, overrideAccess: true }).catch(() => undefined)
         }
-        const createdReel = await req.payload.create({
+        const createdReel = await (req.payload as any).create({
           collection: "media",
           data: { alt: `${name} reel` },
           file: { data: reelBuf, mimetype: reelMime, name: `${slug}-reel.${reelExt}`, size: reelBuf.length },
@@ -472,7 +472,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
         // entry: proper title, portrait thumbnail, and order (low = first).
         let posterMediaId: string | undefined
         if (reelPosterBuf) {
-          const pm = await req.payload.create({
+          const pm = await (req.payload as any).create({
             collection: "media",
             data: { alt: `${name} reel poster` },
             file: { data: reelPosterBuf, mimetype: reelPosterMime, name: `${slug}-reel-poster.webp`, size: reelPosterBuf.length },
@@ -480,7 +480,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
           })
           posterMediaId = String((pm as any).id)
         }
-        const reelDocs = await req.payload.find({
+        const reelDocs = await (req.payload as any).find({
           collection: "reels",
           where: { videoFile: { equals: reelMediaId } },
           limit: 1,
@@ -491,7 +491,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
           const reelOrder =
             typeof metadata.reelOrder === "number" ? metadata.reelOrder
             : typeof metadata.order === "number" ? metadata.order : 0
-          await req.payload.update({
+          await (req.payload as any).update({
             collection: "reels",
             id: reelDoc.id,
             data: { title: `${name} Reel`, order: reelOrder, ...(posterMediaId ? { thumbnail: posterMediaId } : {}) },
@@ -502,7 +502,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
 
       const publicUrl = `${SITE_URL.replace(/\/$/, "")}/case-studies/${slug}`
 
-      await req.payload.update({
+      await (req.payload as any).update({
         collection: "project-imports",
         id: jobId,
         data: {
@@ -535,7 +535,7 @@ export const submitProjectImportResultEndpoint: Endpoint = {
       })
     } catch (e) {
       const message = String((e as Error)?.message || e)
-      await req.payload.update({
+      await (req.payload as any).update({
         collection: "project-imports",
         id: jobId,
         data: { status: "failed", error: message },
