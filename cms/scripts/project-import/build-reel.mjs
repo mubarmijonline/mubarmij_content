@@ -132,6 +132,11 @@ frames.push(await cardFrame('outro', [
 ]))
 console.log(`built ${frames.length} frames`)
 
+// Portrait 9:16 poster for the reel card/thumbnail (first page frame, or intro).
+const posterSrc = frames[1] || frames[0]
+await sharp(posterSrc).webp({ quality: 90 }).toFile(`${path.dirname(OUT)}/reel-poster.webp`)
+console.log(`poster -> ${path.dirname(OUT)}/reel-poster.webp`)
+
 // ---- ffmpeg assemble (ken-burns + crossfade) ----
 const FPS = 30, DUR = 2.6, XFD = 0.5, DFR = Math.round(DUR * FPS)
 const N = frames.length

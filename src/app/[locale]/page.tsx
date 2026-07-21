@@ -70,7 +70,7 @@ export default async function HomePage({
     <>
       <Hero locale={locale} />
       <ReelsRow locale={locale} reels={reels} showAll />
-      <FeaturedCaseStudies locale={locale} clients={clients} />
+      <FeaturedCaseStudies locale={locale} clients={clients} featuredReel={reels[0] ?? null} />
       <Solutions locale={locale} />
       <Process locale={locale} />
       <Testimonials locale={locale} testimonials={testimonials} />

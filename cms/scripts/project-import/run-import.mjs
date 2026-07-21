@@ -118,6 +118,11 @@ const reelPath = process.env.PI_REEL || path.join(ENH, 'reel.mp4')
 if (existsSync(reelPath)) {
   fd.append('reel', new Blob([readFileSync(reelPath)], { type: 'video/mp4' }), `${SLUG}-reel.mp4`)
   console.log(`  + reel: ${reelPath}`)
+  const posterPath = path.join(ENH, 'reel-poster.webp')
+  if (existsSync(posterPath)) {
+    fd.append('reelPoster', new Blob([readFileSync(posterPath)], { type: 'image/webp' }), `${SLUG}-reel-poster.webp`)
+    console.log(`  + reel poster: ${posterPath}`)
+  }
 }
 const submit = await api('POST', `${CMS}/api/v1/agent/project-imports/${jobId}/result`, {
   headers: { 'Authorization': `Bearer ${AGENT_KEY}` }, body: fd,

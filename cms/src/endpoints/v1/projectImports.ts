@@ -318,6 +318,15 @@ export const submitProjectImportResultEndpoint: Endpoint = {
           reelExt = (f.type || "").includes("webm") ? "webm" : "mp4"
         }
       }
+      // Optional portrait (9:16) poster for the reel card/thumbnail.
+      let reelPosterBuf: Buffer | undefined
+      let reelPosterMime = "image/webp"
+      const reelPosterPart = form.get("reelPoster")
+      if (reelPosterPart && typeof (reelPosterPart as any).arrayBuffer === "function") {
+        const f = reelPosterPart as File
+        const b = Buffer.from(await f.arrayBuffer())
+        if (b.length) { reelPosterBuf = b; reelPosterMime = f.type || "image/webp" }
+      }
 
       // ---- Map metadata -> client-logos fields ------------------------------
       const tagline = loc(metadata.tagline)
@@ -458,6 +467,37 @@ export const submitProjectImportResultEndpoint: Endpoint = {
           overrideAccess: true,
         })
         reelMediaId = String((createdReel as any).id)
+
+        // Upload the portrait poster (if any) and refine the auto-created Reels
+        // entry: proper title, portrait thumbnail, and order (low = first).
+        let posterMediaId: string | undefined
+        if (reelPosterBuf) {
+          const pm = await req.payload.create({
+            collection: "media",
+            data: { alt: `${name} reel poster` },
+            file: { data: reelPosterBuf, mimetype: reelPosterMime, name: `${slug}-reel-poster.webp`, size: reelPosterBuf.length },
+            overrideAccess: true,
+          })
+          posterMediaId = String((pm as any).id)
+        }
+        const reelDocs = await req.payload.find({
+          collection: "reels",
+          where: { videoFile: { equals: reelMediaId } },
+          limit: 1,
+          overrideAccess: true,
+        })
+        const reelDoc = reelDocs.docs?.[0] as any
+        if (reelDoc) {
+          const reelOrder =
+            typeof metadata.reelOrder === "number" ? metadata.reelOrder
+            : typeof metadata.order === "number" ? metadata.order : 0
+          await req.payload.update({
+            collection: "reels",
+            id: reelDoc.id,
+            data: { title: `${name} Reel`, order: reelOrder, ...(posterMediaId ? { thumbnail: posterMediaId } : {}) },
+            overrideAccess: true,
+          })
+        }
       }
 
       const publicUrl = `${SITE_URL.replace(/\/$/, "")}/case-studies/${slug}`
