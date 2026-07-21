@@ -16,6 +16,7 @@ import { AnalyticsEvents } from './collections/AnalyticsEvents'
 import { Leads } from './collections/Leads'
 import { PushDevices } from './collections/PushDevices'
 import { Reels } from './collections/Reels'
+import { ProjectImports } from './collections/ProjectImports'
 import { trackPageviewEndpoint } from './endpoints/analyticsTrack'
 import { v1Endpoints } from './endpoints/v1'
 
@@ -44,6 +45,7 @@ export default buildConfig({
     Leads,
     PushDevices,
     Reels,
+    ProjectImports,
   ],
   endpoints: [trackPageviewEndpoint, ...v1Endpoints],
   editor: lexicalEditor({}),

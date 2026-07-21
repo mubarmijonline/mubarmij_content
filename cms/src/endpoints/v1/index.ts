@@ -17,6 +17,11 @@ import {
 } from "./leads"
 import { pushRegisterEndpoint } from "./push"
 import { openapiEndpoint } from "./openapi"
+import {
+  createProjectImportEndpoint,
+  getProjectImportEndpoint,
+  submitProjectImportResultEndpoint,
+} from "./projectImports"
 
 export const v1Endpoints: Endpoint[] = [
   // GET
@@ -32,8 +37,11 @@ export const v1Endpoints: Endpoint[] = [
   listTestimonialsEndpoint,
   listReelsEndpoint,
   getReelEndpoint,
+  getProjectImportEndpoint,
   openapiEndpoint,
   // POST
+  createProjectImportEndpoint,
+  submitProjectImportResultEndpoint,
   contactLeadEndpoint,
   guideLeadEndpoint,
   newsletterLeadEndpoint,

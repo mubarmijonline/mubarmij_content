@@ -1,0 +1,56 @@
+{
+  "name": "Optics",
+  "brand": "OPTICS",
+  "slug": "optics",
+  "websiteUrl": "https://optics.mubarmijonline.com/en/",
+  "sourceUrl": "https://optics.mubarmijonline.com/en/",
+  "address": "optics.mubarmijonline.com/en",
+  "order": -1,
+  "reelOrder": -1,
+  "tagline": {
+    "en": "Eyewear e-commerce with smart lens selection and frame finding",
+    "ar": "متجر نظارات إلكتروني مع اختيار ذكي للعدسات وإيجاد الإطار المناسب"
+  },
+  "shortDescription": {
+    "en": "Optics helps shoppers find eyeglasses, sunglasses and contact lenses, choose the right prescription lenses, and discover frames that fit their face — with trusted brands and fast delivery.",
+    "ar": "Optics تساعد العملاء يلاقوا النظارات الطبية والشمسية والعدسات اللاصقة، يختاروا العدسات الطبية المناسبة، ويكتشفوا الإطارات اللي تناسب وشهم — مع علامات موثوقة وتوصيل سريع."
+  },
+  "description": {
+    "en": "Optics is an eyewear e-commerce experience built around confident lens and frame selection. Customers browse eyeglasses, sunglasses, computer and contact lenses, use a guided lens selector to pick the right prescription and coatings, and try the find-your-frame flow to match frames to their face shape. The store highlights curated brands, best sellers, seasonal deals, and helpful guides, with a clean bilingual (EN/AR) shopping journey from discovery to checkout.",
+    "ar": "Optics تجربة تجارة إلكترونية لمنتجات النظارات مبنية حول اختيار العدسات والإطارات بثقة. العملاء يتصفحوا النظارات الطبية والشمسية ونظارات الكمبيوتر والعدسات اللاصقة، يستخدموا أداة اختيار العدسات لتحديد المقاس والطبقات المناسبة، ويجربوا خاصية إيجاد الإطار لمطابقة الإطار مع شكل الوجه. المتجر يبرز العلامات المختارة والأكثر مبيعًا والعروض الموسمية والأدلة المفيدة، مع رحلة تسوق ثنائية اللغة من الاكتشاف حتى الدفع."
+  },
+  "services": ["web"],
+  "industry": "ecommerce",
+  "techStack": ["E-commerce", "Lens Selector", "Frame Finder", "Product Catalog", "Bilingual UX", "Eyewear Retail"],
+  "metrics": [
+    { "label": "Shopping journey", "value": "Lens selector" },
+    { "label": "Discovery", "value": "Find-your-frame" },
+    { "label": "Catalog", "value": "Frames + lenses" }
+  ],
+  "important": true,
+  "featured": true,
+  "displayOnHomepage": true,
+  "publishStatus": "published",
+  "importedBy": "claude_code",
+  "enhancement": "sharp",
+  "reelRecommended": true,
+  "reelPriority": "high",
+  "reelReason": {
+    "en": "Optics has a rich visual journey across many pages: home, eyeglasses, guided lens selector, find-your-frame, contact lenses, brands, product detail, and deals — ideal for a short scrolling reel.",
+    "ar": "Optics فيها رحلة بصرية غنية عبر صفحات كثيرة: الرئيسية، النظارات، اختيار العدسات، إيجاد الإطار، العدسات اللاصقة، العلامات، صفحة المنتج، والعروض — مثالية لـ Reel قصير."
+  },
+  "reelBrief": {
+    "en": "A short vertical portfolio reel montaging the Optics pages: open on the brand, move through eyeglasses, the guided lens selector, find-your-frame, contact lenses, featured brands, a product page, and deals. MubarmiJ navy/gold framing, subtle zooms and crossfades. Preserve the real UI; do not invent content.",
+    "ar": "Reel رأسي قصير يعرض صفحات Optics: يبدأ بالعلامة، ثم النظارات، أداة اختيار العدسات، إيجاد الإطار، العدسات اللاصقة، العلامات المميزة، صفحة منتج، والعروض. إطار مبرمج الكحلي/الذهبي مع زووم وانتقالات ناعمة. الحفاظ على الواجهة الحقيقية بدون اختراع محتوى."
+  },
+  "reelPages": [
+    { "path": "/en/", "label": "Home" },
+    { "path": "/en/eyeglasses", "label": "Eyeglasses" },
+    { "path": "/en/lens-selector", "label": "Lens Selector" },
+    { "path": "/en/find-frame", "label": "Find Your Frame" },
+    { "path": "/en/contact-lenses", "label": "Contact Lenses" },
+    { "path": "/en/brands", "label": "Brands" },
+    { "path": "/en/products/aria-cat-eye-2", "label": "Product Detail" },
+    { "path": "/en/deals", "label": "Deals" }
+  ]
+}

@@ -1,20 +1,23 @@
 import type { Locale } from "@/i18n/config";
-import type { ClientSummary } from "@/lib/v1";
+import type { ClientSummary, ReelItem } from "@/lib/v1";
 import { cmsMedia, localePath } from "@/lib/utils";
 import { GhostButton, Reveal, SectionEyebrow } from "@/components/system";
+import FeaturedReel from "@/components/home/FeaturedReel";
 
 const COPY = {
-  en: { eyebrow: "Selected work", title: "Results we've shipped", view: "View case study", all: "See all case studies" },
-  ar: { eyebrow: "أعمال مختارة", title: "نتائج سلّمناها", view: "شاهد الحالة", all: "كل دراسات الحالة" },
+  en: { eyebrow: "Selected work", title: "Results we've shipped", view: "View case study", all: "See all case studies", reelEyebrow: "Featured reel", reelSub: "A 60-second look at a build we shipped." },
+  ar: { eyebrow: "أعمال مختارة", title: "نتائج سلّمناها", view: "شاهد الحالة", all: "كل دراسات الحالة", reelEyebrow: "ريل مميّز", reelSub: "نظرة سريعة على مشروع سلّمناه." },
 } as const;
 
 /** P1 §5 — light, full-width responsive grid of featured case studies from /v1/clients?featured=true. */
 export default function FeaturedCaseStudies({
   locale,
   clients,
+  featuredReel,
 }: {
   locale: Locale;
   clients: ClientSummary[];
+  featuredReel?: ReelItem | null;
 }) {
   if (!clients.length) return null;
   const t = COPY[locale];
@@ -32,6 +35,31 @@ export default function FeaturedCaseStudies({
             {t.all}
           </GhostButton>
         </Reveal>
+
+        {featuredReel && featuredReel.playback?.mp4 ? (
+          <Reveal className="mt-10">
+            <div className="flex flex-col items-center gap-8 rounded-tile border border-neutral-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:gap-10 sm:p-8">
+              <FeaturedReel reel={featuredReel} locale={locale} />
+              <div className="max-w-md text-center sm:text-start">
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold-dim">
+                  {t.reelEyebrow}
+                </span>
+                <h3 className="mt-3 text-2xl font-semibold tracking-[-0.01em] text-navy-deep">
+                  {featuredReel.title}
+                </h3>
+                <p className="mt-2 leading-relaxed text-neutral-500">{t.reelSub}</p>
+                {featuredReel.client?.slug ? (
+                  <GhostButton
+                    href={localePath(locale, `/case-studies/${featuredReel.client.slug}`)}
+                    className="mt-5 inline-flex"
+                  >
+                    {t.view}
+                  </GhostButton>
+                ) : null}
+              </div>
+            </div>
+          </Reveal>
+        ) : null}
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {clients.map((c) => {
