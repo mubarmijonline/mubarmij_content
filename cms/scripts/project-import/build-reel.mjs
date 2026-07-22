@@ -29,6 +29,9 @@ const BASE = process.env.PI_DIR || path.join(CMS, 'tmp', 'project-imports', SLUG
 const RDIR = `${BASE}/reel`, PAGES_DIR = `${RDIR}/pages`, FRAMES_DIR = `${RDIR}/frames`
 const OUT = process.env.PI_OUT || `${BASE}/enhanced/reel.mp4`
 mkdirSync(PAGES_DIR, { recursive: true }); mkdirSync(FRAMES_DIR, { recursive: true }); mkdirSync(path.dirname(OUT), { recursive: true })
+// Reuse a logged-in session saved by login.mjs, when present.
+const AUTH = `${BASE}/auth.json`
+const ctxOpts = existsSync(AUTH) ? { storageState: AUTH } : {}
 
 const PAGES = JSON.parse(process.env.PI_PAGES || '[{"path":"/","label":"Home"}]')
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -96,7 +99,7 @@ if (allPresent && process.env.PI_REEL_RECAPTURE !== '1') {
 } else {
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] })
   try {
-    const ctx = await browser.newContext({ viewport: { width: 900, height: 1400 }, deviceScaleFactor: 2, locale: 'en-US' })
+    const ctx = await browser.newContext({ viewport: { width: 900, height: 1400 }, deviceScaleFactor: 2, locale: 'en-US', ...ctxOpts })
     for (let i = 0; i < PAGES.length; i++) {
       const p = PAGES[i]
       const page = await ctx.newPage()

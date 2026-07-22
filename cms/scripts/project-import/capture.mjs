@@ -9,15 +9,20 @@
 //
 // Requires: playwright (npm i playwright && npx playwright install --with-deps chromium)
 import { chromium } from 'playwright'
-import { mkdirSync } from 'node:fs'
+import { mkdirSync, existsSync } from 'node:fs'
 import path from 'node:path'
 
 const URL = process.env.PI_URL
 const SLUG = process.env.PI_SLUG
 if (!URL || !SLUG) { console.error('Set PI_URL and PI_SLUG'); process.exit(1) }
 const CMS = path.resolve(process.env.PI_CMS_DIR || path.join(process.cwd(), '..', '..'))
-const OUT = process.env.PI_ORIGINALS || path.join(CMS, 'tmp', 'project-imports', SLUG, 'originals')
+const DIR = process.env.PI_DIR || path.join(CMS, 'tmp', 'project-imports', SLUG)
+const OUT = process.env.PI_ORIGINALS || path.join(DIR, 'originals')
 mkdirSync(OUT, { recursive: true })
+// Reuse a logged-in session saved by login.mjs, when present.
+const AUTH = path.join(DIR, 'auth.json')
+const ctxOpts = existsSync(AUTH) ? { storageState: AUTH } : {}
+if (existsSync(AUTH)) console.log('using saved login session')
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const GALLERY_COUNT = Number(process.env.PI_GALLERY_COUNT || 6)
@@ -47,7 +52,7 @@ async function open(ctx) {
 }
 
 async function viewport(browser, name, width, height) {
-  const ctx = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 2, locale: 'en-US' })
+  const ctx = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 2, locale: 'en-US', ...ctxOpts })
   const page = await open(ctx)
   await page.screenshot({ path: `${OUT}/${name}.png`, fullPage: false })
   console.log(`viewport ${name} ${width}x${height}`)
@@ -56,7 +61,7 @@ async function viewport(browser, name, width, height) {
 
 async function gallery(browser) {
   const W = 1440, H = 900
-  const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 2, locale: 'en-US' })
+  const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 2, locale: 'en-US', ...ctxOpts })
   const page = await open(ctx)
 
   // Best-effort header logo grab for prepare-logo.mjs.

@@ -92,7 +92,8 @@ async function enhance(name) {
   console.log(`enhanced ${name}`); return true
 }
 
-const NAMES = ['desktop', 'tablet', 'mobile', ...Array.from({ length: 6 }, (_, i) => `gallery-${i + 1}`)]
+const GALLERY_COUNT = Number(process.env.PI_GALLERY_COUNT || 6)
+const NAMES = ['desktop', 'tablet', 'mobile', ...Array.from({ length: GALLERY_COUNT }, (_, i) => `gallery-${i + 1}`)]
 let ok = 0
 for (const n of NAMES) { if (await enhance(n)) ok++ }
 console.log(`ENHANCE DONE: ${ok}/${NAMES.length} -> ${OUT}`)
