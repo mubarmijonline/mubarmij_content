@@ -8,7 +8,28 @@ A portfolio project is a `client-logos` document. It renders at `/case-studies` 
 collection is **legacy** — do not use it.
 
 Helper scripts live in `cms/scripts/project-import/`:
-`run-import.mjs` (orchestrator), `capture.mjs`, `prepare-logo.mjs`, `enhance.mjs`.
+`run-import.mjs` (orchestrator), `login.mjs`, `capture.mjs`, `prepare-logo.mjs`, `enhance.mjs`,
+`build-reel.mjs`. Brand voice for auto-generated copy: `PERSONA.md`.
+
+---
+
+## Fully automated — `/import-project`
+
+The easiest path: run the **`/import-project`** slash command (`.claude/commands/import-project.md`).
+You give a **URL**, how many **photos** (gallery screenshots) and **videos** (0/1 reel), and **login
+credentials if needed**; Claude reads the site, writes the case study in MubarmiJ's voice (per
+`PERSONA.md`), builds the enhanced screenshots + reel, shows you a **preview**, and **publishes on your
+approval** (draft-first). New projects are data — they appear on the live site with no rebuild.
+
+Under the hood it's still the pipeline below, with three additions:
+- **Login** (`login.mjs`): standard form login saves a session (`auth.json`) that `capture.mjs` and
+  `build-reel.mjs` reuse. Credentials come from env (`PI_LOGIN_USER`/`PI_LOGIN_PASS`) — never a file.
+- **Counts**: `photos` → `PI_GALLERY_COUNT` (1–12 gallery shots); `videos` → 0/1 (build a reel or not).
+- **Preview gate**: `BUILD_ONLY=1 run-import.mjs <config>` builds all assets without touching the CMS;
+  approve, then publish by re-running with `SKIP_CAPTURE=1 SKIP_ENHANCE=1 SKIP_REEL=1`.
+
+Prereq (once, on the box that runs captures): `cd cms && npm i` (installs the `playwright` devDep) and
+`npx playwright install --with-deps chromium`.
 
 ---
 

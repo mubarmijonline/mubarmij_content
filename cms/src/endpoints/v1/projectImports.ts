@@ -200,7 +200,8 @@ export const getProjectImportEndpoint: Endpoint = {
 // ---------------------------------------------------------------------------
 // 3. Submit result (agent)
 // ---------------------------------------------------------------------------
-const GALLERY_KEYS = ["gallery_1", "gallery_2", "gallery_3", "gallery_4", "gallery_5", "gallery_6"] as const
+// Accept a flexible number of gallery parts (gallery_1..gallery_12); missing ones are skipped.
+const GALLERY_KEYS = Array.from({ length: 12 }, (_, i) => `gallery_${i + 1}`)
 const VIEWPORT_KEYS = ["desktop", "tablet", "mobile"] as const
 
 export const submitProjectImportResultEndpoint: Endpoint = {

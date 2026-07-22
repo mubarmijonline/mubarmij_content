@@ -39,11 +39,15 @@ const DIR = path.join(CMS_DIR, 'tmp', 'project-imports', SLUG)
 const ENH = path.join(DIR, 'enhanced')
 mkdirSync(ENH, { recursive: true })
 
+// photos = gallery screenshots (1..12); videos = whether to build a reel (0/1).
+const PHOTOS = Math.max(1, Math.min(12, Number(cfg.photos ?? cfg.galleryCount ?? 6)))
+const VIDEOS = Number(cfg.videos ?? (Array.isArray(cfg.reelPages) && cfg.reelPages.length ? 1 : 0))
+
 const step = (n, m) => console.log(`\n▶ [${n}] ${m}`)
 function run(script, extraEnv) {
   const r = spawnSync('node', [path.join(HERE, script)], {
     stdio: 'inherit',
-    env: { ...process.env, PI_URL: URL_, PI_SLUG: SLUG, PI_ADDRESS: ADDRESS, PI_DIR: DIR, PI_CMS_DIR: CMS_DIR, ...extraEnv },
+    env: { ...process.env, PI_URL: URL_, PI_SLUG: SLUG, PI_ADDRESS: ADDRESS, PI_DIR: DIR, PI_CMS_DIR: CMS_DIR, PI_GALLERY_COUNT: String(PHOTOS), ...extraEnv },
   })
   if (r.status !== 0) { console.error(`✗ ${script} failed (exit ${r.status})`); process.exit(1) }
 }
@@ -54,24 +58,40 @@ async function api(method, url, { headers = {}, body } = {}) {
   return { ok: res.ok, status: res.status, json }
 }
 
-// 1) Create (or reuse) the import job
-step(1, 'Create import job')
-const idem = process.env.IDEMPOTENCY_KEY || `${SLUG}-import-1`
-const create = await api('POST', `${CMS}/api/v1/project-imports`, {
-  headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': idem },
-  body: JSON.stringify({
-    url: URL_, name: cfg.name, industry: cfg.industry, services: cfg.services || ['web'],
-    important: cfg.important !== false, publish: cfg.publishStatus ? cfg.publishStatus === 'published' : true,
-    galleryCount: 6, notes: cfg.notes || 'Imported via run-import.mjs',
-  }),
-})
-if (!create.ok) { console.error('create failed', create.status, create.json); process.exit(1) }
-const jobId = create.json?.data?.jobId
-console.log(`  jobId=${jobId} (${create.json?.data?.idempotent ? 'reused' : 'new'})`)
+// 1) Create (or reuse) the import job — skipped in BUILD_ONLY (no CMS contact).
+let jobId
+if (process.env.BUILD_ONLY !== '1') {
+  step(1, 'Create import job')
+  const idem = process.env.IDEMPOTENCY_KEY || `${SLUG}-import-1`
+  const create = await api('POST', `${CMS}/api/v1/project-imports`, {
+    headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': idem },
+    body: JSON.stringify({
+      url: URL_, name: cfg.name, industry: cfg.industry, services: cfg.services || ['web'],
+      important: cfg.important !== false, publish: cfg.publishStatus ? cfg.publishStatus === 'published' : true,
+      galleryCount: PHOTOS, notes: cfg.notes || 'Imported via run-import.mjs',
+    }),
+  })
+  if (!create.ok) { console.error('create failed', create.status, create.json); process.exit(1) }
+  jobId = create.json?.data?.jobId
+  console.log(`  jobId=${jobId} (${create.json?.data?.idempotent ? 'reused' : 'new'})`)
+}
+
+// 1b) Login (optional) — saves a session so capture + reel can shoot pages behind auth.
+// Credentials come from env (PI_LOGIN_USER / PI_LOGIN_PASS), never the config file.
+if (process.env.SKIP_CAPTURE !== '1' && process.env.PI_LOGIN_USER && process.env.PI_LOGIN_PASS) {
+  step('1b', 'Log in to target site')
+  const lg = cfg.login || {}
+  run('login.mjs', {
+    PI_LOGIN_URL: process.env.PI_LOGIN_URL || lg.url || '',
+    ...(lg.userSel ? { PI_LOGIN_USER_SEL: lg.userSel } : {}),
+    ...(lg.passSel ? { PI_LOGIN_PASS_SEL: lg.passSel } : {}),
+    ...(lg.submitSel ? { PI_LOGIN_SUBMIT_SEL: lg.submitSel } : {}),
+  })
+}
 
 // 2) Capture
 if (process.env.SKIP_CAPTURE === '1') step(2, 'Capture — SKIPPED')
-else { step(2, 'Capture screenshots'); run('capture.mjs') }
+else { step(2, `Capture screenshots (${PHOTOS} gallery)`); run('capture.mjs') }
 
 // 3) Logo
 step(3, 'Prepare logo'); run('prepare-logo.mjs')
@@ -80,8 +100,8 @@ step(3, 'Prepare logo'); run('prepare-logo.mjs')
 if (process.env.SKIP_ENHANCE === '1') step(4, 'Enhance — SKIPPED')
 else { step(4, 'Enhance (MubarmiJ frame + logo tab)'); run('enhance.mjs') }
 
-// 4b) Optional reel from the project's pages
-if (process.env.SKIP_REEL !== '1' && Array.isArray(cfg.reelPages) && cfg.reelPages.length) {
+// 4b) Optional reel from the project's pages (videos>=1)
+if (process.env.SKIP_REEL !== '1' && VIDEOS >= 1 && Array.isArray(cfg.reelPages) && cfg.reelPages.length) {
   step('4b', `Build reel from ${cfg.reelPages.length} pages`)
   run('build-reel.mjs', {
     PI_PAGES: JSON.stringify(cfg.reelPages),
@@ -99,12 +119,23 @@ const metaPath = path.join(DIR, 'metadata.json')
 writeFileSync(metaPath, JSON.stringify(metadata, null, 2))
 console.log(`  ${metaPath}`)
 
+// BUILD_ONLY: stop before touching the CMS (draft-first preview gate).
+if (process.env.BUILD_ONLY === '1') {
+  const reelP = path.join(ENH, 'reel.mp4')
+  console.log(`\n✔ Assets built for "${cfg.name}" — NOT submitted (BUILD_ONLY)`)
+  console.log(`  config:    ${cfgPath}`)
+  console.log(`  enhanced:  ${ENH}`)
+  console.log(`  gallery:   ${PHOTOS} images`)
+  console.log(`  reel:      ${VIDEOS >= 1 && existsSync(reelP) ? reelP : 'none'}`)
+  console.log(`  → review, then publish with: SKIP_CAPTURE=1 SKIP_ENHANCE=1 SKIP_REEL=1 CMS=<cms> node run-import.mjs ${cfgPath}`)
+  process.exit(0)
+}
+
 // 6) Submit multipart result
 step(6, 'Submit result')
 const parts = [
   ['logo', 'logo.webp'], ['desktop', 'desktop.webp'], ['tablet', 'tablet.webp'], ['mobile', 'mobile.webp'],
-  ['gallery_1', 'gallery-1.webp'], ['gallery_2', 'gallery-2.webp'], ['gallery_3', 'gallery-3.webp'],
-  ['gallery_4', 'gallery-4.webp'], ['gallery_5', 'gallery-5.webp'], ['gallery_6', 'gallery-6.webp'],
+  ...Array.from({ length: PHOTOS }, (_, i) => [`gallery_${i + 1}`, `gallery-${i + 1}.webp`]),
 ]
 const fd = new FormData()
 fd.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }), 'metadata.json')
@@ -153,10 +184,11 @@ const job = await api('GET', `${CMS}/api/v1/project-imports/${jobId}`, { headers
 console.log('  ' + JSON.stringify(job.json.data))
 const detail = await api('GET', `${CMS}/api/v1/clients/${SLUG}`, { headers: { 'Accept-Language': 'en' } })
 const d = detail.json?.data || {}
-console.log(`\n✔ Import complete for "${cfg.name}"`)
-console.log(`  category:   ${d.category_label}`)
-console.log(`  gallery:    ${(d.gallery || []).length} images`)
-console.log(`  featured:   ${d.featured}`)
-console.log(`  reel:       ${d.reel?.recommended ? d.reel.priority : 'no'}`)
+const isDraft = metadata.publishStatus === 'draft'
+console.log(`\n✔ Import ${isDraft ? 'staged (DRAFT)' : 'complete'} for "${cfg.name}"`)
+console.log(`  status:     ${metadata.publishStatus || 'published'}${isDraft ? ' (not public until published)' : ''}`)
+console.log(`  category:   ${d.category_label || cfg.industry}`)
+console.log(`  gallery:    ${(d.gallery || []).length} images (submitted ${PHOTOS})`)
+console.log(`  reel:       ${VIDEOS >= 1 ? 'yes' : 'no'}`)
 console.log(`  verify:     ${PUBLIC_URL}/case-studies/${SLUG}`)
 console.log(`              ${PUBLIC_URL}/ar/case-studies/${SLUG}`)
