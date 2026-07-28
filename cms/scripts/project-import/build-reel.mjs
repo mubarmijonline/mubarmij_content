@@ -148,8 +148,16 @@ const inputs = []
 // (Using `-loop 1 -t` here makes zoompan emit d frames PER input frame → wrong length.)
 for (const f of frames) inputs.push('-i', f)
 let fc = ''
+// Supersample before zoompan so the pan/zoom position rounds at 1/3 of an output
+// pixel instead of a whole one — this removes the classic zoompan "vibration".
+// Gentle zoom, then downscale to 1080x1920 with lanczos for a smooth result.
+// Deterministic zoom as a function of the output frame index `on` (not the
+// self-accumulating `zoom+inc`, whose per-frame rounding feedback stutters).
+// Large zoompan INPUT (precision) but small OUTPUT s=1080x1920 (speed): the pan
+// position rounds in the big input space → sub-output-pixel → smooth, no vibration.
+const SS = 3, ZRATE = 0.0007
 for (let i = 0; i < N; i++) {
-  fc += `[${i}:v]scale=1080:1920,zoompan=z='min(zoom+0.0009,1.12)':d=${DFR}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS},format=yuv420p,setpts=PTS-STARTPTS[c${i}];`
+  fc += `[${i}:v]scale=${1080 * SS}:${1920 * SS}:flags=lanczos,zoompan=z='min(1+${ZRATE}*on,1.10)':d=${DFR}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS},format=yuv420p,setpts=PTS-STARTPTS[c${i}];`
 }
 let prev = 'c0'
 for (let i = 1; i < N; i++) {
