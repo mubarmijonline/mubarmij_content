@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import type { Locale } from "@/i18n/config";
-import Section from "@/components/ui/Section";
+import { Shell } from "@/components/system";
+import { GoldPeriod } from "@/components/system/Typo";
 
 export async function generateMetadata({
   params,
@@ -29,25 +30,30 @@ export default async function TermsOfServicePage({
   }));
 
   return (
-    <Section bg="white">
-      <article className="prose-like max-w-3xl mx-auto">
-        <h1 className="section-title">{t("title")}</h1>
-        <p className="mt-2 text-sm text-navy/60">{t("updated")}</p>
-        <p className="mt-6 text-base leading-relaxed text-navy">{t("intro")}</p>
+    <section className="surf-light border-b border-hair">
+      <Shell className="sect">
+        <article className="max-w-[46em]">
+          <h1 className="font-display text-d1 font-bold text-fg">
+            {t("title")}
+            <GoldPeriod />
+          </h1>
+          <p className="mono mt-4 text-[11px] uppercase text-fgmuted">{t("updated")}</p>
+          <p className="mt-6 text-copy text-fgbody">{t("intro")}</p>
 
-        {sections.map((s) => (
-          <section key={s.title} className="mt-8">
-            <h2 className="font-display text-xl font-bold text-navy-deep">
-              {s.title}
-            </h2>
-            <p className="mt-2 text-base leading-relaxed text-navy">{s.body}</p>
-          </section>
-        ))}
+          <div className="mt-10 border-t border-hair">
+            {sections.map((s) => (
+              <section key={s.title} className="border-b border-hair py-7">
+                <h2 className="font-display text-[19px] font-semibold tracking-[-0.01em] text-fg">
+                  {s.title}
+                </h2>
+                <p className="mt-2.5 text-copy text-fgbody">{s.body}</p>
+              </section>
+            ))}
+          </div>
 
-        <p className="mt-10 text-base font-semibold text-navy-deep">
-          {t("contact")}
-        </p>
-      </article>
-    </Section>
+          <p className="mt-9 font-display text-[16px] font-semibold text-fg">{t("contact")}</p>
+        </article>
+      </Shell>
+    </section>
   );
 }

@@ -3,9 +3,10 @@ import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/config";
 import { SITE_URL } from "@/lib/site";
-import { cmsMedia, localePath } from "@/lib/utils";
+import { localePath } from "@/lib/utils";
 import { getBlog } from "@/lib/v1";
-import { CTAPanel, GhostButton, GoldButton, Reveal, SectionEyebrow, Stagger, StaggerItem } from "@/components/system";
+import { CTAPanel, EmptyState, ImageWell, SectionEyebrow, Shell } from "@/components/system";
+import { GoldPeriod } from "@/components/system/Typo";
 
 export const revalidate = 300;
 
@@ -68,84 +69,67 @@ export default async function BlogPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = COPY[locale];
-  const env = await getBlog(locale, { limit: 24 });
+  const env = await getBlog(locale, { page_size: 24 });
   const posts = env?.data ?? [];
   const dateFmt = (iso: string | null) =>
     iso ? new Date(iso).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", { year: "numeric", month: "short", day: "numeric" }) : "";
 
   return (
     <>
-      {/* Hero — dark */}
-      <section className="relative overflow-hidden bg-navy-deep">
-        <div className="bg-hero-grid pointer-events-none absolute inset-0" aria-hidden />
-        <div className="relative mx-auto max-w-4xl px-4 py-24 text-center sm:py-28">
-          <Reveal>
-            <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h1 className="mt-4 text-balance font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-tight tracking-[-0.02em] text-cream">
-              {t.title}
-            </h1>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-bodydark sm:text-lg">
-              {t.sub}
-            </p>
-          </Reveal>
-        </div>
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect">
+          <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
+          <h1 className="mt-3.5 max-w-[16em] font-display text-d1 font-bold text-fg">
+            {t.title}
+            <GoldPeriod />
+          </h1>
+          <p className="mt-5 max-w-[40em] text-lede text-fgbody">{t.sub}</p>
+        </Shell>
       </section>
 
-      {/* Posts or empty state — light */}
-      <section className="bg-cream py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl px-4">
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect">
           {posts.length ? (
-            <Stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((p) => {
-                const cover = cmsMedia(p.cover_image_url);
-                return (
-                  <StaggerItem key={p.slug}>
-                    <a
-                      href={localePath(locale, `/blog/${p.slug}`)}
-                      className="group flex h-full flex-col overflow-hidden rounded-tile border border-neutral-200 bg-white shadow-sm transition-transform duration-200 hover:-translate-y-1 focus-gold"
-                    >
-                      {cover ? (
-                        <div className="aspect-[16/10] overflow-hidden bg-neutral-200">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={cover}
-                            alt={p.title}
-                            loading="lazy"
-                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                          />
-                        </div>
-                      ) : null}
-                      <div className="flex flex-1 flex-col p-6">
-                        <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-gold-dim">{p.category}</span>
-                        <h2 className="mt-2 text-lg font-semibold text-navy-deep">{p.title}</h2>
-                        <p className="mt-2 flex-1 text-sm leading-relaxed text-neutral-500">{p.excerpt}</p>
-                        <p className="mt-4 font-mono text-xs text-neutral-400">
-                          {dateFmt(p.published_at)}
-                          {p.reading_time_minutes ? ` · ${p.reading_time_minutes} ${t.minRead}` : ""}
-                        </p>
-                      </div>
-                    </a>
-                  </StaggerItem>
-                );
-              })}
-            </Stagger>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {posts.map((p) => (
+                <a
+                  key={p.slug}
+                  href={localePath(locale, `/blog/${p.slug}`)}
+                  className="focus-gold group flex h-full flex-col overflow-hidden rounded-card border border-hair bg-surface transition duration-300 hover:-translate-y-1 hover:border-hairhov hover:shadow-lift"
+                >
+                  <ImageWell
+                    src={p.cover_image_url}
+                    alt={p.title}
+                    ratio="16 / 10"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                    imgClassName="transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="flex flex-1 flex-col p-6">
+                    <span className="mono text-eyebrow uppercase text-fgmuted">{p.category}</span>
+                    <h2 className="mt-2 font-display text-[19px] font-semibold tracking-[-0.02em] text-fg">
+                      {p.title}
+                    </h2>
+                    <p className="mt-2 flex-1 text-[14.5px] leading-relaxed text-fgbody">
+                      {p.excerpt}
+                    </p>
+                    <p className="mono mt-4 text-[11px] text-fgfaint">
+                      {dateFmt(p.published_at)}
+                      {p.reading_time_minutes ? ` · ${p.reading_time_minutes} ${t.minRead}` : ""}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </div>
           ) : (
-            <Reveal className="mx-auto max-w-xl rounded-tile border border-neutral-200 bg-white p-10 text-center">
-              <h2 className="text-xl font-semibold text-navy-deep">{t.emptyTitle}</h2>
-              <p className="mt-3 text-neutral-500">{t.emptyBody}</p>
-              <div className="mt-6 flex flex-wrap justify-center gap-3">
-                <GoldButton href={localePath(locale, "/resources")}>{t.resources}</GoldButton>
-                <GhostButton href={localePath(locale, "/book-call")} className="border-neutral-300 text-navy hover:bg-navy/5">
-                  {t.book}
-                </GhostButton>
-              </div>
-            </Reveal>
+            <EmptyState
+              locale={locale}
+              title={t.emptyTitle}
+              body={t.emptyBody}
+              ctaHref={localePath(locale, "/resources")}
+              ctaLabel={t.resources}
+            />
           )}
-        </div>
+        </Shell>
       </section>
 
       <CTAPanel

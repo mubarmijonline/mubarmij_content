@@ -5,14 +5,8 @@ import type { Locale } from "@/i18n/config";
 import { SITE_URL } from "@/lib/site";
 import { localePath } from "@/lib/utils";
 import { getAbout } from "@/lib/v1";
-import {
-  CTAPanel,
-  MetricStat,
-  Reveal,
-  SectionEyebrow,
-  Stagger,
-  StaggerItem,
-} from "@/components/system";
+import { CTAPanel, HairCell, HairGrid, MonoChip, SectionEyebrow, Shell, StatCell } from "@/components/system";
+import { GoldPeriod } from "@/components/system/Typo";
 
 export const revalidate = 300;
 
@@ -97,99 +91,85 @@ export default async function AboutPage({
 
   return (
     <>
-      {/* Hero + stats — dark */}
-      <section className="relative overflow-hidden bg-navy-deep">
-        <div className="bg-hero-grid pointer-events-none absolute inset-0" aria-hidden />
-        <div className="relative mx-auto max-w-4xl px-4 pb-12 pt-24 text-center sm:pt-28">
-          <Reveal>
-            <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h1 className="mt-4 text-balance font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-tight tracking-[-0.02em] text-cream">
-              {about?.tagline || t.fallbackTitle}
-            </h1>
-          </Reveal>
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect">
+          <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
+          <h1 className="mt-3.5 max-w-[16em] text-balance font-display text-d1 font-bold text-fg">
+            {about?.tagline || t.fallbackTitle}
+            <GoldPeriod />
+          </h1>
           {about?.story ? (
-            <Reveal delay={0.12}>
-              <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-bodydark sm:text-lg">
-                {about.story}
-              </p>
-            </Reveal>
+            <p className="mt-5 max-w-[42em] text-lede text-fgbody">{about.story}</p>
           ) : null}
-        </div>
 
-        {statItems.length ? (
-          <div className="relative mx-auto max-w-5xl px-4 pb-20">
-            <Stagger className="grid grid-cols-2 gap-8 border-t border-line pt-10 sm:grid-cols-4">
+          {statItems.length ? (
+            <HairGrid cols={2} lgCols={4} className="mt-12 border-t border-hair">
               {statItems.map((s) => (
-                <StaggerItem key={s.label} className="text-center">
-                  <MetricStat value={s.value} label={s.label} className="items-center" />
-                </StaggerItem>
+                <HairCell key={s.label} className="py-7 pe-5">
+                  <StatCell value={s.value} label={s.label} />
+                </HairCell>
               ))}
-            </Stagger>
-          </div>
-        ) : null}
+            </HairGrid>
+          ) : null}
+        </Shell>
       </section>
 
-      {/* Mission — light */}
       {about?.mission ? (
-        <section className="bg-cream py-16 sm:py-20">
-          <div className="mx-auto max-w-3xl px-4 text-center">
-            <Reveal>
-              <SectionEyebrow>{t.missionTitle}</SectionEyebrow>
-            </Reveal>
-            <Reveal delay={0.06}>
-              <p className="mt-5 text-balance text-xl font-medium leading-relaxed tracking-[-0.01em] text-navy-deep sm:text-2xl">
-                {about.mission}
-              </p>
-            </Reveal>
-          </div>
+        <section className="surf-dark sect">
+          <Shell>
+            <SectionEyebrow>{t.missionTitle}</SectionEyebrow>
+            <p className="mt-5 max-w-[24em] text-balance font-display text-d2 font-bold text-fg">
+              {about.mission}
+              <GoldPeriod />
+            </p>
+          </Shell>
         </section>
       ) : null}
 
-      {/* Values — light */}
       {values.length ? (
-        <section className="bg-bglight py-16 sm:py-20">
-          <div className="mx-auto max-w-6xl px-4">
-            <Reveal className="mx-auto max-w-2xl text-center">
-              <SectionEyebrow>{t.valuesTitle}</SectionEyebrow>
-            </Reveal>
-            <Stagger className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="surf-light border-b border-hair">
+          <Shell className="sect">
+            <SectionEyebrow>{t.valuesTitle}</SectionEyebrow>
+            <HairGrid cols={1} mdCols={2} lgCols={4} className="mt-9 border-t border-hair">
               {values.map((v) => (
-                <StaggerItem key={v.title} className="rounded-tile border border-neutral-200 bg-white p-6">
-                  <h3 className="font-semibold text-navy-deep">{v.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-500">{v.body}</p>
-                </StaggerItem>
+                <HairCell key={v.title} className="py-7 pe-6">
+                  <h2 className="font-display text-[19px] font-semibold tracking-[-0.02em] text-fg">
+                    {v.title}
+                  </h2>
+                  <p className="mt-2 text-[15px] leading-relaxed text-fgbody">{v.body}</p>
+                </HairCell>
               ))}
-            </Stagger>
-          </div>
+            </HairGrid>
+          </Shell>
         </section>
       ) : null}
 
-      {/* Expertise + stack — cream */}
       {expertise.length || techStack.length ? (
-        <section className="bg-cream py-16 sm:py-20">
-          <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-2">
+        <section className="surf-light border-b border-hair">
+          <Shell className="sect grid gap-12 lg:grid-cols-2">
             {expertise.length ? (
               <div>
-                <Reveal>
-                  <SectionEyebrow>{t.expertiseTitle}</SectionEyebrow>
-                </Reveal>
-                <div className="mt-6 space-y-5">
+                <SectionEyebrow>{t.expertiseTitle}</SectionEyebrow>
+                <div className="mt-7 space-y-6">
                   {expertise.map((e) => {
                     const pct = Math.max(0, Math.min(100, e.level));
                     return (
-                      <Reveal key={e.name} delay={0.04}>
-                        <div>
-                          <div className="flex items-baseline justify-between">
-                            <span className="text-sm font-medium text-navy-deep">{e.name}</span>
-                            <span className="font-mono text-xs text-gold-dim">{pct}%</span>
-                          </div>
-                          <div className="mt-2 h-1.5 overflow-hidden rounded-pill bg-neutral-200">
-                            <div className="h-full rounded-pill bg-gold" style={{ width: `${pct}%` }} />
-                          </div>
+                      <div key={e.name}>
+                        <div className="flex items-baseline justify-between gap-4">
+                          <span className="font-display text-[15.5px] font-semibold text-fg">
+                            {e.name}
+                          </span>
+                          <span className="mono ltr-island text-[11px] text-fgmuted">{pct}%</span>
                         </div>
-                      </Reveal>
+                        <div className="mt-2.5 h-1.5 overflow-hidden rounded-pill bg-well">
+                          {/* The design's `bar` keyframe, on the one figure that
+                              genuinely animates from zero to a real value. */}
+                          <div
+                            className="h-full animate-bar rounded-pill bg-gold"
+                            style={{ ["--bar-to" as string]: `${pct}%`, width: `${pct}%` }}
+                          />
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
@@ -198,39 +178,39 @@ export default async function AboutPage({
 
             {techStack.length ? (
               <div>
-                <Reveal>
-                  <SectionEyebrow>{t.stackTitle}</SectionEyebrow>
-                </Reveal>
-                <div className="mt-6 flex flex-wrap gap-2.5">
+                <SectionEyebrow>{t.stackTitle}</SectionEyebrow>
+                <div className="mt-7 flex flex-wrap gap-2">
                   {techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-pill border border-neutral-300 bg-white px-3.5 py-1.5 font-mono text-sm text-neutral-600"
-                    >
-                      {tech}
-                    </span>
+                    <MonoChip key={tech}>{tech}</MonoChip>
                   ))}
                 </div>
               </div>
             ) : null}
-          </div>
+          </Shell>
         </section>
       ) : null}
 
-      {/* Contact — light */}
       {contact ? (
-        <section className="bg-bglight py-16 sm:py-20">
-          <div className="mx-auto max-w-6xl px-4">
-            <Reveal className="text-center">
-              <SectionEyebrow>{t.contactTitle}</SectionEyebrow>
-            </Reveal>
-            <Stagger className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              <ContactCard label={t.contact.phone} value={contact.phone} href={`tel:${contact.phone.replace(/\s+/g, "")}`} />
-              <ContactCard label={t.contact.email} value={contact.email} href={`mailto:${contact.email}`} />
-              <ContactCard label={t.contact.address} value={contact.address} />
-              <ContactCard label={t.contact.hours} value={contact.hours} />
-            </Stagger>
-          </div>
+        <section className="surf-light border-b border-hair">
+          <Shell className="sect">
+            <SectionEyebrow>{t.contactTitle}</SectionEyebrow>
+            <HairGrid cols={1} mdCols={2} lgCols={4} className="mt-9 border-t border-hair">
+              <ContactCell
+                label={t.contact.phone}
+                value={contact.phone}
+                href={`tel:${contact.phone.replace(/\s+/g, "")}`}
+                mono
+              />
+              <ContactCell
+                label={t.contact.email}
+                value={contact.email}
+                href={`mailto:${contact.email}`}
+                mono
+              />
+              <ContactCell label={t.contact.address} value={contact.address} />
+              <ContactCell label={t.contact.hours} value={contact.hours} />
+            </HairGrid>
+          </Shell>
         </section>
       ) : null}
 
@@ -246,17 +226,29 @@ export default async function AboutPage({
   );
 }
 
-function ContactCard({ label, value, href }: { label: string; value: string; href?: string }) {
+function ContactCell({
+  label,
+  value,
+  href,
+  mono,
+}: {
+  label: string;
+  value: string;
+  href?: string;
+  /** Latin contact details need an LTR island inside Arabic pages. */
+  mono?: boolean;
+}) {
+  const body = mono ? "mono ltr-island text-[14px]" : "text-[15px]";
   return (
-    <StaggerItem className="rounded-tile border border-neutral-200 bg-white p-6">
-      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold-dim">{label}</p>
+    <HairCell className="py-7 pe-6">
+      <p className="mono text-eyebrow uppercase text-accent">{label}</p>
       {href ? (
-        <a href={href} className="mt-2 block break-words text-navy-deep transition-colors hover:text-gold focus-gold">
+        <a href={href} className={`focus-gold mt-2 block break-words text-fg hover:text-gold-deep ${body}`}>
           {value}
         </a>
       ) : (
-        <p className="mt-2 break-words text-navy-deep">{value}</p>
+        <p className={`mt-2 break-words text-fgbody ${body}`}>{value}</p>
       )}
-    </StaggerItem>
+    </HairCell>
   );
 }

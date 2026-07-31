@@ -105,7 +105,7 @@ export default function ConsultationForm({ locale }: { locale: Locale }) {
   if (status === "success") {
     return (
       <p
-        className="rounded-tile border border-gold/50 bg-gold/10 px-5 py-8 text-center font-medium text-navy-deep"
+        className="rounded-card border border-gold/50 bg-gold/10 px-5 py-8 text-center font-medium text-fg"
         role="status"
       >
         {t.success}
@@ -114,8 +114,8 @@ export default function ConsultationForm({ locale }: { locale: Locale }) {
   }
 
   const inputCls =
-    "w-full rounded-tile border border-neutral-300 bg-white px-4 py-3 text-sm text-navy-deep placeholder:text-neutral-400 focus-gold";
-  const labelCls = "mb-1.5 block text-sm font-medium text-navy-deep";
+    "w-full rounded-card border border-hairbtn bg-white px-4 py-3 text-sm text-fg placeholder:text-fgfaint focus-gold";
+  const labelCls = "mb-1.5 block text-sm font-medium text-fg";
 
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit} noValidate>

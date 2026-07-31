@@ -9,14 +9,14 @@
     "badge2Sub": "Official Business Account",
     "badge2Chip": "Active",
     "f1Title": "Goal-Oriented Delivery",
-    "f1Body": "Every project is shaped around a clear business outcome \u2014 leads, hours saved, conversion lift \u2014 not a wishlist of features.",
+    "f1Body": "Every project is shaped around a clear business outcome — leads, hours saved, conversion lift — not a wishlist of features.",
     "f2Title": "Senior Engineers",
     "f2Body": "You work directly with experienced developers who have shipped automation, web and mobile products in production for years.",
     "f3Title": "Built To Scale",
-    "f3Body": "Modern stacks, clean code and ownership of the source means your platform keeps growing long after launch \u2014 no lock-in."
+    "f3Body": "Modern stacks, clean code and ownership of the source means your platform keeps growing long after launch — no lock-in."
   },
   "welcome": {
-    "celebrate": "Welcome to MubarmiJ \u2728"
+    "celebrate": "Welcome to MubarmiJ ✨"
   },
   "site": {
     "name": "MubarmiJ",
@@ -33,7 +33,11 @@
     "blog": "Blog",
     "about": "About",
     "contact": "Contact",
-    "bookConsultation": "Book Consultation"
+    "bookConsultation": "Book Consultation",
+    "caseStudies": "Case Studies",
+    "pricing": "Pricing",
+    "reels": "Reels",
+    "ecommerce": "E-commerce"
   },
   "cta": {
     "primary": "Book Free Consultation",
@@ -66,13 +70,31 @@
     "highRoi": "Highest ROI",
     "card1Title": "Automated systems that work for you",
     "card1Result": "✓ A client saved 80 hours of work per month",
-    "card1Items": ["WhatsApp Bots", "CRM Integration", "Lead Management", "Workflow Automation", "System Integrations"],
+    "card1Items": [
+      "WhatsApp Bots",
+      "CRM Integration",
+      "Lead Management",
+      "Workflow Automation",
+      "System Integrations"
+    ],
     "card2Title": "Websites that bring clients, not just brochures",
     "card2Price": "Tailored to your business",
-    "card2Items": ["Landing Pages", "Corporate Websites", "E-commerce", "Custom Dashboards", "SEO"],
+    "card2Items": [
+      "Landing Pages",
+      "Corporate Websites",
+      "E-commerce",
+      "Custom Dashboards",
+      "SEO"
+    ],
     "card3Title": "Mobile apps that grow your business",
     "card3Eligibility": "For companies with a serious budget",
-    "card3Items": ["iOS + Android", "Flutter", "Full Backend", "Admin Dashboard", "App Store deployment"]
+    "card3Items": [
+      "iOS + Android",
+      "Flutter",
+      "Full Backend",
+      "Admin Dashboard",
+      "App Store deployment"
+    ]
   },
   "process": {
     "title": "From the first call to delivery — every step is transparent",
@@ -100,7 +122,11 @@
     "eyebrow": "📘 Get for free",
     "headline": "Business Owner's Guide: 10 mistakes that cost you half your customers without you noticing",
     "sub": "PDF Guide + practical Checklist. Delivered to your email within minutes.",
-    "form": { "name": "Name", "email": "Email", "phone": "Mobile number" },
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Mobile number"
+    },
     "footnote": "✓ No spam   ✓ Unsubscribe any time"
   },
   "faq": {

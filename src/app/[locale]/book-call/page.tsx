@@ -4,7 +4,8 @@ import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 import { CALENDLY_URL, CONTACT_EMAIL, CONTACT_PHONE, SITE_URL } from "@/lib/site";
 import { localePath } from "@/lib/utils";
-import { GhostButton, Reveal, SectionEyebrow, WhatsAppButton } from "@/components/system";
+import { GhostButton, SectionEyebrow, Shell, WhatsAppButton } from "@/components/system";
+import { GoldPeriod } from "@/components/system/Typo";
 import ConsultationForm from "@/components/book-call/ConsultationForm";
 
 export const revalidate = 300;
@@ -78,81 +79,74 @@ export default async function BookCallPage({
 
   return (
     <>
-      <section className="relative overflow-hidden bg-navy-deep">
-        <div className="bg-hero-grid pointer-events-none absolute inset-0" aria-hidden />
-        <div className="relative mx-auto max-w-4xl px-4 py-20 text-center sm:py-24">
-          <Reveal>
-            <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h1 className="mt-4 text-balance font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-tight tracking-[-0.02em] text-cream">
-              {t.title}
-            </h1>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-bodydark sm:text-lg">
-              {t.sub}
-            </p>
-          </Reveal>
-        </div>
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect">
+          <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
+          <h1 className="mt-3.5 max-w-[16em] font-display text-d1 font-bold text-fg">
+            {t.title}
+            <GoldPeriod />
+          </h1>
+          <p className="mt-5 max-w-[40em] text-lede text-fgbody">{t.sub}</p>
+        </Shell>
       </section>
 
-      <section className="bg-cream py-16 sm:py-20">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[1fr_360px]">
-          {/* Consultation form */}
-          <div className="rounded-tile border border-neutral-200 bg-white p-6 sm:p-8">
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect grid gap-10 lg:grid-cols-[1fr_340px]">
+          <div className="rounded-card border border-hair bg-surface p-6 sm:p-8">
             <SectionEyebrow>{t.formTitle}</SectionEyebrow>
             <div className="mt-6">
               <ConsultationForm locale={locale} />
             </div>
           </div>
 
-          {/* Quick channels + next steps */}
           <aside className="space-y-6">
-            <div className="rounded-tile border border-neutral-200 bg-white p-6">
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold-dim">{t.quickTitle}</h2>
+            <div className="rounded-card border border-hair bg-surface p-6">
+              <h2 className="mono text-eyebrow uppercase text-accent">{t.quickTitle}</h2>
               <div className="mt-4 flex flex-col gap-3">
-                <WhatsAppButton message={t.waMsg} className="w-full">
+                <WhatsAppButton message={t.waMsg} dot className="w-full">
                   {t.whatsapp}
                 </WhatsAppButton>
                 {CALENDLY_URL ? (
-                  <GhostButton href={CALENDLY_URL} external className="w-full border-neutral-300 text-navy hover:bg-navy/5">
+                  <GhostButton href={CALENDLY_URL} external className="w-full">
                     {t.calendly}
                   </GhostButton>
                 ) : null}
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="flex items-center justify-between gap-3 rounded-tile border border-neutral-200 px-4 py-2.5 text-sm text-navy-deep transition-colors hover:border-gold focus-gold"
+                  className="focus-gold flex items-center justify-between gap-3 rounded-btn border border-hair px-4 py-2.5 transition-colors hover:border-hairhov"
                 >
-                  <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-gold-dim">{t.emailLabel}</span>
-                  <span className="truncate">{CONTACT_EMAIL}</span>
+                  <span className="mono text-eyebrow uppercase text-accent">{t.emailLabel}</span>
+                  <span className="mono ltr-island truncate text-[13px] text-fgbody">
+                    {CONTACT_EMAIL}
+                  </span>
                 </a>
                 <a
                   href={phoneHref}
-                  dir="ltr"
-                  className="flex items-center justify-between gap-3 rounded-tile border border-neutral-200 px-4 py-2.5 text-sm text-navy-deep transition-colors hover:border-gold focus-gold"
+                  className="focus-gold flex items-center justify-between gap-3 rounded-btn border border-hair px-4 py-2.5 transition-colors hover:border-hairhov"
                 >
-                  <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-gold-dim">{t.callLabel}</span>
-                  <span className="truncate">{CONTACT_PHONE}</span>
+                  <span className="mono text-eyebrow uppercase text-accent">{t.callLabel}</span>
+                  <span className="mono ltr-island truncate text-[13px] text-fgbody">
+                    {CONTACT_PHONE}
+                  </span>
                 </a>
               </div>
             </div>
 
-            <div className="rounded-tile border border-neutral-200 bg-white p-6">
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold-dim">{t.stepsTitle}</h2>
-              <ol className="mt-4 space-y-4">
+            <div className="rounded-card border border-hair bg-surface p-6">
+              <h2 className="mono text-eyebrow uppercase text-accent">{t.stepsTitle}</h2>
+              <ol className="mt-5 border-t border-hair">
                 {t.steps.map((step, i) => (
-                  <li key={step} className="flex items-start gap-3">
-                    <span className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-navy-deep font-mono text-sm text-gold">
-                      {i + 1}
+                  <li key={step} className="flex gap-3 border-b border-hair py-4">
+                    <span className="mono ltr-island shrink-0 text-[11px] text-fgfaint">
+                      {String(i + 1).padStart(2, "0")}
                     </span>
-                    <p className="text-sm leading-relaxed text-neutral-600">{step}</p>
+                    <p className="text-[14.5px] leading-relaxed text-fgbody">{step}</p>
                   </li>
                 ))}
               </ol>
             </div>
           </aside>
-        </div>
+        </Shell>
       </section>
     </>
   );

@@ -76,21 +76,21 @@ export default function LeadMagnet({ locale }: { locale: Locale }) {
   }
 
   const inputCls =
-    "w-full rounded-tile border border-line bg-panel/60 px-4 py-3 text-sm text-cream placeholder:text-bodydark focus-gold";
+    "w-full rounded-card border border-hair bg-well/60 px-4 py-3 text-sm text-fg placeholder:text-fgbody focus-gold";
 
   return (
-    <section className="bg-navy-deep px-4 py-20 md:py-28">
-      <div className="mx-auto grid max-w-5xl items-center gap-10 rounded-tile border border-line bg-panel/40 p-8 md:grid-cols-2 md:p-12">
+    <section className="surf-dark sect px-4">
+      <div className="mx-auto grid max-w-5xl items-center gap-10 rounded-card border border-hair bg-well/40 p-8 md:grid-cols-2 md:p-12">
         <div>
           <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
-          <h2 className="mt-3 text-balance font-sans text-2xl font-semibold tracking-[-0.02em] text-cream md:text-3xl">
+          <h2 className="mt-3 text-balance font-sans text-2xl font-semibold tracking-[-0.02em] text-fg md:text-3xl">
             {t.title}
           </h2>
-          <p className="mt-4 leading-relaxed text-bodydark">{t.sub}</p>
+          <p className="mt-4 leading-relaxed text-fgbody">{t.sub}</p>
         </div>
 
         {status === "success" ? (
-          <p className="rounded-tile border border-gold/40 bg-gold/10 px-5 py-6 text-center font-medium text-gold-light" role="status">
+          <p className="rounded-card border border-gold/40 bg-gold/10 px-5 py-6 text-center font-medium text-gold-light" role="status">
             {t.success}
           </p>
         ) : (

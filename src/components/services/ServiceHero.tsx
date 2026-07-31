@@ -1,9 +1,18 @@
 import type { Locale } from "@/i18n/config";
 import type { ServiceDetail } from "@/lib/v1";
 import { localePath } from "@/lib/utils";
-import { GhostButton, GoldButton, Reveal, SectionEyebrow } from "@/components/system";
+import {
+  DarkButton,
+  GhostButton,
+  ImageWell,
+  SectionEyebrow,
+  Shell,
+  SlashList,
+  StatCell,
+} from "@/components/system";
+import { GoldPeriod } from "@/components/system/Typo";
 
-/** Resolve hero banner to a same-origin path (the API returns an absolute URL). */
+/** The API returns absolute banner URLs; reduce to a same-origin path. */
 function bannerPath(url?: string): string | null {
   if (!url) return null;
   try {
@@ -14,11 +23,22 @@ function bannerPath(url?: string): string | null {
 }
 
 const UI = {
-  en: { book: "Book a free consultation", roi: "Calculate your ROI", work: "View our work", included: "What's included" },
-  ar: { book: "احجز استشارة مجانية", roi: "احسب العائد", work: "شاهد أعمالنا", included: "اللي بتتضمنه" },
+  en: {
+    book: "Book a free consultation",
+    roi: "Calculate your ROI",
+    work: "View our work",
+    included: "What's included",
+    timeline: "Timeline",
+  },
+  ar: {
+    book: "احجز استشارة مجانية",
+    roi: "احسب العائد",
+    work: "شاهد أعمالنا",
+    included: "اللي بيتسلّم",
+    timeline: "المدة",
+  },
 } as const;
 
-/** v2 service hero — full-bleed banner (hero_image_url) with dark navy overlay, or a dark navy fallback. */
 export default function ServiceHero({ locale, service }: { locale: Locale; service: ServiceDetail }) {
   const ui = UI[locale];
   const hasRoi = service.has_roi_calculator;
@@ -26,73 +46,61 @@ export default function ServiceHero({ locale, service }: { locale: Locale; servi
   const banner = bannerPath(service.hero_image_url);
 
   return (
-    <section className="relative overflow-hidden bg-navy-deep text-cream">
-      {banner ? (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={banner}
-            alt=""
-            aria-hidden
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-navy-deep/60" aria-hidden />
-          <div
-            className="absolute inset-0 bg-gradient-to-r from-navy-deep via-navy-deep/85 to-navy-deep/20 rtl:bg-gradient-to-l"
-            aria-hidden
-          />
-        </>
-      ) : (
-        <>
-          <div className="bg-hero-grid pointer-events-none absolute inset-0" aria-hidden />
-          <div
-            className="pointer-events-none absolute inset-x-0 top-0 h-[65%] bg-[radial-gradient(ellipse_70%_100%_at_50%_0%,rgba(30,58,95,0.5),transparent_75%)]"
-            aria-hidden
-          />
-        </>
-      )}
-
-      <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-32 md:pb-28 md:pt-40">
-        <div className="max-w-2xl">
+    <section className="surf-light border-b border-hair">
+      <Shell className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr]">
+        <div className="animate-rise border-hair py-14 lg:border-e lg:py-16 lg:pe-12">
           {service.tagline ? <SectionEyebrow>{service.tagline}</SectionEyebrow> : null}
-          <Reveal as="h1" delay={0.05} className="mt-4 text-balance font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-cream">
+          <h1 className="mt-3.5 text-balance font-display text-d1 font-bold text-fg">
             {service.title}
-          </Reveal>
-          <Reveal as="p" delay={0.13} className="mt-6 max-w-xl text-lg leading-relaxed text-bodydark">
+            <GoldPeriod />
+          </h1>
+          <p className="mt-5 max-w-[32em] text-lede text-fgbody">
             {service.intro || service.summary}
-          </Reveal>
-          <Reveal as="div" delay={0.21} className="mt-8 flex flex-wrap items-center gap-4">
-            <GoldButton href={localePath(locale, "/book-call")} size="lg">
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <DarkButton size="lg" href={localePath(locale, "/book-call")}>
               {ui.book}
-            </GoldButton>
+            </DarkButton>
             {hasRoi ? (
-              <GhostButton href="#roi" size="lg">
+              <GhostButton size="lg" href="#roi">
                 {ui.roi}
               </GhostButton>
             ) : (
-              <GhostButton href={localePath(locale, "/case-studies")} size="lg">
+              <GhostButton size="lg" href={localePath(locale, "/case-studies")}>
                 {ui.work}
               </GhostButton>
             )}
-          </Reveal>
+          </div>
 
-          {!hasRoi && deliverables.length ? (
-            <Reveal as="div" delay={0.28} className="mt-10 w-full max-w-xl rounded-tile border border-line bg-navy-deep/70 p-6 backdrop-blur">
-              <SectionEyebrow>{ui.included}</SectionEyebrow>
-              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-                {deliverables.map((d) => (
-                  <li key={d} className="flex items-start gap-3 text-cream/90">
-                    <svg viewBox="0 0 20 20" className="mt-1 h-4 w-4 shrink-0 fill-gold" aria-hidden>
-                      <path d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.29 6.3-6.29a1 1 0 011.4 0z" />
-                    </svg>
-                    {d}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
+          {service.duration ? (
+            <div className="mt-12 border-t border-hair pt-6">
+              <StatCell kind="text" value={service.duration} label={ui.timeline} />
+            </div>
           ) : null}
         </div>
-      </div>
+
+        <div className="py-14 lg:ps-12 lg:pt-16">
+          {banner ? (
+            <div className="overflow-hidden rounded-card border border-hair">
+              <ImageWell
+                src={banner}
+                alt=""
+                height={230}
+                priority
+                sizes="(max-width: 1024px) 100vw, 520px"
+              />
+            </div>
+          ) : null}
+
+          {deliverables.length ? (
+            <div className={banner ? "mt-8" : ""}>
+              <div className="mono text-eyebrow uppercase text-accent">{ui.included}</div>
+              <SlashList className="mt-4" items={deliverables} />
+            </div>
+          ) : null}
+        </div>
+      </Shell>
     </section>
   );
 }

@@ -41,7 +41,7 @@ export default function VideoList({ videos }: { videos: VideoEntry[] }) {
       {videos.map((v, i) => {
         if (v.source === "upload" && v.fileUrl) {
           return (
-            <figure key={i} className="rounded-xl overflow-hidden border border-bglight bg-navy-deep">
+            <figure key={i} className="rounded-xl overflow-hidden border border-hair bg-ink">
               <video
                 src={v.fileUrl}
                 controls
@@ -50,7 +50,7 @@ export default function VideoList({ videos }: { videos: VideoEntry[] }) {
                 className="w-full aspect-video"
               />
               {v.title && (
-                <figcaption className="px-4 py-3 text-sm font-semibold text-navy bg-bglight">
+                <figcaption className="px-4 py-3 text-sm font-semibold text-fg bg-paper-subtle">
                   {v.title}
                 </figcaption>
               )}
@@ -62,7 +62,7 @@ export default function VideoList({ videos }: { videos: VideoEntry[] }) {
         if (!embed) return null;
 
         return (
-          <figure key={i} className="rounded-xl overflow-hidden border border-bglight bg-navy-deep">
+          <figure key={i} className="rounded-xl overflow-hidden border border-hair bg-ink">
             <div className="relative aspect-video">
               {v.thumbnail && (
                 <Image
@@ -84,7 +84,7 @@ export default function VideoList({ videos }: { videos: VideoEntry[] }) {
               />
             </div>
             {v.title && (
-              <figcaption className="px-4 py-3 text-sm font-semibold text-navy bg-bglight">
+              <figcaption className="px-4 py-3 text-sm font-semibold text-fg bg-paper-subtle">
                 {v.title}
               </figcaption>
             )}

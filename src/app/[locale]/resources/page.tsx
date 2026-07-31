@@ -5,7 +5,8 @@ import type { Locale } from "@/i18n/config";
 import { SITE_URL } from "@/lib/site";
 import { cmsMedia, localePath } from "@/lib/utils";
 import { getResources } from "@/lib/v1";
-import { CTAPanel, Reveal, SectionEyebrow, Stagger, StaggerItem } from "@/components/system";
+import { CTAPanel, ImageWell, MonoChip, SectionEyebrow, Shell } from "@/components/system";
+import { Arrow, GoldPeriod } from "@/components/system/Typo";
 import LeadMagnet from "@/components/home/LeadMagnet";
 
 export const revalidate = 300;
@@ -75,84 +76,74 @@ export default async function ResourcesPage({
 
   return (
     <>
-      {/* Hero — dark */}
-      <section className="relative overflow-hidden bg-navy-deep">
-        <div className="bg-hero-grid pointer-events-none absolute inset-0" aria-hidden />
-        <div className="relative mx-auto max-w-4xl px-4 py-24 text-center sm:py-28">
-          <Reveal>
-            <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h1 className="mt-4 text-balance font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-tight tracking-[-0.02em] text-cream">
-              {t.title}
-            </h1>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-bodydark sm:text-lg">
-              {t.sub}
-            </p>
-          </Reveal>
-        </div>
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect">
+          <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
+          <h1 className="mt-3.5 max-w-[16em] font-display text-d1 font-bold text-fg">
+            {t.title}
+            <GoldPeriod />
+          </h1>
+          <p className="mt-5 max-w-[40em] text-lede text-fgbody">{t.sub}</p>
+        </Shell>
       </section>
 
-      {/* Resource grid — light */}
-      <section className="bg-cream py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <Stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Featured static PDF guide */}
-            <StaggerItem className="flex flex-col rounded-tile border border-gold/60 bg-white p-6 shadow-sm">
-              <span className="inline-flex w-fit items-center rounded-pill bg-gold/15 px-3 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.15em] text-gold-dim">
-                {t.pdfBadge}
-              </span>
-              <h3 className="mt-4 text-lg font-semibold text-navy-deep">{t.pdfTitle}</h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-neutral-500">{t.pdfDesc}</p>
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Featured guide — a static PDF, not a CMS record. */}
+            <div className="flex flex-col rounded-card border border-gold bg-surface p-6">
+              <MonoChip className="w-fit border-gold text-gold-deep">{t.pdfBadge}</MonoChip>
+              <h2 className="mt-4 font-display text-[19px] font-semibold tracking-[-0.02em] text-fg">
+                {t.pdfTitle}
+              </h2>
+              <p className="mt-2 flex-1 text-[14.5px] leading-relaxed text-fgbody">{t.pdfDesc}</p>
               <a
                 href="/resources/10-mistakes-en.pdf"
                 download
-                className="mt-5 inline-flex items-center justify-center gap-1.5 rounded-pill bg-gold px-5 py-2.5 text-sm font-medium text-gold-ink transition-transform hover:scale-[1.03] focus-gold"
+                className="focus-gold mt-6 inline-flex w-fit items-center gap-2 rounded-btn bg-ink px-5 py-3 font-display text-[14.5px] font-semibold text-white transition-colors hover:bg-gold hover:text-ink"
               >
                 {t.download}
-                <span aria-hidden>↓</span>
+                <span aria-hidden="true">↓</span>
               </a>
-            </StaggerItem>
+            </div>
 
-            {/* CMS-backed resources */}
-            {resources.map((r) => {
-              const cover = cmsMedia(r.cover_image_url);
-              return (
-                <StaggerItem
-                  key={r.slug}
-                  className="flex flex-col overflow-hidden rounded-tile border border-neutral-200 bg-white shadow-sm"
-                >
-                  {cover ? (
-                    <div className="aspect-[16/10] overflow-hidden bg-neutral-200">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={cover} alt={r.title} loading="lazy" className="h-full w-full object-cover" />
-                    </div>
+            {resources.map((r) => (
+              <div
+                key={r.slug}
+                className="flex flex-col overflow-hidden rounded-card border border-hair bg-surface"
+              >
+                <ImageWell
+                  src={r.cover_image_url}
+                  alt={r.title}
+                  ratio="16 / 10"
+                  sizes="(max-width: 640px) 100vw, 400px"
+                />
+                <div className="flex flex-1 flex-col p-6">
+                  <span className="mono text-eyebrow uppercase text-fgmuted">{r.type}</span>
+                  <h2 className="mt-2 font-display text-[19px] font-semibold tracking-[-0.02em] text-fg">
+                    {r.title}
+                  </h2>
+                  <p className="mt-2 flex-1 text-[14.5px] leading-relaxed text-fgbody">
+                    {r.description}
+                  </p>
+                  {r.pdf_url ? (
+                    <a
+                      href={cmsMedia(r.pdf_url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mono focus-gold mt-5 inline-flex items-center gap-2 text-[11px] uppercase text-fgmuted transition-colors hover:text-gold-deep"
+                    >
+                      {r.requires_email ? t.open : t.download}
+                      <Arrow locale={locale} />
+                    </a>
                   ) : null}
-                  <div className="flex flex-1 flex-col p-6">
-                    <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-gold-dim">{r.type}</span>
-                    <h3 className="mt-2 text-lg font-semibold text-navy-deep">{r.title}</h3>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-neutral-500">{r.description}</p>
-                    {r.pdf_url ? (
-                      <a
-                        href={cmsMedia(r.pdf_url)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-navy hover:text-gold focus-gold"
-                      >
-                        {r.requires_email ? t.open : t.download}
-                        <span aria-hidden>→</span>
-                      </a>
-                    ) : null}
-                  </div>
-                </StaggerItem>
-              );
-            })}
-          </Stagger>
+                </div>
+              </div>
+            ))}
+          </div>
 
-          <p className="mt-10 text-center text-sm text-neutral-400">{t.moreSoon}</p>
-        </div>
+          <p className="mono mt-10 text-[11px] uppercase text-fgfaint">{t.moreSoon}</p>
+        </Shell>
       </section>
 
       {/* Email capture — dark */}

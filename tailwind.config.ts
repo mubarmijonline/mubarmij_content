@@ -14,131 +14,119 @@ const config: Config = {
     },
     extend: {
       colors: {
-        navy: { DEFAULT: "#1E3A5F", deep: "#0A1628" },
-        // v2 "Flagship" surfaces on dark
-        panel: "#0E1D33",
-        line: "#1E2D45",
-        bodydark: "#8DA2C0",
-        cream: "#F8FAFC",
+        // ---- v3 surface-scoped tokens -------------------------------------
+        // Resolved from the .surf-light / .surf-subtle / .surf-dark scopes in
+        // globals.css, so a primitive written once inverts inside a dark band.
+        // NOTE: never use Tailwind opacity modifiers on these (text-fg/60) —
+        // the vars hold rgba() and the modifier silently does nothing.
+        surface: "var(--bg)",
+        fg: "var(--fg)",
+        fgbody: "var(--fg-body)",
+        fgmuted: "var(--fg-muted)",
+        fgfaint: "var(--fg-faint)",
+        hair: "var(--rule)",
+        hairin: "var(--rule-in)",
+        hairbtn: "var(--rule-btn)",
+        hairhov: "var(--rule-hov)",
+        well: "var(--well)",
+        // Named `accent`, not `eyebrow` — `text-eyebrow` is already the
+        // font-size key, and a name in both scales resolves ambiguously.
+        accent: "var(--eyebrow)",
+
+        // ---- v3 literal values (never invert) ------------------------------
+        ink: {
+          DEFAULT: "#0A1628",
+          body: "#46536B",
+          muted: "#7A8698",
+          faint: "#A3ADBB",
+          logo: "#B6BEC9",
+          chrome: "#16233A",
+        },
+        rule: { DEFAULT: "#E2E6EC", btn: "#D6DCE5", in: "#EDF0F5", hov: "#CBD3DE" },
+        paper: { DEFAULT: "#FFFFFF", subtle: "#F7F8FA", well: "#F1F4F8" },
+        live: "#4ADE80",
+
         gold: {
           DEFAULT: "#D4A24C",
           light: "#F4C97A",
           ink: "#3A2A05",
           dim: "#B98A2F",
+          deep: "#9A6E22",
           50: "#FBF6EC",
           100: "#F5E8CC",
           400: "#E0B976",
           500: "#D4A24C",
           600: "#B6862F",
         },
-        neutral: {
-          200: "#E2E8F0",
-          300: "#CBD5E1",
-          400: "#94A3B8",
-          500: "#64748B",
-        },
         whatsapp: "#25D366",
-        bglight: "#F8FAFC",
+      },
+      maxWidth: {
+        shell: "1280px",
       },
       borderRadius: {
-        tile: "12px",
+        chip: "6px",
+        btn: "9px",
+        panel: "12px",
+        card: "14px",
+        phone: "26px",
+        phonein: "19px",
         pill: "9999px",
       },
-      fontFamily: {
-        sans: ["var(--font-sans)", "var(--font-inter)", "Inter", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
-        plexar: ["var(--font-plex-ar)", "var(--font-cairo)", "system-ui", "sans-serif"],
-        display: ["var(--font-poppins)", "Poppins", "system-ui", "sans-serif"],
-        arabic: ["var(--font-cairo)", "Cairo", "system-ui", "sans-serif"],
-        "arabic-display": ["var(--font-tajawal)", "Tajawal", "system-ui", "sans-serif"],
+      fontSize: {
+        eyebrow: ["10.5px", { lineHeight: "1.2", letterSpacing: "0.09em" }],
+        monosm: ["11px", { lineHeight: "1.3", letterSpacing: "0.06em" }],
+        d1: ["clamp(34px, 4.6vw, 60px)", { lineHeight: "1.07", letterSpacing: "-0.035em" }],
+        d2: ["clamp(27px, 3.1vw, 38px)", { lineHeight: "1.12", letterSpacing: "-0.03em" }],
+        d3: ["21px", { lineHeight: "1.25", letterSpacing: "-0.02em" }],
+        lede: ["18.5px", { lineHeight: "1.65" }],
+        copy: ["16px", { lineHeight: "1.65" }],
       },
-      backgroundImage: {
-        "hero-gradient": "linear-gradient(135deg, #0A1628 0%, #1E3A5F 100%)",
-        "gold-gradient": "linear-gradient(135deg, #D4A24C 0%, #B6862F 100%)",
+      fontFamily: {
+        // Latin body/display/mono each chain to Cairo so a missed class still
+        // renders Arabic rather than falling back to a system serif.
+        sans: ["var(--font-dm)", "var(--font-cairo)", "system-ui", "sans-serif"],
+        display: ["var(--font-poppins)", "var(--font-cairo)", "system-ui", "sans-serif"],
+        mono: ["var(--font-jet)", "ui-monospace", "SFMono-Regular", "monospace"],
+        arabic: ["var(--font-cairo)", "Cairo", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        gold: "0 10px 30px -10px rgba(212, 162, 76, 0.45)",
-        navy: "0 10px 30px -10px rgba(10, 22, 40, 0.55)",
+        float: "0 30px 70px -34px rgba(0, 0, 0, 0.6)",
+        lift: "0 30px 60px -44px rgba(10, 22, 40, 0.45)",
       },
       animation: {
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        marquee: "marquee 30s linear infinite",
-        "fade-up": "fadeUp 0.6s ease-out both",
-        "fade-in": "fadeIn 0.8s ease-out both",
-        "slide-in-left": "slideInLeft 0.7s cubic-bezier(0.22,1,0.36,1) both",
-        "slide-in-right": "slideInRight 0.7s cubic-bezier(0.22,1,0.36,1) both",
-        "logo-pop": "logoPop 0.7s cubic-bezier(0.34,1.56,0.64,1) both",
-        "logo-float": "logoFloat 4s ease-in-out infinite",
-        "shine": "shine 3s linear infinite",
-        "gradient-x": "gradientX 6s ease infinite",
-        "blink-caret": "blinkCaret 0.85s steps(2, start) infinite",
-        "type": "type var(--type-duration, 2.6s) steps(var(--type-steps, 30), end) both",
-        "orbit": "orbit 4s linear infinite",
-        "dot-land": "dotLand 0.55s cubic-bezier(0.34,1.56,0.64,1) both",
-        "confetti-burst": "confettiBurst 1.4s ease-out forwards",
+        // ---- v3 motion (from the design) ----------------------------------
+        rise: "rise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both",
+        float1: "float1 7.5s ease-in-out infinite",
+        float2: "float2 9s ease-in-out infinite",
+        mq: "mq 36s linear infinite",
+        tick: "tick 2.4s ease-in-out infinite",
+        bar: "bar 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both",
+
       },
       keyframes: {
-        marquee: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
-        },
-        fadeUp: {
+        rise: {
           from: { opacity: "0", transform: "translateY(16px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
+          to: { opacity: "1", transform: "none" },
         },
-        fadeIn: {
-          from: { opacity: "0" },
-          to: { opacity: "1" },
-        },
-        slideInLeft: {
-          from: { opacity: "0", transform: "translateX(-24px)" },
-          to: { opacity: "1", transform: "translateX(0)" },
-        },
-        slideInRight: {
-          from: { opacity: "0", transform: "translateX(24px)" },
-          to: { opacity: "1", transform: "translateX(0)" },
-        },
-        logoPop: {
-          "0%": { opacity: "0", transform: "scale(0.6) rotate(-12deg)" },
-          "60%": { opacity: "1", transform: "scale(1.08) rotate(4deg)" },
-          "100%": { opacity: "1", transform: "scale(1) rotate(0)" },
-        },
-        logoFloat: {
+        float1: {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-3px)" },
+          "50%": { transform: "translateY(-12px)" },
         },
-        shine: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
+        float2: {
+          "0%, 100%": { transform: "translateY(-6px)" },
+          "50%": { transform: "translateY(6px)" },
         },
-        gradientX: {
-          "0%, 100%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" },
+        // Direction-aware: [dir=rtl] .mq-track flips --mq-dir to -1.
+        mq: {
+          to: { transform: "translateX(calc(-50% * var(--mq-dir, 1)))" },
         },
-        blinkCaret: {
-          "0%, 100%": { borderColor: "transparent" },
-          "50%": { borderColor: "currentColor" },
+        tick: {
+          "0%, 100%": { opacity: "0.25" },
+          "50%": { opacity: "1" },
         },
-        type: {
-          from: { width: "0" },
-          to: { width: "100%" },
-        },
-        orbit: {
-          "0%": { transform: "rotate(0deg)" },
-          "100%": { transform: "rotate(360deg)" },
-        },
-        dotLand: {
-          "0%": { opacity: "0", transform: "translate(-50%, -180%) scale(0)" },
-          "60%": { opacity: "1", transform: "translate(-50%, -50%) scale(1.4)" },
-          "100%": { opacity: "1", transform: "translate(-50%, -50%) scale(1)" },
-        },
-        confettiBurst: {
-          "0%": { opacity: "1", transform: "translate(0,0) rotate(0deg)" },
-          "100%": {
-            opacity: "0",
-            transform:
-              "translate(var(--cx, 0px), var(--cy, 0px)) rotate(var(--cr, 720deg))",
-          },
+        bar: {
+          from: { width: "0%" },
+          to: { width: "var(--bar-to, 86%)" },
         },
       },
     },

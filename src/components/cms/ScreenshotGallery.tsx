@@ -50,7 +50,7 @@ export default function ScreenshotGallery({ shots }: { shots: Shot[] }) {
             type="button"
             onClick={() => setActive(i)}
             title={s.caption || s.alt}
-            className={`group relative block w-full ${tileAspect} overflow-hidden rounded-2xl border border-bglight bg-gradient-to-br from-bglight to-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold shadow-sm hover:shadow-xl transition-shadow`}
+            className={`group relative block w-full ${tileAspect} overflow-hidden rounded-2xl border border-hair bg-gradient-to-br from-bglight to-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold shadow-sm hover:shadow-xl transition-shadow`}
           >
             <Image
               src={s.src}
@@ -78,7 +78,7 @@ export default function ScreenshotGallery({ shots }: { shots: Shot[] }) {
           role="dialog"
           aria-modal="true"
           aria-label="Screenshot preview"
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-deep/90 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/90 backdrop-blur-sm p-4"
           onClick={() => setActive(null)}
         >
           <button
@@ -103,7 +103,7 @@ export default function ScreenshotGallery({ shots }: { shots: Shot[] }) {
             />
           </div>
           {shots[active].caption && (
-            <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/90 text-sm md:text-base font-semibold bg-navy-deep/70 rounded-full px-4 py-1.5">
+            <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/90 text-sm md:text-base font-semibold bg-ink/70 rounded-full px-4 py-1.5">
               {shots[active].caption}
             </p>
           )}

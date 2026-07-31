@@ -8,14 +8,18 @@ import { cmsMedia, localePath } from "@/lib/utils";
 import { getClient, getReels } from "@/lib/v1";
 import {
   CTAPanel,
+  DarkButton,
   GhostButton,
-  GoldButton,
-  MetricStat,
-  Reveal,
+  HairCell,
+  HairGrid,
+  ImageWell,
+  MonoChip,
   SectionEyebrow,
-  Stagger,
-  StaggerItem,
+  Shell,
+  StatCell,
+  hasStat,
 } from "@/components/system";
+import { Arrow, GoldPeriod } from "@/components/system/Typo";
 import ScreenshotGallery, { type Shot } from "@/components/cms/ScreenshotGallery";
 import ReelsRow from "@/components/reels/ReelsRow";
 
@@ -31,12 +35,12 @@ const COPY = {
     stack: "Built with",
     services: "What we did",
     timeline: "Timeline",
-    results: "The results",
+    results: "Highlights",
     gallery: "A look inside",
     ctaTitle: "Have a project in mind?",
     ctaSub: "Let's scope it together and map the fastest path to launch.",
-    ctaLabel: "Book a free consultation",
-    waLabel: "Chat on WhatsApp",
+    ctaLabel: "Book a call",
+    waLabel: "Message us on WhatsApp",
   },
   ar: {
     back: "كل دراسات الحالة",
@@ -47,12 +51,12 @@ const COPY = {
     stack: "اتبنى بـ",
     services: "اللي عملناه",
     timeline: "المدة",
-    results: "النتايج",
+    results: "أبرز النقاط",
     gallery: "من جوّه المشروع",
     ctaTitle: "عندك مشروع في بالك؟",
     ctaSub: "خلّينا نحدّد نطاقه سوا ونرسم أسرع طريق للإطلاق.",
-    ctaLabel: "احجز استشارة مجانية",
-    waLabel: "تواصل على واتساب",
+    ctaLabel: "احجز مكالمة",
+    waLabel: "كلمنا على واتساب",
   },
 } as const;
 
@@ -93,55 +97,57 @@ export default async function CaseStudyDetailPage({
   const client = await getClient(slug, locale);
   if (!client) notFound();
 
-  const reelsEnv = await getReels(locale, { client: slug, limit: 12 });
+  const gallery = (client.gallery ?? []).map(cmsMedia).filter(Boolean);
+
+  // Logo-only stubs resolve through the API but have nothing to show. Sending
+  // them to a page with a name and no content is worse than a 404.
+  if (!client.brief && !client.brief_html && !gallery.length) notFound();
+
+  const reelsEnv = await getReels(locale, { client: slug, page_size: 12 });
   const reels = reelsEnv?.data ?? [];
 
-  const heroImg = cmsMedia(client.hero_image_url || client.logo_url);
-  const gallery = (client.gallery ?? []).map(cmsMedia).filter(Boolean);
   const galleryShots: Shot[] = gallery.map((src, index) => ({
     src,
     alt: `${client.name} — ${index + 1}`,
   }));
-  const results = client.results ?? [];
+  const results = (client.results ?? []).filter((r) => hasStat(r.metric));
   const techStack = client.tech_stack ?? [];
   const services = client.services ?? [];
   const { live_url, app_store, play_store } = client.links ?? {};
 
   return (
     <>
-      {/* Hero — dark */}
-      <section className="relative overflow-hidden bg-navy-deep">
-        <div className="bg-hero-grid pointer-events-none absolute inset-0" aria-hidden />
-        <div className="relative mx-auto max-w-5xl px-4 pb-16 pt-24 sm:pt-28">
-          <Reveal>
+      <section className="surf-light border-b border-hair">
+        <Shell className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr]">
+          <div className="border-hair py-12 lg:border-e lg:py-14 lg:pe-12">
             <a
               href={localePath(locale, "/case-studies")}
-              className="inline-flex items-center gap-1.5 text-sm text-bodydark transition-colors hover:text-cream focus-gold"
+              className="mono focus-gold inline-flex items-center gap-2 text-[11px] uppercase text-fgmuted transition-colors hover:text-fg"
             >
-              <span aria-hidden className="rtl:rotate-180">
+              <span aria-hidden="true" className="rtl:rotate-180">
                 ←
               </span>
               {t.back}
             </a>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <SectionEyebrow className="mt-8">{client.category_label}</SectionEyebrow>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h1 className="mt-3 text-balance font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-tight tracking-[-0.02em] text-cream">
+
+            <div className="mt-8">
+              <SectionEyebrow>{client.category_label}</SectionEyebrow>
+            </div>
+            <h1 className="mt-3.5 text-balance font-display text-d1 font-bold text-fg">
               {client.name}
+              <GoldPeriod />
             </h1>
-          </Reveal>
-          <Reveal delay={0.16}>
-            <p className="mt-4 max-w-2xl text-pretty text-lg text-bodydark">{client.tagline}</p>
-          </Reveal>
-          {live_url || app_store || play_store ? (
-            <Reveal delay={0.22}>
+            {client.tagline ? (
+              <p className="mt-5 max-w-[32em] text-lede text-fgbody">{client.tagline}</p>
+            ) : null}
+
+            {live_url || app_store || play_store ? (
               <div className="mt-8 flex flex-wrap gap-3">
                 {live_url ? (
-                  <GoldButton href={live_url} external>
+                  <DarkButton href={live_url} external>
                     {t.visit}
-                  </GoldButton>
+                    <Arrow locale={locale} />
+                  </DarkButton>
                 ) : null}
                 {app_store ? (
                   <GhostButton href={app_store} external>
@@ -154,140 +160,104 @@ export default async function CaseStudyDetailPage({
                   </GhostButton>
                 ) : null}
               </div>
-            </Reveal>
-          ) : null}
-        </div>
+            ) : null}
 
-        {heroImg ? (
-          <div className="mx-auto max-w-6xl px-4 pb-16">
-            <Reveal delay={0.1}>
-              <div className="overflow-hidden rounded-tile border border-line bg-panel">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={heroImg} alt={client.name} className="h-auto w-full object-cover" />
-              </div>
-            </Reveal>
+            {results.length ? (
+              <HairGrid cols={2} className="mt-12 border-t border-hair">
+                {results.slice(0, 4).map((r) => (
+                  <HairCell key={r.label} className="py-6 pe-5">
+                    <StatCell value={r.metric} label={r.label} />
+                  </HairCell>
+                ))}
+              </HairGrid>
+            ) : null}
           </div>
-        ) : null}
+
+          <div className="py-12 lg:ps-12 lg:pt-14">
+            <div className="overflow-hidden rounded-card border border-hair">
+              <ImageWell
+                src={client.hero_image_url || client.logo_url}
+                alt={client.name}
+                height={400}
+                priority
+                fit={client.hero_image_url ? "cover" : "contain"}
+                sizes="(max-width: 1024px) 100vw, 640px"
+              />
+            </div>
+          </div>
+        </Shell>
       </section>
 
-      <ReelsRow locale={locale} reels={reels} showAll={false} />
-
-      {/* Overview — light */}
-      <section className="bg-cream py-16 sm:py-20">
-        <div className="mx-auto grid max-w-6xl gap-12 px-4 lg:grid-cols-[1fr_300px]">
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect grid grid-cols-1 gap-12 lg:grid-cols-[1fr_280px]">
           <div>
-            <Reveal>
-              <SectionEyebrow>{t.overview}</SectionEyebrow>
-            </Reveal>
-            <Reveal delay={0.06}>
-              {client.brief_html ? (
-                <div
-                  className="mt-5 max-w-2xl text-neutral-600 [&_a]:text-navy [&_a]:underline [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-navy-deep [&_h3]:mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-navy-deep [&_li]:mt-1.5 [&_li]:leading-relaxed [&_ol]:mt-4 [&_ol]:list-decimal [&_ol]:ps-5 [&_p]:mt-4 [&_p]:leading-relaxed [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:ps-5"
-                  dangerouslySetInnerHTML={{ __html: client.brief_html }}
-                />
-              ) : (
-                <p className="mt-5 max-w-2xl leading-relaxed text-neutral-600">{client.brief}</p>
-              )}
-            </Reveal>
+            <SectionEyebrow>{t.overview}</SectionEyebrow>
+            {client.brief_html ? (
+              <div
+                className="mt-5 max-w-[42em] text-copy text-fgbody [&_a]:text-gold-deep [&_a]:underline [&_h2]:mt-8 [&_h2]:font-display [&_h2]:text-[21px] [&_h2]:font-semibold [&_h2]:text-fg [&_h3]:mt-6 [&_h3]:font-display [&_h3]:text-[17px] [&_h3]:font-semibold [&_h3]:text-fg [&_li]:mt-1.5 [&_li]:leading-relaxed [&_ol]:mt-4 [&_ol]:list-decimal [&_ol]:ps-5 [&_p]:mt-4 [&_p]:leading-relaxed [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:ps-5"
+                dangerouslySetInnerHTML={{ __html: client.brief_html }}
+              />
+            ) : (
+              <p className="mt-5 max-w-[42em] text-copy text-fgbody">{client.brief}</p>
+            )}
           </div>
 
-          <aside className="space-y-8">
+          <aside className="grid gap-8 self-start lg:border-s lg:border-hair lg:ps-8">
             {services.length ? (
-              <Reveal delay={0.1}>
-                <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold-dim">
-                    {t.services}
-                  </h2>
-                  <ul className="mt-3 space-y-1.5 text-sm text-neutral-600">
-                    {services.map((s) => (
-                      <li key={s}>{s}</li>
-                    ))}
-                  </ul>
-                </div>
-              </Reveal>
+              <div>
+                <h2 className="mono text-eyebrow uppercase text-accent">{t.services}</h2>
+                <ul className="mt-3 space-y-1.5 text-[14.5px] text-fgbody">
+                  {services.map((s) => (
+                    <li key={s}>{s}</li>
+                  ))}
+                </ul>
+              </div>
             ) : null}
 
             {client.timeline ? (
-              <Reveal delay={0.14}>
-                <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold-dim">
-                    {t.timeline}
-                  </h2>
-                  <p className="mt-3 text-sm text-neutral-600">{client.timeline}</p>
-                </div>
-              </Reveal>
+              <div>
+                <h2 className="mono text-eyebrow uppercase text-accent">{t.timeline}</h2>
+                <p className="mt-3 text-[14.5px] text-fgbody">{client.timeline}</p>
+              </div>
             ) : null}
 
             {techStack.length ? (
-              <Reveal delay={0.18}>
-                <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-gold-dim">
-                    {t.stack}
-                  </h2>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-pill border border-neutral-300 bg-white px-3 py-1 font-mono text-xs text-neutral-600"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+              <div>
+                <h2 className="mono text-eyebrow uppercase text-accent">{t.stack}</h2>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {techStack.map((tech) => (
+                    <MonoChip key={tech}>{tech}</MonoChip>
+                  ))}
                 </div>
-              </Reveal>
+              </div>
             ) : null}
           </aside>
-        </div>
+        </Shell>
       </section>
 
-      {/* Gallery — light continuation */}
       {galleryShots.length ? (
-        <section className="bg-cream pb-16 sm:pb-20">
-          <div className="mx-auto max-w-6xl px-4">
-            <Reveal>
-              <SectionEyebrow>{t.gallery}</SectionEyebrow>
-            </Reveal>
+        <section className="surf-light border-b border-hair">
+          <Shell className="sect">
+            <SectionEyebrow>{t.gallery}</SectionEyebrow>
             <div className="mt-6">
               <ScreenshotGallery shots={galleryShots} />
             </div>
-          </div>
+          </Shell>
         </section>
       ) : null}
 
-      {/* Results — dark */}
-      {results.length ? (
-        <section className="bg-navy-deep py-16 sm:py-20">
-          <div className="mx-auto max-w-5xl px-4">
-            <Reveal>
-              <SectionEyebrow>{t.results}</SectionEyebrow>
-            </Reveal>
-            <Stagger className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {results.map((r) => (
-                <StaggerItem key={r.label}>
-                  <MetricStat value={r.metric} label={r.label} />
-                </StaggerItem>
-              ))}
-            </Stagger>
-          </div>
-        </section>
-      ) : null}
+      <ReelsRow locale={locale} reels={reels} showAll={false} />
 
-      {/* Testimonial — light */}
       {client.testimonial?.quote ? (
-        <section className="bg-cream py-16 sm:py-20">
-          <div className="mx-auto max-w-3xl px-4 text-center">
-            <Reveal>
-              <blockquote className="text-balance font-sans text-2xl font-medium leading-relaxed tracking-[-0.01em] text-navy-deep sm:text-3xl">
-                &ldquo;{client.testimonial.quote}&rdquo;
-              </blockquote>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <p className="mt-6 font-mono text-sm uppercase tracking-[0.15em] text-gold-dim">
-                {client.testimonial.author}
-              </p>
-            </Reveal>
-          </div>
+        <section className="surf-dark sect">
+          <Shell className="max-w-3xl text-center">
+            <blockquote className="text-balance font-display text-[26px] font-semibold leading-relaxed tracking-[-0.01em] text-fg sm:text-[30px]">
+              &ldquo;{client.testimonial.quote}&rdquo;
+            </blockquote>
+            <p className="mono mt-6 text-[11.5px] uppercase text-gold">
+              {client.testimonial.author}
+            </p>
+          </Shell>
         </section>
       ) : null}
 

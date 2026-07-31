@@ -3,11 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --brand-navy: #1e3a5f;
   --brand-navy-deep: #0a1628;
   --brand-gold: #d4a24c;
-  --brand-whatsapp: #25d366;
-  --bg-light: #f8fafc;
+
+  /* Sticky-header height — drives scroll-margin and sticky column offsets. */
+  --hdr-h: 72px;
+}
+@media (min-width: 1024px) {
+  :root { --hdr-h: 96px; }
 }
 
 html {
@@ -16,9 +19,184 @@ html {
 
 body {
   background-color: #ffffff;
-  color: var(--brand-navy-deep);
+  color: #46536b;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Anchored sections must clear the sticky header. */
+[id] {
+  scroll-margin-block-start: calc(var(--hdr-h) + 16px);
+}
+
+/* ======================================================================== */
+/*  Surface scopes — the light/dark mechanism                               */
+/*                                                                          */
+/*  A scope sets custom properties only. Tailwind maps them to colour names */
+/*  (text-fg, border-hair, bg-well, …) so a primitive is written once and    */
+/*  inverts automatically inside <Section tone="dark">.                      */
+/*  Do NOT use opacity modifiers on those names — the dark scope stores      */
+/*  rgba() values and `text-fg/60` would silently no-op.                     */
+/* ======================================================================== */
+.surf-light,
+.surf-subtle,
+.surf-dark {
+  background-color: var(--bg);
+  color: var(--fg-body);
+}
+
+.surf-light {
+  --bg: #ffffff;
+  --fg: #0a1628;
+  --fg-body: #46536b;
+  --fg-muted: #7a8698;
+  --fg-faint: #a3adbb;
+  --rule: #e2e6ec;
+  --rule-in: #edf0f5;
+  --rule-btn: #d6dce5;
+  --rule-hov: #cbd3de;
+  --well: #f1f4f8;
+  --eyebrow: #9a6e22;
+}
+
+.surf-subtle {
+  --bg: #f7f8fa;
+  --fg: #0a1628;
+  --fg-body: #46536b;
+  --fg-muted: #7a8698;
+  --fg-faint: #a3adbb;
+  --rule: #e2e6ec;
+  --rule-in: #edf0f5;
+  --rule-btn: #d6dce5;
+  --rule-hov: #cbd3de;
+  --well: #ffffff;
+  --eyebrow: #9a6e22;
+}
+
+.surf-dark {
+  --bg: #0a1628;
+  --fg: rgba(255, 255, 255, 0.92);
+  --fg-body: rgba(255, 255, 255, 0.72);
+  --fg-muted: rgba(255, 255, 255, 0.6);
+  --fg-faint: rgba(255, 255, 255, 0.45);
+  --rule: rgba(255, 255, 255, 0.18);
+  --rule-in: rgba(255, 255, 255, 0.12);
+  --rule-btn: rgba(255, 255, 255, 0.2);
+  --rule-hov: rgba(255, 255, 255, 0.3);
+  --well: #16233a;
+  --eyebrow: #d4a24c;
+}
+
+/* Page default, so tokens resolve even outside an explicit <Section>. */
+body {
+  --bg: #ffffff;
+  --fg: #0a1628;
+  --fg-body: #46536b;
+  --fg-muted: #7a8698;
+  --fg-faint: #a3adbb;
+  --rule: #e2e6ec;
+  --rule-in: #edf0f5;
+  --rule-btn: #d6dce5;
+  --rule-hov: #cbd3de;
+  --well: #f1f4f8;
+  --eyebrow: #9a6e22;
+}
+
+/* ---------- v3 layout utilities ----------------------------------------- */
+
+.shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1280px;
+  padding-inline: 20px;
+}
+@media (min-width: 768px) {
+  .shell { padding-inline: 32px; }
+}
+
+.sect {
+  padding-block: 64px;
+}
+@media (min-width: 768px) {
+  .sect { padding-block: 72px; }
+}
+.sect-sm {
+  padding-block: 40px;
+}
+
+/* Semantic mono: eyebrows, chips, spec labels. Arabic swaps to Cairo and
+   drops the tracking/uppercase that break connected script. Use Tailwind's
+   font-mono instead for *literal* monospace (urls, terminal) that must stay
+   JetBrains in both directions. */
+.mono {
+  font-family: var(--font-jet), ui-monospace, SFMono-Regular, monospace;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+[dir="rtl"] .mono {
+  font-family: var(--font-cairo), system-ui, sans-serif;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* Latin fragments embedded in Arabic prose: phone numbers, urls, tech chips.
+   `isolate` is the load-bearing part — without it +20120… reorders. */
+.ltr-island {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+}
+
+/* The design's negative tracking tears Arabic letter joining apart. */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] .mono {
+  letter-spacing: normal;
+}
+
+/* Gold grid well behind the dark hero panel. */
+.grid-well {
+  background-image:
+    linear-gradient(rgba(212, 162, 76, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 162, 76, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Marquee: one keyframe, sign-flipped per direction. */
+.mq-track {
+  animation: mq 36s linear infinite;
+  will-change: transform;
+}
+[dir="rtl"] .mq-track {
+  --mq-dir: -1;
+}
+.mq-wrap:hover .mq-track {
+  animation-play-state: paused;
+}
+
+/* ---------- In-view reveal (see components/system/Reveal.tsx) ------------ */
+/* Only hide when scripting is actually available, so a no-JS visitor gets the
+   content instead of a blank page. Browsers without `scripting` support fall
+   through to "always visible", which is the safe direction. */
+@media (scripting: enabled) {
+  [data-reveal="hidden"],
+  [data-stagger="hidden"] .stg-item {
+    opacity: 0;
+  }
+}
+[data-stagger="shown"] .stg-item {
+  animation: rise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * var(--stg-step, 0.08s));
+}
+
+/* <details> accordion reset */
+summary {
+  list-style: none;
+  cursor: pointer;
+}
+summary::-webkit-details-marker {
+  display: none;
 }
 
 .skip-link {
@@ -36,221 +214,6 @@ body {
   outline: 2px solid var(--brand-gold);
 }
 
-[dir="rtl"] .flip-x {
-  transform: scaleX(-1);
-}
-
-@layer components {
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gold;
-  }
-  .btn-primary {
-    @apply btn bg-gold text-navy-deep hover:bg-gold-600 hover:shadow-gold;
-  }
-  .btn-secondary {
-    @apply btn border border-gold text-gold hover:bg-gold hover:text-navy-deep;
-  }
-  .btn-whatsapp {
-    @apply btn bg-whatsapp text-white hover:opacity-90;
-  }
-  .btn-leadmagnet {
-    @apply btn bg-navy text-white hover:bg-navy-deep;
-  }
-  .section {
-    @apply py-16 md:py-24;
-  }
-  .section-title {
-    @apply font-display text-3xl md:text-4xl lg:text-5xl font-bold text-navy-deep;
-  }
-  [dir="rtl"] .section-title {
-    @apply font-arabic-display;
-  }
-  [dir="rtl"] body {
-    @apply font-arabic;
-  }
-}
-
-/* Scroll-reveal utility used by <Reveal /> */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
-}
-.reveal-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Hover lift utility for cards */
-.card-lift {
-  transition:
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
-}
-.card-lift:hover {
-  transform: translateY(-6px);
-}
-
-/* Animated background grid (used inside dark hero) */
-.bg-grid-drift {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
-  animation: gridDrift 20s linear infinite;
-}
-@keyframes gridDrift {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 0 40px, 40px 0; }
-}
-
-/* Pulsing dot for "live" badges */
-.pulse-dot {
-  position: relative;
-  display: inline-block;
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 9999px;
-  background: var(--brand-gold);
-}
-.pulse-dot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background: var(--brand-gold);
-  opacity: 0.6;
-  animation: pulseDot 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-@keyframes pulseDot {
-  0% { transform: scale(1); opacity: 0.6; }
-  80%, 100% { transform: scale(2.4); opacity: 0; }
-}
-
-/* Step number glow used in Process */
-.step-glow {
-  animation: stepGlow 3s ease-in-out infinite;
-}
-@keyframes stepGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 162, 76, 0.55); }
-  50% { box-shadow: 0 0 0 14px rgba(212, 162, 76, 0); }
-}
-
-/* Indeterminate progress bar */
-.progress-rail {
-  position: relative;
-  height: 4px;
-  overflow: hidden;
-  background: rgba(212, 162, 76, 0.12);
-  border-radius: 9999px;
-}
-.progress-rail::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
-  transform: translateX(-100%);
-  animation: progressSweep 3s linear infinite;
-}
-@keyframes progressSweep {
-  to { transform: translateX(100%); }
-}
-
-/* Floating badges (used near hero/stat tiles) */
-.float-y {
-  animation: floatY 4s ease-in-out infinite;
-}
-.float-y-delay {
-  animation: floatY 4s ease-in-out 1s infinite;
-}
-@keyframes floatY {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-/* ---------- Cover placeholder (used by client cards & detail hero) -------- */
-.cover-placeholder {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-.cover-placeholder::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 22% 28%, rgba(255, 255, 255, 0.05) 0%, transparent 55%),
-    radial-gradient(circle at 78% 72%, rgba(255, 255, 255, 0.03) 0%, transparent 55%);
-  pointer-events: none;
-}
-.cover-placeholder__initials {
-  font-size: clamp(40px, 7vw, 96px);
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.14);
-  letter-spacing: -2px;
-  position: relative;
-  z-index: 1;
-  user-select: none;
-}
-
-/* ---------- Reverse-direction marquee (used in RTL) ---------------------- */
-@keyframes marquee-rtl {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
-}
-.animate-marquee-rtl {
-  animation: marquee-rtl 28s linear infinite;
-}
-.animate-marquee-ltr {
-  animation: marquee 28s linear infinite;
-}
-.marquee-pause:hover .animate-marquee-ltr,
-.marquee-pause:hover .animate-marquee-rtl {
-  animation-play-state: paused;
-}
-
-/* ---------- User-scrollable client logo strip --------------------------- */
-.logo-scroll {
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: #1E3A5F #E2E8F0;
-}
-.logo-scroll::-webkit-scrollbar {
-  height: 8px;
-}
-.logo-scroll::-webkit-scrollbar-track {
-  background: #E2E8F0;
-  border-radius: 9999px;
-  margin: 0 1rem;
-}
-.logo-scroll::-webkit-scrollbar-thumb {
-  background: #1E3A5F;
-  border-radius: 9999px;
-}
-.logo-scroll::-webkit-scrollbar-thumb:hover {
-  background: #0A1628;
-}
-
-/* ======================================================================== */
-/*  v2 "Flagship" design-system utilities                                    */
-/* ======================================================================== */
-
-/* SVG-style grid overlay for the homepage hero (stroke = line, low opacity) */
-.bg-hero-grid {
-  background-image:
-    linear-gradient(rgba(30, 45, 69, 0.55) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(30, 45, 69, 0.55) 1px, transparent 1px);
-  background-size: 56px 56px;
-  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 40%, transparent 100%);
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 40%, transparent 100%);
-}
-
 /* Direction-aware horizontal scroll-snap row */
 .snap-row {
   display: flex;
@@ -263,57 +226,29 @@ body {
 .snap-row::-webkit-scrollbar { display: none; }
 .snap-row > * { scroll-snap-align: start; flex: 0 0 auto; }
 
-/* Gold keyword span used inside display headlines (no underline) */
-.kw-gold { color: #D4A24C; }
-
 /* Eyebrow: Latin uses mono + letter-spacing; Arabic must not letter-space
    (breaks connected script) nor uppercase. */
 [dir="rtl"] .eyebrow {
   text-transform: none;
   letter-spacing: normal;
-  font-family: var(--font-plex-ar), var(--font-cairo), sans-serif;
+  font-family: var(--font-cairo), sans-serif;
 }
 
-/* Unified focus ring for v2 interactive elements */
+/* Unified focus ring. The inner ring tracks the surface colour — hardcoding
+   navy drew a stray halo on the light pages. */
 .focus-gold:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px #0A1628, 0 0 0 4px #D4A24C;
-}
-
-/* Hairline divider on dark */
-.rule-gold {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(244, 201, 122, 0.5), transparent);
-}
-
-/* Reading progress bar (blog) — transform-only, GPU composited */
-.read-progress {
-  position: fixed;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  height: 2px;
-  width: 100%;
-  transform-origin: 0 50%;
-  background: #D4A24C;
-  z-index: 60;
-}
-[dir="rtl"] .read-progress { transform-origin: 100% 50%; }
-
-/* AutomationLog terminal window (brand visual; internally LTR) */
-.term {
-  direction: ltr;
-  text-align: left;
-  font-family: var(--font-mono), ui-monospace, monospace;
+  box-shadow: 0 0 0 2px var(--bg, #fff), 0 0 0 4px #D4A24C;
 }
 
 /* Reduced-motion: collapse decorative loops to static */
 @media (prefers-reduced-motion: reduce) {
-  .bg-grid-drift,
-  .float-y,
-  .float-y-delay,
-  .animate-marquee-ltr,
-  .animate-marquee-rtl,
-  .step-glow,
-  .pulse-dot::after { animation: none !important; }
+  .mq-track,
+  .animate-float1,
+  .animate-float2,
+  .animate-tick { animation: none !important; }
+  .animate-rise,
+  .animate-bar,
+  [data-stagger="shown"] .stg-item { animation-duration: 1ms !important; animation-delay: 0s !important; }
   html { scroll-behavior: auto; }
 }

@@ -222,7 +222,7 @@ export default function ReelLightbox({
   return createPortal(
     <div
       dir={dir}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-deep/90 p-4 backdrop-blur-sm md:p-8"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/90 p-4 backdrop-blur-sm md:p-8"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -232,7 +232,7 @@ export default function ReelLightbox({
         type="button"
         onClick={onClose}
         aria-label={t.close}
-        className="absolute end-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-line bg-panel/80 text-cream transition-colors hover:bg-panel focus-gold"
+        className="absolute end-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-hair bg-well/80 text-fg transition-colors hover:bg-well focus-gold"
       >
         <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-none stroke-current stroke-2">
           <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
@@ -245,7 +245,7 @@ export default function ReelLightbox({
           type="button"
           onClick={goPrev}
           aria-label={t.prev}
-          className="absolute start-2 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-panel/80 text-cream transition-colors hover:bg-panel focus-gold md:flex"
+          className="absolute start-2 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-hair bg-well/80 text-fg transition-colors hover:bg-well focus-gold md:flex"
         >
           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-none stroke-current stroke-2 rtl:-scale-x-100">
             <path d="M15 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
@@ -259,7 +259,7 @@ export default function ReelLightbox({
           type="button"
           onClick={goNext}
           aria-label={t.next}
-          className="absolute end-2 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-panel/80 text-cream transition-colors hover:bg-panel focus-gold md:flex"
+          className="absolute end-2 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-hair bg-well/80 text-fg transition-colors hover:bg-well focus-gold md:flex"
         >
           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-none stroke-current stroke-2 rtl:-scale-x-100">
             <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
@@ -274,7 +274,7 @@ export default function ReelLightbox({
         aria-modal="true"
         aria-label={reel.title}
         tabIndex={-1}
-        className="flex max-h-full w-full max-w-sm flex-col overflow-hidden rounded-tile border border-line bg-panel shadow-2xl outline-none"
+        className="flex max-h-full w-full max-w-sm flex-col overflow-hidden rounded-card border border-hair bg-well shadow-2xl outline-none"
       >
         <div className="relative aspect-[9/16] w-full shrink-0 bg-black">
           {reel.source === "embed" && reel.embedUrl ? (
@@ -298,19 +298,19 @@ export default function ReelLightbox({
         <div className="flex flex-col gap-3 p-5">
           <div className="flex items-center justify-between gap-3">
             {reel.client?.name ? (
-              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-gold-dim">
+              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
                 {reel.client.name}
               </span>
             ) : (
               <span />
             )}
             {total > 1 ? (
-              <span className="font-mono text-[11px] text-bodydark">{t.counter(index + 1, total)}</span>
+              <span className="font-mono text-[11px] text-fgbody">{t.counter(index + 1, total)}</span>
             ) : null}
           </div>
 
-          <h2 className="text-lg font-medium text-cream">{reel.title}</h2>
-          {reel.description ? <p className="text-sm text-bodydark">{reel.description}</p> : null}
+          <h2 className="text-lg font-medium text-fg">{reel.title}</h2>
+          {reel.description ? <p className="text-sm text-fgbody">{reel.description}</p> : null}
 
           <div className="mt-1 flex flex-wrap items-center gap-3">
             <a
@@ -324,7 +324,7 @@ export default function ReelLightbox({
               <a
                 href={localePath(locale, `/case-studies/${reel.client.slug}`)}
                 onClick={onCta}
-                className="inline-flex items-center justify-center rounded-pill border border-line px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:border-gold/60 focus-gold"
+                className="inline-flex items-center justify-center rounded-pill border border-hair px-5 py-2.5 text-sm font-medium text-fg transition-colors hover:border-gold/60 focus-gold"
               >
                 {t.caseStudy}
               </a>

@@ -12,6 +12,8 @@ export type ServiceSummary = {
   deliverables: string[]
   proof?: string
   order: number
+  /** Typical delivery window, shown as the mono meta value on capability rows. */
+  duration?: string
 }
 
 export type ServiceDetail = ServiceSummary & {
@@ -32,6 +34,7 @@ type ServiceContent = {
   has_roi_calculator?: boolean
   title: Bilingual
   tagline?: Bilingual
+  duration?: Bilingual
   summary?: Bilingual
   intro: Bilingual
   proof?: Bilingual
@@ -45,9 +48,86 @@ const PUBLIC_BASE = "https://www.mubarmijonline.com"
 
 const SERVICES: ServiceContent[] = [
   {
+    slug: "ecommerce",
+    icon: "shopping-cart",
+    order: 1,
+    hero_image_url: `${PUBLIC_BASE}/banners/banner-6.png`,
+    title: {
+      en: "E-commerce shops built to sell",
+      ar: "متاجر إلكترونية مبنية عشان تبيع",
+    },
+    tagline: { en: "Most requested", ar: "الأكثر طلبًا" },
+    duration: { en: "5–8 weeks", ar: "5–8 أسابيع" },
+    summary: {
+      en: "Fast product pages, one-step checkout, local payment and shipping, and a dashboard your team can actually run.",
+      ar: "صفحات منتجات سريعة، شراء في خطوة واحدة، دفع وشحن محلي، ولوحة تحكم فريقك يقدر يشغّلها فعلًا.",
+    },
+    intro: {
+      en: "For retail and fashion brands going online properly — or moving off a template that caps their growth. We design the storefront, structure the catalogue, wire the payments and shipping, and hand you a dashboard with the training to use it.",
+      ar: "للعلامات التجارية في التجزئة والأزياء اللي عايزة تنزل أونلاين صح — أو تسيب قالب جاهز بيحدّد نموّها. بنصمم المتجر، ونرتّب الكتالوج، ونربط الدفع والشحن، ونسلّمك لوحة تحكم مع تدريب عليها.",
+    },
+    deliverables: {
+      en: [
+        "Brand-led storefront design, desktop and mobile",
+        "Catalogue structure, variants and search",
+        "One-step checkout, local payment and shipping",
+        "Arabic / English with full RTL",
+        "Abandoned-cart and WhatsApp order flows",
+        "Team training, docs, three months of care",
+      ],
+      ar: [
+        "تصميم متجر معبّر عن العلامة، على الكمبيوتر والموبايل",
+        "ترتيب الكتالوج والمتغيرات والبحث",
+        "شراء في خطوة واحدة مع دفع وشحن محلي",
+        "عربي / إنجليزي بدعم RTL كامل",
+        "متابعة السلات المتروكة وطلبات واتساب",
+        "تدريب الفريق، توثيق، و3 شهور صيانة",
+      ],
+    },
+    pain_points: {
+      en: [
+        "Half our catalogue is buried and never gets seen",
+        "People add to cart and never finish checkout",
+        "We take orders in DMs and lose track of them",
+        "The store is slow on mobile data",
+        "Arabic looks broken on our current template",
+        "We can't edit products without calling a developer",
+      ],
+      ar: [
+        "نص الكتالوج مدفون ومحدش بيشوفه",
+        "الناس بتضيف للسلة وما بتكمّلش الشراء",
+        "بناخد الطلبات في الرسايل وبتضيع مننا",
+        "المتجر بطيء على بيانات الموبايل",
+        "العربي شكله باظ في القالب الحالي",
+        "مش بنقدر نعدّل منتج من غير ما نكلّم مبرمج",
+      ],
+    },
+    types: [
+      { title: { en: "Fashion and lifestyle storefronts", ar: "متاجر أزياء ولايف ستايل" }, icon: "shopping-cart" },
+      { title: { en: "Catalogue-heavy retail", ar: "تجزئة بكتالوج كبير" }, icon: "building" },
+      { title: { en: "Replatforming off a template", ar: "الانتقال من قالب جاهز" }, icon: "rocket" },
+      { title: { en: "Payment and shipping integrations", ar: "ربط الدفع والشحن" }, icon: "plug" },
+    ],
+    differentiators: {
+      en: [
+        "Built around collections, not raw SKUs",
+        "Local payment and cash on delivery wired in",
+        "Arabic RTL designed in, not bolted on",
+        "Three months of care included after launch",
+      ],
+      ar: [
+        "مبني حول المجموعات، مش مجرد أكواد منتجات",
+        "دفع محلي والدفع عند الاستلام متربوطين من الأول",
+        "العربي و RTL مصممين من الأساس، مش ملزوقين",
+        "3 شهور صيانة مشمولة بعد الإطلاق",
+      ],
+    },
+  },
+  {
     slug: "automation",
     icon: "bolt",
-    order: 1,
+    order: 4,
+    duration: { en: "scoped", ar: "حسب النطاق" },
     hero_image_url: `${PUBLIC_BASE}/banners/banner-2.png`,
     has_roi_calculator: true,
     title: {
@@ -106,6 +186,7 @@ const SERVICES: ServiceContent[] = [
     slug: "web-development",
     icon: "globe",
     order: 2,
+    duration: { en: "4–6 weeks", ar: "4–6 أسابيع" },
     hero_image_url: `${PUBLIC_BASE}/banners/banner-6.png`,
     title: {
       en: "Websites that bring clients, not just brochures",
@@ -153,6 +234,7 @@ const SERVICES: ServiceContent[] = [
     slug: "mobile-apps",
     icon: "phone",
     order: 3,
+    duration: { en: "8–14 weeks", ar: "8–14 أسبوع" },
     hero_image_url: `${PUBLIC_BASE}/banners/banner-5.png`,
     title: {
       en: "Mobile apps that grow your business",
@@ -197,7 +279,8 @@ const SERVICES: ServiceContent[] = [
   {
     slug: "maintenance",
     icon: "shield-check",
-    order: 4,
+    order: 5,
+    duration: { en: "monthly", ar: "شهري" },
     hero_image_url: `${PUBLIC_BASE}/banners/banner-4.png`,
     title: { en: "Maintenance & Support", ar: "صيانة ودعم" },
     tagline: { en: "Priority support", ar: "دعم بأولوية" },
@@ -240,6 +323,7 @@ function summary(c: ServiceContent, locale: V1Locale): ServiceSummary {
     deliverables: c.deliverables[locale],
     proof: c.proof?.[locale],
     order: c.order,
+    duration: c.duration?.[locale],
   }
 }
 

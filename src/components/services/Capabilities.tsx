@@ -1,13 +1,14 @@
 import type { Locale } from "@/i18n/config";
 import type { ServiceDetail } from "@/lib/v1";
-import { BentoTile, Reveal, SectionEyebrow, Stagger, StaggerItem } from "@/components/system";
+import { HairCell, HairGrid, SectionEyebrow, Shell } from "@/components/system";
+import { GoldPeriod } from "@/components/system/Typo";
 
 const UI = {
   en: { eyebrow: "What we build", title: "Capabilities" },
   ar: { eyebrow: "اللي بنبنيه", title: "الإمكانيات" },
 } as const;
 
-/** Dark bento of service.types (mono-numbered tiles). */
+/** Dark band listing service.types on the hairline grid. */
 export default function Capabilities({
   locale,
   types,
@@ -18,28 +19,29 @@ export default function Capabilities({
   const list = types ?? [];
   if (!list.length) return null;
   const ui = UI[locale];
+
   return (
-    <section className="bg-navy-deep px-4 py-20 md:py-28">
-      <div className="mx-auto max-w-6xl">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <SectionEyebrow>{ui.eyebrow}</SectionEyebrow>
-          <h2 className="mt-3 text-balance font-sans text-3xl font-semibold tracking-[-0.02em] text-cream md:text-4xl">
-            {ui.title}
-          </h2>
-        </Reveal>
-        <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <section className="surf-dark sect">
+      <Shell>
+        <SectionEyebrow>{ui.eyebrow}</SectionEyebrow>
+        <h2 className="mt-3.5 font-display text-d2 font-bold text-fg">
+          {ui.title}
+          <GoldPeriod />
+        </h2>
+
+        <HairGrid cols={1} mdCols={2} lgCols={4} className="mt-10 border-t border-hair">
           {list.map((type, i) => (
-            <StaggerItem key={type.title} className="h-full">
-              <BentoTile className="flex h-full flex-col">
-                <span className="font-mono text-sm font-medium text-gold-dim">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-4 text-lg font-semibold leading-snug text-cream">{type.title}</h3>
-              </BentoTile>
-            </StaggerItem>
+            <HairCell key={type.title} className="py-7 pe-6">
+              <span className="mono ltr-island text-eyebrow text-gold">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-3 font-display text-[19px] font-semibold leading-snug tracking-[-0.01em] text-fg">
+                {type.title}
+              </h3>
+            </HairCell>
           ))}
-        </Stagger>
-      </div>
+        </HairGrid>
+      </Shell>
     </section>
   );
 }

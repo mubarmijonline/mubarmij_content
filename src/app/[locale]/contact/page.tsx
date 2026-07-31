@@ -2,10 +2,41 @@ import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import type { Locale } from "@/i18n/config";
-import Section from "@/components/ui/Section";
-import CTAButton from "@/components/ui/CTAButton";
-import { localePath, whatsappLink } from "@/lib/utils";
+import { getAbout } from "@/lib/v1";
+import { whatsappLink } from "@/lib/utils";
 import { CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/site";
+import { SectionEyebrow, Shell } from "@/components/system";
+import { Arrow, GoldPeriod } from "@/components/system/Typo";
+import ContactForm from "@/components/contact/ContactForm";
+
+export const revalidate = 300;
+
+const COPY = {
+  en: {
+    eyebrow: "Contact",
+    title: "Tell us what you sell. We'll tell you what to build",
+    lede: "One 30-minute call, then a written scope with a fixed price and a date. No retainer to talk.",
+    waLabel: "Fastest",
+    waTitle: "WhatsApp us",
+    waMsg: "Hi MubarmiJ — I'd like to discuss a project.",
+    callLabel: "Call",
+    emailLabel: "Email",
+    emailTitle: "Send a brief",
+    hoursFallback: "Sunday – Thursday, 10:00 – 18:00 (Cairo time)",
+  },
+  ar: {
+    eyebrow: "تواصل معانا",
+    title: "قولنا بتبيع إيه، ونقولك تبني إيه",
+    lede: "مكالمة 30 دقيقة، وبعدها نطاق مكتوب بسعر ثابت وتاريخ. الكلام مش بفلوس.",
+    waLabel: "الأسرع",
+    waTitle: "كلمنا واتساب",
+    waMsg: "أهلاً مبرمج — عايز أتكلم عن مشروع.",
+    callLabel: "اتصال",
+    emailLabel: "إيميل",
+    emailTitle: "ابعتلنا التفاصيل",
+    hoursFallback: "الأحد – الخميس، 10:00 – 18:00 (بتوقيت القاهرة)",
+  },
+} as const;
 
 export async function generateMetadata({
   params,
@@ -24,125 +55,88 @@ export default async function ContactPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations({ locale, namespace: "contactPage" });
-  const tCta = await getTranslations({ locale, namespace: "cta" });
-  const tWa = await getTranslations({ locale, namespace: "whatsapp" });
-  const lp = (p: string) => localePath(locale, p);
+  const t = COPY[locale];
+
+  // Phone, email and opening hours are CMS-owned, not duplicated in messages.
+  const about = await getAbout(locale);
+  const phone = about?.contact?.phone || CONTACT_PHONE;
+  const email = about?.contact?.email || CONTACT_EMAIL;
+  const hours = about?.contact?.hours || t.hoursFallback;
 
   return (
-    <>
-      <Section bg="gradient" padded>
-        <div className="max-w-3xl mx-auto text-center py-10">
-          <p className="font-display font-extrabold text-2xl md:text-3xl mb-3">
-            MubarmiJ
-          </p>
-          <h1 className="font-display rtl:font-arabic-display text-3xl md:text-5xl font-extrabold mb-4">
-            {t("title")}
+    <section className="surf-light border-b border-hair">
+      <Shell className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr]">
+        <div className="border-hair py-14 lg:border-e lg:py-16 lg:pe-12">
+          <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
+          <h1 className="mt-3.5 max-w-[15em] text-balance font-display text-d1 font-bold text-fg">
+            {t.title}
+            <GoldPeriod />
           </h1>
-          <p className="text-white/80 text-lg">{t("sub")}</p>
-        </div>
-      </Section>
+          <p className="mt-5 max-w-[34em] text-lede text-fgbody">{t.lede}</p>
 
-      <Section bg="white">
-        <div className="grid gap-10 md:grid-cols-2 max-w-5xl mx-auto">
-          <div className="space-y-6">
-            <Field label={t("businessName")} value={t("businessNameValue")} />
-            <Field
-              label={t("emailLabel")}
-              value={CONTACT_EMAIL}
-              href={`mailto:${CONTACT_EMAIL}`}
+          <div className="mt-10 border-t border-hair">
+            <ContactRow
+              locale={locale}
+              href={whatsappLink(t.waMsg)}
+              external
+              label={t.waLabel}
+              title={t.waTitle}
+              value={phone}
             />
-            <Field
-              label={t("phoneLabel")}
-              value={CONTACT_PHONE}
-              href={`tel:${CONTACT_PHONE.replace(/\s+/g, "")}`}
+            <ContactRow
+              locale={locale}
+              href={`tel:${phone.replace(/\s+/g, "")}`}
+              label={t.callLabel}
+              title={hours}
+              value={phone}
             />
-            <Field label={t("hoursLabel")} value={t("hours")} />
-            <Field label={t("addressLabel")} value={t("address")} />
-
-            <div className="flex flex-wrap gap-3 pt-2">
-              <CTAButton
-                href={whatsappLink(tWa("prefilled"))}
-                variant="whatsapp"
-                external
-              >
-                {tCta("whatsapp")}
-              </CTAButton>
-              <CTAButton href={lp("/book-call")} variant="primary">
-                {tCta("primary")}
-              </CTAButton>
-            </div>
-          </div>
-
-          <div>
-            <h2 className="font-display text-2xl font-bold text-navy-deep mb-4">
-              {t("formTitle")}
-            </h2>
-            <form
-              action="/api/lead"
-              method="post"
-              className="space-y-3 rounded-2xl border border-bglight bg-white p-6 shadow-sm"
-            >
-              <input type="hidden" name="source" value="contact" />
-              <input
-                type="text"
-                name="name"
-                required
-                placeholder={t("name")}
-                className="w-full rounded-md border border-bglight px-3 py-2 text-sm"
-                aria-label={t("name")}
-              />
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder={t("email")}
-                className="w-full rounded-md border border-bglight px-3 py-2 text-sm"
-                aria-label={t("email")}
-              />
-              <textarea
-                name="message"
-                rows={5}
-                required
-                placeholder={t("message")}
-                className="w-full rounded-md border border-bglight px-3 py-2 text-sm"
-                aria-label={t("message")}
-              />
-              <button type="submit" className="btn-primary w-full justify-center">
-                {t("send")}
-              </button>
-            </form>
+            <ContactRow
+              locale={locale}
+              href={`mailto:${email}`}
+              label={t.emailLabel}
+              title={t.emailTitle}
+              value={email}
+            />
           </div>
         </div>
-      </Section>
-    </>
+
+        <div className="py-14 lg:ps-12 lg:pt-16">
+          <ContactForm locale={locale} />
+        </div>
+      </Shell>
+    </section>
   );
 }
 
-function Field({
-  label,
-  value,
+function ContactRow({
+  locale,
   href,
+  external,
+  label,
+  title,
+  value,
 }: {
+  locale: Locale;
+  href: string;
+  external?: boolean;
   label: string;
+  title: string;
   value: string;
-  href?: string;
 }) {
   return (
-    <div>
-      <div className="text-xs font-semibold uppercase tracking-wide text-navy/60">
-        {label}
-      </div>
-      {href ? (
-        <a
-          href={href}
-          className="block mt-1 text-navy-deep font-semibold hover:text-gold"
-        >
-          {value}
-        </a>
-      ) : (
-        <div className="mt-1 text-navy-deep font-semibold">{value}</div>
-      )}
-    </div>
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      className="focus-gold group flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-b border-hair py-5 transition-colors hover:bg-paper-subtle"
+    >
+      <span className="min-w-0">
+        <span className="mono block text-eyebrow uppercase text-accent">{label}</span>
+        <span className="mt-1 block font-display text-[17px] font-semibold text-fg">{title}</span>
+      </span>
+      <span className="mono ltr-island flex items-center gap-2 text-[13px] text-fgmuted transition-colors group-hover:text-fg">
+        {value}
+        <Arrow locale={locale} />
+      </span>
+    </a>
   );
 }

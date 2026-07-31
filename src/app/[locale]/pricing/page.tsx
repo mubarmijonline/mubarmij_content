@@ -6,15 +6,17 @@ import { SITE_URL } from "@/lib/site";
 import { localePath } from "@/lib/utils";
 import { getFaq } from "@/lib/v1";
 import {
+  Accordion,
   CTAPanel,
-  FaqAccordion,
+  DarkButton,
   GhostButton,
-  GoldButton,
-  Reveal,
+  HairCell,
+  HairGrid,
   SectionEyebrow,
-  Stagger,
-  StaggerItem,
+  Shell,
+  SlashList,
 } from "@/components/system";
+import { GoldPeriod } from "@/components/system/Typo";
 
 export const revalidate = 300;
 
@@ -129,105 +131,84 @@ export default async function PricingPage({
 
   return (
     <>
-      {/* Hero — dark */}
-      <section className="relative overflow-hidden bg-navy-deep">
-        <div className="bg-hero-grid pointer-events-none absolute inset-0" aria-hidden />
-        <div className="relative mx-auto max-w-4xl px-4 py-24 text-center sm:py-28">
-          <Reveal>
-            <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h1 className="mt-4 text-balance font-sans text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-tight tracking-[-0.02em] text-cream">
-              {t.title}
-            </h1>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-bodydark sm:text-lg">
-              {t.sub}
-            </p>
-          </Reveal>
-        </div>
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect">
+          <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
+          <h1 className="mt-3.5 max-w-[16em] font-display text-d1 font-bold text-fg">
+            {t.title}
+            <GoldPeriod />
+          </h1>
+          <p className="mt-5 max-w-[40em] text-lede text-fgbody">{t.sub}</p>
+        </Shell>
       </section>
 
-      {/* Tiers — light */}
-      <section className="bg-cream py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <Stagger className="grid items-start gap-6 md:grid-cols-3">
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect">
+          <div className="grid items-start gap-6 md:grid-cols-3">
             {t.tiers.map((tier, i) => {
               const featured = i === 1;
               return (
-                <StaggerItem
+                <div
                   key={tier.name}
                   className={
                     featured
-                      ? "relative rounded-tile border-2 border-gold bg-white p-7 shadow-md md:-mt-4"
-                      : "rounded-tile border border-neutral-200 bg-white p-7 shadow-sm"
+                      ? "relative rounded-card border-2 border-gold bg-surface p-7"
+                      : "rounded-card border border-hair bg-surface p-7"
                   }
                 >
                   {featured ? (
-                    <span className="absolute -top-3 start-7 inline-flex items-center rounded-pill bg-gold px-3 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.15em] text-gold-ink">
+                    <span className="mono absolute -top-3 start-7 rounded-chip bg-gold px-3 py-1 text-[10.5px] uppercase text-gold-ink">
                       {t.popular}
                     </span>
                   ) : null}
-                  <h3 className="text-xl font-semibold text-navy-deep">{tier.name}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-500">{tier.desc}</p>
-                  <p className="mt-4 font-mono text-sm uppercase tracking-[0.12em] text-gold-dim">{t.from}</p>
-                  <ul className="mt-5 space-y-3">
-                    {tier.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-navy-deep">
-                        <svg viewBox="0 0 20 20" className="mt-0.5 h-4 w-4 shrink-0 fill-gold" aria-hidden>
-                          <path d="M16.7 5.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-3-3a1 1 0 111.4-1.4l2.3 2.29 6.3-6.29a1 1 0 011.4 0z" />
-                        </svg>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-7">
+                  <h2 className="font-display text-[21px] font-semibold tracking-[-0.02em] text-fg">
+                    {tier.name}
+                  </h2>
+                  <p className="mt-2 text-[14.5px] leading-relaxed text-fgbody">{tier.desc}</p>
+                  <p className="mono mt-5 text-eyebrow uppercase text-accent">{t.from}</p>
+                  <SlashList className="mt-4" items={[...tier.features]} />
+                  <div className="mt-8">
                     {featured ? (
-                      <GoldButton href={localePath(locale, "/book-call")} className="w-full">
+                      <DarkButton href={localePath(locale, "/book-call")} className="w-full">
                         {t.getQuote}
-                      </GoldButton>
+                      </DarkButton>
                     ) : (
-                      <GhostButton href={localePath(locale, "/book-call")} className="w-full border-neutral-300 text-navy hover:bg-navy/5">
+                      <GhostButton href={localePath(locale, "/book-call")} className="w-full">
                         {t.choose}
                       </GhostButton>
                     )}
                   </div>
-                </StaggerItem>
+                </div>
               );
             })}
-          </Stagger>
-        </div>
-      </section>
-
-      {/* What's included — light continuation */}
-      <section className="bg-bglight py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <Reveal className="mx-auto max-w-2xl text-center">
-            <SectionEyebrow>{t.includedTitle}</SectionEyebrow>
-          </Reveal>
-          <Stagger className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {t.included.map((item) => (
-              <StaggerItem key={item.title} className="rounded-tile border border-neutral-200 bg-white p-6">
-                <h3 className="font-semibold text-navy-deep">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-500">{item.body}</p>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </div>
-      </section>
-
-      {/* FAQ — cream */}
-      {faq.length ? (
-        <section className="bg-cream py-16 sm:py-20">
-          <div className="mx-auto max-w-3xl px-4">
-            <Reveal className="text-center">
-              <SectionEyebrow>{t.faqTitle}</SectionEyebrow>
-            </Reveal>
-            <div className="mt-8">
-              <FaqAccordion items={faq} jsonLd={false} />
-            </div>
           </div>
+        </Shell>
+      </section>
+
+      <section className="surf-subtle border-b border-hair">
+        <Shell className="sect">
+          <SectionEyebrow>{t.includedTitle}</SectionEyebrow>
+          <HairGrid cols={1} mdCols={2} lgCols={4} className="mt-9 border-t border-hair">
+            {t.included.map((item) => (
+              <HairCell key={item.title} className="py-7 pe-6">
+                <h2 className="font-display text-[18px] font-semibold tracking-[-0.02em] text-fg">
+                  {item.title}
+                </h2>
+                <p className="mt-2 text-[15px] leading-relaxed text-fgbody">{item.body}</p>
+              </HairCell>
+            ))}
+          </HairGrid>
+        </Shell>
+      </section>
+
+      {faq.length ? (
+        <section className="surf-light border-b border-hair">
+          <Shell className="sect grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.4fr]">
+            <div>
+              <SectionEyebrow>{t.faqTitle}</SectionEyebrow>
+            </div>
+            <Accordion items={faq} jsonLd={false} />
+          </Shell>
         </section>
       ) : null}
 

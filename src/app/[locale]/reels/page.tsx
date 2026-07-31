@@ -5,7 +5,8 @@ import type { Locale } from "@/i18n/config";
 import { SITE_URL } from "@/lib/site";
 import { localePath } from "@/lib/utils";
 import { getReels } from "@/lib/v1";
-import { CTAPanel, Reveal, SectionEyebrow } from "@/components/system";
+import { CTAPanel, EmptyState, SectionEyebrow, Shell } from "@/components/system";
+import { GoldPeriod } from "@/components/system/Typo";
 import ReelsRow from "@/components/reels/ReelsRow";
 
 export const revalidate = 300;
@@ -64,36 +65,35 @@ export default async function ReelsPage({
   setRequestLocale(locale);
   const t = COPY[locale];
 
-  const reelsEnv = await getReels(locale, { limit: 48 });
+  const reelsEnv = await getReels(locale, { page_size: 48 });
   const reels = reelsEnv?.data ?? [];
 
   return (
     <>
-      <section className="bg-navy-deep px-4 pt-32 pb-10 md:pt-40 md:pb-12">
-        <div className="mx-auto max-w-6xl">
-          <Reveal className="max-w-2xl">
-            <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
-            <h1 className="mt-3 text-balance font-sans text-4xl font-semibold tracking-[-0.02em] text-cream md:text-5xl">
-              {t.title}
-            </h1>
-            <p className="mt-4 text-pretty text-lg text-bodydark">{t.sub}</p>
-          </Reveal>
-        </div>
+      <section className="surf-light border-b border-hair">
+        <Shell className="sect">
+          <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
+          <h1 className="mt-3.5 max-w-[16em] font-display text-d1 font-bold text-fg">
+            {t.title}
+            <GoldPeriod />
+          </h1>
+          <p className="mt-5 max-w-[40em] text-lede text-fgbody">{t.sub}</p>
+        </Shell>
       </section>
 
       {reels.length ? (
         <ReelsRow locale={locale} reels={reels} hideHeader />
       ) : (
-        <section className="bg-navy-deep px-4 pb-24 md:pb-28">
-          <div className="mx-auto max-w-6xl rounded-tile border border-line bg-panel p-10 text-center">
-            <p className="text-pretty text-bodydark">{t.empty}</p>
-            <a
-              href={localePath(locale, "/case-studies")}
-              className="mt-6 inline-flex items-center justify-center rounded-pill border border-line px-6 py-3 text-sm font-medium text-cream transition-colors hover:border-gold/60 focus-gold"
-            >
-              {t.emptyCta}
-            </a>
-          </div>
+        <section className="surf-light border-b border-hair">
+          <Shell className="sect">
+            <EmptyState
+              locale={locale}
+              title={t.title}
+              body={t.empty}
+              ctaHref={localePath(locale, "/case-studies")}
+              ctaLabel={t.emptyCta}
+            />
+          </Shell>
         </section>
       )}
 

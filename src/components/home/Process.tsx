@@ -1,76 +1,58 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-
 import type { Locale } from "@/i18n/config";
-import { EASE } from "@/lib/motion";
-import { Reveal, SectionEyebrow, Stagger, StaggerItem } from "@/components/system";
+import { HairCell, HairGrid, SectionEyebrow, Shell } from "@/components/system";
+import { GoldPeriod } from "@/components/system/Typo";
 
 const COPY = {
   en: {
-    eyebrow: "How it works",
-    title: "A clear path from idea to impact",
+    eyebrow: "Process",
+    title: "A clear path from idea to revenue",
     steps: [
-      { k: "01", title: "Discover", body: "We map your workflows, goals, and where time leaks out." },
-      { k: "02", title: "Design", body: "We blueprint the solution and the experience around it." },
-      { k: "03", title: "Build", body: "We develop, integrate your tools, and test everything." },
-      { k: "04", title: "Launch & support", body: "We ship, train your team, and keep it running." },
+      { k: "01", when: "week 1", title: "Scope", body: "One call, then a written scope: what ships, what it costs, what it needs from you." },
+      { k: "02", when: "weeks 1–2", title: "Design", body: "Clickable screens you approve before a line of production code is written." },
+      { k: "03", when: "weeks 2–6", title: "Build", body: "Weekly demos on a live staging link. Integrations, QA, content load, no surprises." },
+      { k: "04", when: "launch +", title: "Run", body: "Training, docs, monitoring, and a retainer for the improvements that follow." },
     ],
   },
   ar: {
     eyebrow: "إزاي بنشتغل",
-    title: "طريق واضح من الفكرة للأثر",
+    title: "طريق واضح من الفكرة للإيراد",
     steps: [
-      { k: "٠١", title: "الاكتشاف", body: "بنرسم خرائط شغلك وأهدافك وأماكن ضياع الوقت." },
-      { k: "٠٢", title: "التصميم", body: "بنرسم الحل والتجربة المحيطة بيه." },
-      { k: "٠٣", title: "البناء", body: "بنطوّر، ونربط أدواتك، ونختبر كل حاجة." },
-      { k: "٠٤", title: "الإطلاق والدعم", body: "بنطلق، وندرّب فريقك، ونحافظ على تشغيله." },
+      { k: "01", when: "الأسبوع ١", title: "تحديد النطاق", body: "مكالمة واحدة، وبعدها نطاق مكتوب: هيتسلّم إيه، بكام، ومحتاجين منك إيه." },
+      { k: "02", when: "الأسبوع ١–٢", title: "التصميم", body: "شاشات قابلة للضغط بتوافق عليها قبل ما نكتب سطر كود إنتاجي." },
+      { k: "03", when: "الأسبوع ٢–٦", title: "التنفيذ", body: "عروض أسبوعية على رابط staging شغّال. ربط الأنظمة، اختبار، رفع المحتوى، من غير مفاجآت." },
+      { k: "04", when: "بعد الإطلاق", title: "التشغيل", body: "تدريب، توثيق، مراقبة، وعقد صيانة للتحسينات اللي بعد كده." },
     ],
   },
 } as const;
 
-/** P1 §6 — dark 4-step timeline with a gold progress line (transform-only scaleX draw). */
-export default function Process({ locale }: { locale: Locale }) {
+export default function Process({ locale, index }: { locale: Locale; index: string }) {
   const t = COPY[locale];
-  const reduce = useReducedMotion();
-  const isRtl = locale === "ar";
 
   return (
-    <section className="bg-navy px-4 py-20 md:py-28">
-      <div className="mx-auto max-w-6xl">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <SectionEyebrow>{t.eyebrow}</SectionEyebrow>
-          <h2 className="mt-3 text-balance font-sans text-3xl font-semibold tracking-[-0.02em] text-cream md:text-4xl">
-            {t.title}
-          </h2>
-        </Reveal>
+    <section className="surf-light border-b border-hair">
+      <Shell className="sect">
+        <SectionEyebrow index={index}>{t.eyebrow}</SectionEyebrow>
+        <h2 className="mt-3.5 font-display text-d2 font-bold text-fg">
+          {t.title}
+          <GoldPeriod />
+        </h2>
 
-        <div className="relative mt-14">
-          {/* progress line (md+) */}
-          <div className="pointer-events-none absolute inset-x-0 top-5 hidden h-px bg-line md:block" aria-hidden>
-            <motion.div
-              className="h-px bg-gradient-to-r from-gold-dim via-gold to-gold-light"
-              style={{ transformOrigin: isRtl ? "right" : "left" }}
-              initial={reduce ? { scaleX: 1 } : { scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={reduce ? { duration: 0 } : { duration: 1.1, ease: EASE }}
-            />
-          </div>
-
-          <Stagger className="grid gap-10 md:grid-cols-4 md:gap-6">
-            {t.steps.map((s) => (
-              <StaggerItem key={s.k} className="relative">
-                <span className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gold/60 bg-navy-deep font-mono text-sm font-medium text-gold">
-                  {s.k}
-                </span>
-                <h3 className="mt-5 text-lg font-semibold text-cream">{s.title}</h3>
-                <p className="mt-2 leading-relaxed text-bodydark">{s.body}</p>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </div>
-      </div>
+        <HairGrid cols={1} mdCols={2} lgCols={4} className="mt-10 border-t border-hair">
+          {t.steps.map((s) => (
+            <HairCell key={s.k} className="py-7 pe-6 md:pe-8">
+              <div className="mono text-eyebrow uppercase text-accent">
+                <span className="ltr-island">{s.k}</span>
+                <span aria-hidden="true"> / </span>
+                {s.when}
+              </div>
+              <h3 className="mt-3 font-display text-[21px] font-semibold tracking-[-0.02em] text-fg">
+                {s.title}
+              </h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-fgbody">{s.body}</p>
+            </HairCell>
+          ))}
+        </HairGrid>
+      </Shell>
     </section>
   );
 }

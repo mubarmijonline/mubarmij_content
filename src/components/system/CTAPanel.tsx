@@ -1,7 +1,9 @@
 import { CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/site";
-import { cn } from "@/lib/utils";
-import { GoldButton, WhatsAppButton } from "./Buttons";
+import { cn, whatsappLink } from "@/lib/utils";
+import { DarkButton, GhostButton } from "./Buttons";
 import { Reveal } from "./Reveal";
+import { Shell } from "./Layout";
+import { GoldPeriod } from "./Typo";
 
 type Props = {
   title: string;
@@ -11,10 +13,16 @@ type Props = {
   whatsappLabel: string;
   whatsappMessage?: string;
   showContact?: boolean;
+  tone?: "subtle" | "dark";
   className?: string;
 };
 
-/** Full-width navy CTA band. Used as the final section on every page. */
+/**
+ * The closing CTA band, used as the last section on nearly every page.
+ *
+ * Two columns rather than the old centered stack: copy on the start edge,
+ * actions on the end edge, on the design's `#F7F8FA` surface.
+ */
 export function CTAPanel({
   title,
   subtitle,
@@ -23,35 +31,50 @@ export function CTAPanel({
   whatsappLabel,
   whatsappMessage,
   showContact = true,
+  tone = "subtle",
   className,
 }: Props) {
   return (
-    <section className={cn("bg-navy-deep px-4 py-20 md:py-28", className)}>
-      <Reveal className="mx-auto max-w-3xl text-center">
-        <h2 className="text-balance font-sans text-3xl font-semibold tracking-[-0.02em] text-cream md:text-4xl">
-          {title}
-        </h2>
-        {subtitle ? <p className="mx-auto mt-4 max-w-2xl text-bodydark">{subtitle}</p> : null}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <GoldButton href={ctaHref} size="lg">
-            {ctaLabel}
-          </GoldButton>
-          <WhatsAppButton size="lg" message={whatsappMessage}>
-            {whatsappLabel}
-          </WhatsAppButton>
-        </div>
-        {showContact ? (
-          <p className="mt-6 font-mono text-sm text-bodydark">
-            <a href={`tel:${CONTACT_PHONE}`} className="hover:text-gold">
-              {CONTACT_PHONE}
-            </a>
-            <span className="mx-2 text-line">·</span>
-            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-gold">
-              {CONTACT_EMAIL}
-            </a>
-          </p>
-        ) : null}
-      </Reveal>
+    <section
+      className={cn(
+        tone === "dark" ? "surf-dark" : "surf-subtle border-t border-hair",
+        "sect",
+        className,
+      )}
+    >
+      <Shell>
+        <Reveal className="flex flex-wrap items-end justify-between gap-x-12 gap-y-8">
+          <div className="min-w-0 max-w-[30em]">
+            <h2 className="font-display text-d2 font-bold text-fg">
+              {title}
+              <GoldPeriod />
+            </h2>
+            {subtitle ? <p className="mt-4 text-copy text-fgbody">{subtitle}</p> : null}
+            {showContact ? (
+              <p className="mono ltr-island mt-5 text-[13px] text-fgmuted">
+                <a href={`tel:${CONTACT_PHONE}`} className="focus-gold hover:text-gold-deep">
+                  {CONTACT_PHONE}
+                </a>
+                <span aria-hidden="true" className="mx-2 text-fgfaint">
+                  ·
+                </span>
+                <a href={`mailto:${CONTACT_EMAIL}`} className="focus-gold hover:text-gold-deep">
+                  {CONTACT_EMAIL}
+                </a>
+              </p>
+            ) : null}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <DarkButton size="lg" href={ctaHref}>
+              {ctaLabel}
+            </DarkButton>
+            <GhostButton size="lg" external href={whatsappLink(whatsappMessage)}>
+              {whatsappLabel}
+            </GhostButton>
+          </div>
+        </Reveal>
+      </Shell>
     </section>
   );
 }

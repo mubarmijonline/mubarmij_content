@@ -51,6 +51,8 @@ export async function v1Get<T>(path: string, opts: FetchOpts = {}): Promise<V1Ok
 export type ServiceSummary = {
   slug: string; title: string; tagline: string; icon: string;
   summary: string; deliverables: string[]; proof?: string; order: number;
+  /** Typical delivery window, e.g. "5–8 weeks". Optional — older CMS builds omit it. */
+  duration?: string;
 };
 export type ServiceDetail = ServiceSummary & {
   intro: string; hero_image_url?: string; pain_points: string[];
@@ -61,6 +63,8 @@ export type ServiceDetail = ServiceSummary & {
 export type ClientSummary = {
   slug: string; name: string; tagline: string; category: string;
   category_label: string; logo_url?: string; thumb_url?: string;
+  /** Logo is light-on-transparent — needs a dark backing to be visible. */
+  dark_card?: boolean;
   featured: boolean; order: number; locale: string;
 };
 export type ClientDetail = {

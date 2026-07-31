@@ -45,6 +45,7 @@ type CmsClient = {
   industryCustom?: string
   country?: string
   logo?: unknown
+  darkCard?: boolean
   coverImage?: unknown
   screenshots?: unknown[]
   services?: string[]
@@ -76,6 +77,9 @@ function clientSummary(c: CmsClient, locale: V1Locale, order: number) {
     category_label: industryLabel(c.industry, c.industryCustom),
     logo_url: logo,
     thumb_url: cover || logo,
+    // Set when the logo is light-on-transparent, so the site can back it with
+    // a dark chip instead of losing it against a white surface.
+    dark_card: Boolean(c.darkCard),
     featured: Boolean(c.featured),
     order,
     locale,

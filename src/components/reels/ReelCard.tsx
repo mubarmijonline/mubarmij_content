@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import type { Locale } from "@/i18n/config";
 import type { ReelItem } from "@/lib/v1";
 import { cmsMedia } from "@/lib/utils";
@@ -45,25 +47,25 @@ export default function ReelCard({
       type="button"
       onClick={() => onOpen(index)}
       aria-label={`${t.play}: ${reel.title}`}
-      className="group relative block w-[230px] shrink-0 snap-start overflow-hidden rounded-tile border border-line bg-panel text-start shadow-sm transition-transform duration-200 hover:-translate-y-1 focus-gold md:w-[260px]"
+      className="focus-gold group relative block w-[230px] shrink-0 snap-start overflow-hidden rounded-card border border-hair bg-ink text-start transition duration-300 hover:-translate-y-1 hover:shadow-lift md:w-[260px]"
     >
-      <div className="relative aspect-[9/16] overflow-hidden bg-navy">
+      <div className="relative aspect-[9/16] overflow-hidden bg-ink-chrome">
         {thumb ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={thumb}
             alt={reel.thumbnail?.alt || reel.title}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            fill
+            sizes="(max-width: 768px) 230px, 260px"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : null}
 
         {/* Gradient scrim for legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/90 via-navy-deep/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/10 to-transparent" />
 
         {/* Play affordance */}
         <span className="absolute inset-0 flex items-center justify-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream/95 text-navy-deep shadow-lg backdrop-blur transition-transform duration-200 group-hover:scale-110">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-ink shadow-lg backdrop-blur transition-transform duration-200 group-hover:scale-110">
             <svg viewBox="0 0 24 24" aria-hidden="true" className="ms-1 h-6 w-6 fill-current">
               <path d="M8 5v14l11-7z" />
             </svg>
@@ -72,21 +74,21 @@ export default function ReelCard({
 
         {/* Duration badge */}
         {duration ? (
-          <span className="absolute bottom-3 end-3 rounded-pill bg-navy-deep/80 px-2 py-0.5 font-mono text-[11px] font-medium text-cream backdrop-blur">
+          <span className="ltr-island absolute bottom-3 end-3 rounded-chip bg-ink/80 px-2 py-0.5 font-mono text-[11px] font-medium text-white backdrop-blur">
             {duration}
           </span>
         ) : null}
 
         {/* Category eyebrow */}
-        <span className="absolute top-3 start-3 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-gold-light">
+        <span className="mono absolute start-3 top-3 text-[10px] font-medium uppercase text-gold-light">
           {category}
         </span>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 p-4">
-        <h3 className="line-clamp-2 text-sm font-medium text-cream">{reel.title}</h3>
+        <h3 className="line-clamp-2 font-display text-[15px] font-semibold text-white">{reel.title}</h3>
         {reel.client?.name ? (
-          <p className="mt-1 text-xs text-bodydark">{reel.client.name}</p>
+          <p className="mt-1 text-[12.5px] text-white/70">{reel.client.name}</p>
         ) : null}
       </div>
     </button>

@@ -32,7 +32,7 @@ const FORMAT = {
 function renderText(node: LexNode, key: number): ReactNode {
   let el: ReactNode = node.text ?? "";
   const f = typeof node.format === "number" ? node.format : 0;
-  if (f & FORMAT.CODE) el = <code className="px-1 py-0.5 rounded bg-bglight text-navy-deep">{el}</code>;
+  if (f & FORMAT.CODE) el = <code className="px-1 py-0.5 rounded bg-paper-subtle text-fg">{el}</code>;
   if (f & FORMAT.UNDERLINE) el = <u>{el}</u>;
   if (f & FORMAT.STRIKETHROUGH) el = <s>{el}</s>;
   if (f & FORMAT.ITALIC) el = <em>{el}</em>;
@@ -61,10 +61,10 @@ function renderNode(node: LexNode, key: number): ReactNode {
     const tag = (node.tag || "h2").toLowerCase();
     const cls =
       tag === "h1"
-        ? "font-display rtl:font-arabic-display text-3xl md:text-4xl font-extrabold text-navy-deep mt-8 mb-4"
+        ? "font-display text-3xl md:text-4xl font-extrabold text-fg mt-8 mb-4"
         : tag === "h2"
-        ? "font-display rtl:font-arabic-display text-2xl md:text-3xl font-bold text-navy-deep mt-7 mb-3"
-        : "font-display rtl:font-arabic-display text-xl md:text-2xl font-bold text-navy-deep mt-6 mb-3";
+        ? "font-display text-2xl md:text-3xl font-bold text-fg mt-7 mb-3"
+        : "font-display text-xl md:text-2xl font-bold text-fg mt-6 mb-3";
     const Tag = tag as keyof JSX.IntrinsicElements;
     return <Tag key={key} className={cls}>{renderChildren(node.children)}</Tag>;
   }
@@ -73,8 +73,8 @@ function renderNode(node: LexNode, key: number): ReactNode {
   if (node.type === "list") {
     const ordered = node.listType === "number";
     const cls = ordered
-      ? "list-decimal pl-6 rtl:pr-6 rtl:pl-0 my-4 space-y-1.5 text-navy/85"
-      : "list-disc pl-6 rtl:pr-6 rtl:pl-0 my-4 space-y-1.5 text-navy/85";
+      ? "list-decimal pl-6 rtl:pr-6 rtl:pl-0 my-4 space-y-1.5 text-fg/85"
+      : "list-disc pl-6 rtl:pr-6 rtl:pl-0 my-4 space-y-1.5 text-fg/85";
     if (ordered) return <ol key={key} className={cls}>{renderChildren(node.children)}</ol>;
     return <ul key={key} className={cls}>{renderChildren(node.children)}</ul>;
   }
@@ -87,7 +87,7 @@ function renderNode(node: LexNode, key: number): ReactNode {
     return (
       <blockquote
         key={key}
-        className="border-l-4 rtl:border-l-0 rtl:border-r-4 border-gold pl-4 rtl:pr-4 rtl:pl-0 my-5 text-navy/80 italic"
+        className="border-l-4 rtl:border-l-0 rtl:border-r-4 border-gold pl-4 rtl:pr-4 rtl:pl-0 my-5 text-fg/80 italic"
       >
         {renderChildren(node.children)}
       </blockquote>
@@ -114,7 +114,7 @@ function renderNode(node: LexNode, key: number): ReactNode {
   // Paragraph (default block)
   if (node.type === "paragraph" || !node.type) {
     return (
-      <p key={key} className="my-4 leading-relaxed text-navy/85 text-base md:text-lg">
+      <p key={key} className="my-4 leading-relaxed text-fg/85 text-base md:text-lg">
         {renderChildren(node.children)}
       </p>
     );

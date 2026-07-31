@@ -101,16 +101,16 @@ export default function RoiCalculator({ locale }: { locale: Locale }) {
   const yearly = ui.perYear.replace("{v}", `${nf.format(shown.savings * 12)} EGP`);
 
   return (
-    <section id="roi" className="scroll-mt-24 bg-cream px-4 py-20 md:py-28">
+    <section id="roi" className="scroll-mt-24 bg-surface px-4 py-20 md:py-28">
       <div className="mx-auto max-w-4xl">
         <div className="mx-auto max-w-2xl text-center">
           <SectionEyebrow>{ui.eyebrow}</SectionEyebrow>
-          <h2 className="mt-3 text-balance font-sans text-3xl font-semibold tracking-[-0.02em] text-navy-deep md:text-4xl">
+          <h2 className="mt-3 text-balance font-sans text-3xl font-semibold tracking-[-0.02em] text-fg md:text-4xl">
             {ui.title}
           </h2>
         </div>
 
-        <div className="mt-12 grid gap-8 rounded-tile border border-neutral-200 bg-white p-6 shadow-sm md:grid-cols-2 md:p-8">
+        <div className="mt-12 grid gap-8 rounded-card border border-hair bg-white p-6 shadow-sm md:grid-cols-2 md:p-8">
           {/* Inputs */}
           <div className="grid gap-5">
             <Field label={ui.employees} value={employees} min={1} max={500} step={1} onChange={setEmployees} fmt={nf} />
@@ -119,21 +119,21 @@ export default function RoiCalculator({ locale }: { locale: Locale }) {
           </div>
 
           {/* Result */}
-          <div className="flex flex-col justify-between rounded-tile bg-navy-deep p-6 text-cream">
+          <div className="flex flex-col justify-between rounded-card bg-ink p-6 text-fg">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="font-mono text-3xl font-semibold text-gold">{nf.format(shown.hours)}</div>
-                <div className="mt-1 text-sm text-bodydark">{ui.estHours}</div>
+                <div className="mt-1 text-sm text-fgbody">{ui.estHours}</div>
               </div>
               <div>
                 <div className="font-mono text-3xl font-semibold text-gold">{nf.format(shown.savings)}</div>
-                <div className="mt-1 text-sm text-bodydark">{ui.estSavings} (EGP)</div>
+                <div className="mt-1 text-sm text-fgbody">{ui.estSavings} (EGP)</div>
               </div>
             </div>
-            <p className="mt-4 text-sm text-bodydark">{yearly}</p>
+            <p className="mt-4 text-sm text-fgbody">{yearly}</p>
 
             {status === "success" ? (
-              <p className="mt-6 rounded-tile border border-gold/40 bg-gold/10 px-4 py-3 text-sm font-medium text-gold-light" role="status">
+              <p className="mt-6 rounded-card border border-gold/40 bg-gold/10 px-4 py-3 text-sm font-medium text-gold-light" role="status">
                 {ui.success}
               </p>
             ) : open ? (
@@ -153,7 +153,7 @@ export default function RoiCalculator({ locale }: { locale: Locale }) {
                   required
                   placeholder={ui.name}
                   aria-label={ui.name}
-                  className="rounded-tile border border-line bg-panel/60 px-4 py-2.5 text-sm text-cream placeholder:text-bodydark focus-gold"
+                  className="rounded-card border border-hair bg-well/60 px-4 py-2.5 text-sm text-fg placeholder:text-fgbody focus-gold"
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                 />
@@ -162,7 +162,7 @@ export default function RoiCalculator({ locale }: { locale: Locale }) {
                   required
                   placeholder={ui.email}
                   aria-label={ui.email}
-                  className="rounded-tile border border-line bg-panel/60 px-4 py-2.5 text-sm text-cream placeholder:text-bodydark focus-gold"
+                  className="rounded-card border border-hair bg-well/60 px-4 py-2.5 text-sm text-fg placeholder:text-fgbody focus-gold"
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                 />
@@ -170,7 +170,7 @@ export default function RoiCalculator({ locale }: { locale: Locale }) {
                   type="tel"
                   placeholder={ui.phone}
                   aria-label={ui.phone}
-                  className="rounded-tile border border-line bg-panel/60 px-4 py-2.5 text-sm text-cream placeholder:text-bodydark focus-gold"
+                  className="rounded-card border border-hair bg-well/60 px-4 py-2.5 text-sm text-fg placeholder:text-fgbody focus-gold"
                   value={form.phone}
                   onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
                 />
@@ -218,9 +218,9 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="flex items-center justify-between text-sm text-neutral-500">
+      <span className="flex items-center justify-between text-sm text-fgmuted">
         {label}
-        <span className="font-mono font-medium text-navy-deep">{fmt.format(value)}</span>
+        <span className="font-mono font-medium text-fg">{fmt.format(value)}</span>
       </span>
       <input
         type="range"

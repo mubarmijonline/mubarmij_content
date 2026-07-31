@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 
 import type { Locale } from "@/i18n/config";
@@ -11,7 +12,7 @@ const UI = {
   ar: { all: "الكل", view: "شاهد الحالة", empty: "لا توجد دراسات حالة في هذا التصنيف بعد." },
 } as const;
 
-/** Filterable grid of case studies (category pills + cards). */
+/** Filterable grid of case studies. Six real categories across the portfolio. */
 export default function CaseStudiesGrid({
   locale,
   clients,
@@ -22,61 +23,71 @@ export default function CaseStudiesGrid({
   const ui = UI[locale];
   const cats = useMemo(() => {
     const m = new Map<string, string>();
-    for (const c of clients) if (c.category_label) m.set(c.category_label.toLowerCase(), c.category_label);
+    for (const c of clients) {
+      if (c.category_label) m.set(c.category_label.toLowerCase(), c.category_label);
+    }
     return Array.from(m.entries());
   }, [clients]);
   const [active, setActive] = useState<string | null>(null);
 
-  const list = active
-    ? clients.filter((c) => c.category_label?.toLowerCase() === active)
-    : clients;
+  const list = active ? clients.filter((c) => c.category_label?.toLowerCase() === active) : clients;
 
   return (
     <div>
       {cats.length > 1 ? (
-        <div className="flex flex-wrap justify-center gap-2">
-          <Pill active={active === null} onClick={() => setActive(null)}>
+        <div className="flex flex-wrap gap-2">
+          <Chip active={active === null} onClick={() => setActive(null)}>
             {ui.all}
-          </Pill>
+          </Chip>
           {cats.map(([key, label]) => (
-            <Pill key={key} active={active === key} onClick={() => setActive(key)}>
+            <Chip key={key} active={active === key} onClick={() => setActive(key)}>
               {label}
-            </Pill>
+            </Chip>
           ))}
         </div>
       ) : null}
 
       {list.length ? (
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((c) => {
             const img = cmsMedia(c.thumb_url || c.logo_url);
             return (
               <a
                 key={c.slug}
                 href={localePath(locale, `/case-studies/${c.slug}`)}
-                className="group block overflow-hidden rounded-tile border border-neutral-200 bg-white shadow-sm transition-transform duration-200 hover:-translate-y-1 focus-gold"
+                className="focus-gold group block overflow-hidden rounded-card border border-hair bg-surface transition duration-300 hover:-translate-y-1 hover:border-hairhov hover:shadow-lift"
               >
-                <div className="aspect-[16/10] overflow-hidden bg-neutral-200">
+                <div className="relative aspect-[16/10] overflow-hidden bg-well">
                   {img ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={img}
                       alt={c.name}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                      className={cn(
+                        "transition-transform duration-500 group-hover:scale-105",
+                        c.thumb_url ? "object-cover" : "object-contain p-6",
+                      )}
                     />
                   ) : null}
                 </div>
                 <div className="p-5">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-gold-dim">
+                  <span className="mono text-eyebrow uppercase text-fgmuted">
                     {c.category_label}
                   </span>
-                  <h3 className="mt-2 text-lg font-semibold text-navy-deep">{c.name}</h3>
-                  <p className="mt-1 line-clamp-2 text-sm text-neutral-500">{c.tagline}</p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-navy group-hover:text-gold">
+                  <h3 className="mt-2 font-display text-[19px] font-semibold tracking-[-0.02em] text-fg">
+                    {c.name}
+                  </h3>
+                  <p className="mt-1.5 line-clamp-2 text-[14.5px] leading-relaxed text-fgbody">
+                    {c.tagline}
+                  </p>
+                  <span className="mono mt-4 inline-flex items-center gap-2 text-[11px] uppercase text-fgmuted transition-colors group-hover:text-gold-deep">
                     {ui.view}
-                    <span aria-hidden className="transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1">
-                      →
+                    <span
+                      aria-hidden="true"
+                      className="transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+                    >
+                      {locale === "ar" ? "←" : "→"}
                     </span>
                   </span>
                 </div>
@@ -85,13 +96,13 @@ export default function CaseStudiesGrid({
           })}
         </div>
       ) : (
-        <p className="mt-12 text-center text-neutral-500">{ui.empty}</p>
+        <p className="mt-10 text-center text-fgmuted">{ui.empty}</p>
       )}
     </div>
   );
 }
 
-function Pill({
+function Chip({
   active,
   onClick,
   children,
@@ -105,10 +116,10 @@ function Pill({
       type="button"
       onClick={onClick}
       className={cn(
-        "rounded-pill border px-4 py-1.5 font-mono text-xs uppercase tracking-[0.12em] transition-colors focus-gold",
+        "mono focus-gold rounded-chip border px-3 py-1.5 text-[11px] uppercase transition-colors",
         active
-          ? "border-gold bg-gold text-gold-ink"
-          : "border-neutral-300 text-neutral-500 hover:border-gold hover:text-navy-deep",
+          ? "border-ink bg-ink text-white"
+          : "border-hair text-fgmuted hover:border-hairhov hover:text-fg",
       )}
     >
       {children}

@@ -1,11 +1,24 @@
-export { Reveal, Stagger, StaggerItem, revealProps } from "./Reveal";
-export { GoldButton, GhostButton, WhatsAppButton } from "./Buttons";
+// Layout
+export { Shell, Section, HairGrid, HairCell } from "./Layout";
+
+// Typography
 export { SectionEyebrow } from "./SectionEyebrow";
-export { BentoTile } from "./BentoTile";
-export { MetricStat } from "./MetricStat";
-export { AutomationLog, type LogLine } from "./AutomationLog";
+export { GoldPeriod, Arrow, LinkArrow, SectionTitle } from "./Typo";
+
+// Motion
+export { Reveal, Stagger, StaggerItem } from "./Reveal";
+
+// Controls
+export { DarkButton, GoldButton, GhostButton, WhatsAppButton } from "./Buttons";
+export { FormCard, FieldRow, TextInput, TextArea, Select, Honeypot } from "./FormCard";
+
+// Content primitives
+export { MonoChip, Pill } from "./MonoChip";
+export { StatCell, hasStat, isNumericStat } from "./StatCell";
+export { SpecRow, SlashList } from "./SpecRow";
+export { ImageWell, WellFallback } from "./ImageWell";
+export { BrowserFrame, PhoneFrame, DarkPanel } from "./Frames";
+export { Marquee } from "./Marquee";
+export { Accordion, FaqAccordion } from "./Accordion";
+export { EmptyState } from "./EmptyState";
 export { CTAPanel } from "./CTAPanel";
-export { TestimonialCard } from "./TestimonialCard";
-export { FaqAccordion } from "./FaqAccordion";
-export { LogoBar, type LogoItem } from "./LogoBar";
-export { PillNav } from "./PillNav";

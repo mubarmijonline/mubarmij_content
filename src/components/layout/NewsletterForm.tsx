@@ -73,7 +73,7 @@ export default function NewsletterForm({
           onChange={(e) => setEmail(e.target.value)}
           placeholder={placeholder}
           disabled={done}
-          className="min-w-0 flex-1 rounded-pill border border-line bg-white/5 px-4 py-2 text-sm text-cream placeholder:text-bodydark focus-gold disabled:opacity-60"
+          className="min-w-0 flex-1 rounded-pill border border-hair bg-white/5 px-4 py-2 text-sm text-fg placeholder:text-fgbody focus-gold disabled:opacity-60"
           aria-label={placeholder}
         />
         <button
