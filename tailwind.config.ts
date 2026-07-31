@@ -91,6 +91,9 @@ const config: Config = {
       },
       boxShadow: {
         float: "0 30px 70px -34px rgba(0, 0, 0, 0.6)",
+        // Named rather than an arbitrary value: the rgba() commas inside a
+        // shadow-[...] class parse into transparent layers.
+        nav: "0 1px 0 0 #E2E6EC, 0 10px 30px -22px rgba(10, 22, 40, 0.45)",
         lift: "0 30px 60px -44px rgba(10, 22, 40, 0.45)",
       },
       animation: {
