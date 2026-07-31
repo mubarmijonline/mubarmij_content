@@ -37,17 +37,18 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    // In production nginx fronts both apps on one origin, so /api/media/*
-    // already resolves. On a dev server it 404s, which silently turns every
-    // CMS image into its empty state. Proxy it locally instead.
-    // Production is fronted by nginx, which already serves /api/media on the
-    // public origin — so the rewrite stays off unless CMS_MEDIA_URL is set
-    // explicitly, which is how you test a production build locally.
-    const explicit = process.env.CMS_MEDIA_URL;
-    if (process.env.NODE_ENV === "production" && !explicit) return [];
-    // CMS_MEDIA_URL also lets media come from a different CMS instance than the
-    // API — useful in a worktree, whose cms/media directory is empty.
-    const cms = explicit || process.env.CMS_INTERNAL_URL || "http://localhost:3001";
+    // Always on, in every environment.
+    //
+    // nginx maps /api/media straight to the CMS, so a *browser* request never
+    // reaches this app. But next/image resolves relative URLs against its own
+    // origin, so the optimizer fetches /api/media from the Next server itself
+    // — where, without this rewrite, it 404s and every CMS image 400s.
+    // Gating this on NODE_ENV breaks images in production; don't.
+    //
+    // CMS_MEDIA_URL lets media come from a different CMS instance than the API
+    // — useful in a worktree, whose cms/media directory is empty.
+    const cms =
+      process.env.CMS_MEDIA_URL || process.env.CMS_INTERNAL_URL || "http://localhost:3001";
     return [{ source: "/api/media/:path*", destination: `${cms}/api/media/:path*` }];
   },
   async headers() {
