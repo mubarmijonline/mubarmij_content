@@ -52,7 +52,27 @@ const nextConfig = {
     return [{ source: "/api/media/:path*", destination: `${cms}/api/media/:path*` }];
   },
   async headers() {
-    return [{ source: "/(.*)", headers: securityHeaders }];
+    return [
+      { source: "/(.*)", headers: securityHeaders },
+      {
+        // HTML documents only — never the hashed assets under /_next/static,
+        // which are immutable and must stay cached for a year.
+        //
+        // Next ships pages with `s-maxage=300, stale-while-revalidate` and no
+        // browser directive at all, so browsers fall back to heuristic
+        // caching and can sit on a stale page for a long time after a deploy.
+        // max-age=0 + must-revalidate makes the browser check every time —
+        // it's a cheap 304 when nothing changed — while s-maxage keeps the
+        // CDN caching exactly as before.
+        source: "/((?!_next/static|_next/image|api/|.*\\.[a-zA-Z0-9]+$).*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate, s-maxage=300, stale-while-revalidate=86400",
+          },
+        ],
+      },
+    ];
   },
 };
 
