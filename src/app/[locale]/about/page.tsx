@@ -105,7 +105,7 @@ export default async function AboutPage({
           {statItems.length ? (
             <HairGrid cols={2} lgCols={4} className="mt-12 border-t border-hair">
               {statItems.map((s) => (
-                <HairCell key={s.label} className="py-7 pe-5">
+                <HairCell key={s.label} className="py-7">
                   <StatCell value={s.value} label={s.label} />
                 </HairCell>
               ))}
@@ -132,7 +132,7 @@ export default async function AboutPage({
             <SectionEyebrow>{t.valuesTitle}</SectionEyebrow>
             <HairGrid cols={1} mdCols={2} lgCols={4} className="mt-9 border-t border-hair">
               {values.map((v) => (
-                <HairCell key={v.title} className="py-7 pe-6">
+                <HairCell key={v.title} className="py-7">
                   <h2 className="font-display text-[19px] font-semibold tracking-[-0.02em] text-fg">
                     {v.title}
                   </h2>
@@ -240,7 +240,7 @@ function ContactCell({
 }) {
   const body = mono ? "mono ltr-island text-[14px]" : "text-[15px]";
   return (
-    <HairCell className="py-7 pe-6">
+    <HairCell className="py-7">
       <p className="mono text-eyebrow uppercase text-accent">{label}</p>
       {href ? (
         <a href={href} className={`focus-gold mt-2 block break-words text-fg hover:text-gold-deep ${body}`}>

@@ -5,7 +5,7 @@ import type { Locale } from "@/i18n/config";
 import { getAbout } from "@/lib/v1";
 import { whatsappLink } from "@/lib/utils";
 import { CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/site";
-import { SectionEyebrow, Shell } from "@/components/system";
+import { SectionEyebrow, Shell, WhatsAppIcon } from "@/components/system";
 import { Arrow, GoldPeriod } from "@/components/system/Typo";
 import ContactForm from "@/components/contact/ContactForm";
 
@@ -82,6 +82,7 @@ export default async function ContactPage({
               label={t.waLabel}
               title={t.waTitle}
               value={phone}
+              icon={<WhatsAppIcon size={19} />}
             />
             <ContactRow
               locale={locale}
@@ -115,6 +116,7 @@ function ContactRow({
   label,
   title,
   value,
+  icon,
 }: {
   locale: Locale;
   href: string;
@@ -122,6 +124,7 @@ function ContactRow({
   label: string;
   title: string;
   value: string;
+  icon?: React.ReactNode;
 }) {
   return (
     <a
@@ -131,7 +134,10 @@ function ContactRow({
     >
       <span className="min-w-0">
         <span className="mono block text-eyebrow uppercase text-accent">{label}</span>
-        <span className="mt-1 block font-display text-[17px] font-semibold text-fg">{title}</span>
+        <span className="mt-1 flex items-center gap-2 font-display text-[17px] font-semibold text-fg">
+          {icon}
+          {title}
+        </span>
       </span>
       <span className="mono ltr-island flex items-center gap-2 text-[13px] text-fgmuted transition-colors group-hover:text-fg">
         {value}

@@ -14,6 +14,14 @@ export { FormCard, FieldRow, TextInput, TextArea, Select, Honeypot } from "./For
 
 // Content primitives
 export { MonoChip, Pill } from "./MonoChip";
+export {
+  WhatsAppIcon,
+  WhatsAppGlyphOnGreen,
+  FacebookIcon,
+  InstagramIcon,
+  LinkedInIcon,
+  YouTubeIcon,
+} from "./BrandIcons";
 export { StatCell, hasStat, isNumericStat } from "./StatCell";
 export { SpecRow, SlashList } from "./SpecRow";
 export { ImageWell, WellFallback } from "./ImageWell";

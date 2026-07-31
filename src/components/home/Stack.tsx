@@ -23,7 +23,7 @@ export default function Stack({ locale, index }: { locale: Locale; index: string
 
         <HairGrid cols={1} mdCols={2} lgCols={5} className="mt-10 border-t border-hair">
           {STACK.map((group, i) => (
-            <HairCell key={group.label.en} className="px-0 py-6 md:px-5 lg:pe-5 lg:ps-5">
+            <HairCell key={group.label.en} className="py-6">
               <div className="flex items-baseline gap-2">
                 <span className="mono ltr-island text-eyebrow text-gold">
                   {String(i + 1).padStart(2, "0")}

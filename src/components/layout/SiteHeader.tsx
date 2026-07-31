@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 
 import type { Locale } from "@/i18n/config";
 import { cn, localePath, whatsappLink } from "@/lib/utils";
+import { WhatsAppIcon } from "@/components/system";
 
 type NavItem = { label: string; href: string };
 type ServiceItem = { label: string; desc: string; href: string };
@@ -229,12 +230,9 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             href={whatsappLink(t.whatsappMsg)}
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-gold group inline-flex shrink-0 items-center gap-2.5 rounded-btn bg-ink px-5 py-[11px] font-display text-[14.5px] font-semibold text-white transition-colors hover:bg-gold hover:text-ink"
+            className="focus-gold inline-flex shrink-0 items-center gap-2.5 rounded-btn bg-ink px-5 py-[11px] font-display text-[14.5px] font-semibold text-white transition-colors hover:bg-gold hover:text-ink"
           >
-            <span
-              aria-hidden="true"
-              className="block h-[7px] w-[7px] rounded-full bg-live transition-colors group-hover:bg-ink"
-            />
+            <WhatsAppIcon size={18} />
             {t.whatsapp}
           </a>
         </nav>
@@ -311,7 +309,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 rounded-btn bg-ink px-5 py-3 font-display text-[15px] font-semibold text-white"
               >
-                <span aria-hidden="true" className="block h-[7px] w-[7px] rounded-full bg-live" />
+                <WhatsAppIcon size={18} />
                 {t.whatsapp}
               </a>
             </div>

@@ -39,7 +39,7 @@ export default function Process({ locale, index }: { locale: Locale; index: stri
 
         <HairGrid cols={1} mdCols={2} lgCols={4} className="mt-10 border-t border-hair">
           {t.steps.map((s) => (
-            <HairCell key={s.k} className="py-7 pe-6 md:pe-8">
+            <HairCell key={s.k} className="py-7">
               <div className="mono text-eyebrow uppercase text-accent">
                 <span className="ltr-island">{s.k}</span>
                 <span aria-hidden="true"> / </span>

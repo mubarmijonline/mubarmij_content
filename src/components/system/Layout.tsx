@@ -67,6 +67,12 @@ export function Section({
  * logical margin, so the whole thing flips correctly under RTL with no
  * direction-specific CSS.
  *
+ * Gutters: cells get symmetric inline padding so text never touches a rule,
+ * and the grid is pulled outward by exactly that padding. The result is the
+ * mockup's behaviour for free, at any number of rows — the first column's
+ * text sits flush on the measure, the last column's ends on it, and every
+ * interior column is inset from the rule on both sides.
+ *
  * Cells must be rendered with <HairCell> (or carry the same border classes).
  */
 export function HairGrid({
@@ -105,10 +111,19 @@ export function HairGrid({
     5: "lg:grid-cols-5",
   } as const;
 
+  // Inline gutter. -ms-5 is the padding; -me-[21px] is the padding plus the 1px
+  // of trailing rule. A single-column grid has no interior rules, so it only
+  // takes the gutter once it actually splits into columns at md.
+  const gutter =
+    cols > 1
+      ? "[&>*]:px-5 -ms-5 -me-[21px]"
+      : "-me-px md:[&>*]:px-5 md:-ms-5 md:-me-[21px]";
+
   return (
     <div
       className={cn(
-        "-mb-px -me-px grid",
+        "-mb-px grid",
+        gutter,
         base[cols],
         mdCols && md[mdCols],
         lgCols && lg[lgCols],

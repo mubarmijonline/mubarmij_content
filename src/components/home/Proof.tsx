@@ -74,7 +74,7 @@ export default function Proof({
             className="mt-10 border-t border-hair"
           >
             {stats.map((s) => (
-              <HairCell key={s.label} className="py-7 pe-5">
+              <HairCell key={s.label} className="py-7">
                 <StatCell value={s.value} label={s.label} />
               </HairCell>
             ))}

@@ -1,6 +1,6 @@
 import { CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/site";
-import { cn, whatsappLink } from "@/lib/utils";
-import { DarkButton, GhostButton } from "./Buttons";
+import { cn } from "@/lib/utils";
+import { DarkButton, WhatsAppButton } from "./Buttons";
 import { Reveal } from "./Reveal";
 import { Shell } from "./Layout";
 import { GoldPeriod } from "./Typo";
@@ -69,9 +69,13 @@ export function CTAPanel({
             <DarkButton size="lg" href={ctaHref}>
               {ctaLabel}
             </DarkButton>
-            <GhostButton size="lg" external href={whatsappLink(whatsappMessage)}>
+            <WhatsAppButton
+              size="lg"
+              message={whatsappMessage}
+              className="border border-hairbtn bg-transparent text-fg hover:border-ink hover:bg-transparent hover:text-fg"
+            >
               {whatsappLabel}
-            </GhostButton>
+            </WhatsAppButton>
           </div>
         </Reveal>
       </Shell>

@@ -1,12 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 
 import type { Locale } from "@/i18n/config";
 import { localePath } from "@/lib/utils";
 import { CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/site";
-import { Shell } from "@/components/system";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedInIcon,
+  Shell,
+  YouTubeIcon,
+} from "@/components/system";
 import NewsletterForm from "./NewsletterForm";
 
 /**
@@ -138,18 +143,36 @@ export default function Footer({ locale }: { locale: Locale }) {
               label={t("footer.subscribe")}
             />
           </div>
-          <div className="mt-6 flex items-center gap-4 text-fgmuted">
-            <a href="#" aria-label="Facebook" className="focus-gold hover:text-gold">
-              <Facebook size={19} />
+          {/* Brand colours, so each channel is recognisable against the dark
+              footer. Opacity carries the hover state instead of a fill swap. */}
+          <div className="mt-6 flex items-center gap-4">
+            <a
+              href="#"
+              aria-label="Facebook"
+              className="focus-gold opacity-80 transition-opacity hover:opacity-100"
+            >
+              <FacebookIcon size={22} />
             </a>
-            <a href="#" aria-label="Instagram" className="focus-gold hover:text-gold">
-              <Instagram size={19} />
+            <a
+              href="#"
+              aria-label="Instagram"
+              className="focus-gold opacity-80 transition-opacity hover:opacity-100"
+            >
+              <InstagramIcon size={22} />
             </a>
-            <a href="#" aria-label="LinkedIn" className="focus-gold hover:text-gold">
-              <Linkedin size={19} />
+            <a
+              href="#"
+              aria-label="LinkedIn"
+              className="focus-gold opacity-80 transition-opacity hover:opacity-100"
+            >
+              <LinkedInIcon size={22} />
             </a>
-            <a href="#" aria-label="YouTube" className="focus-gold hover:text-gold">
-              <Youtube size={19} />
+            <a
+              href="#"
+              aria-label="YouTube"
+              className="focus-gold opacity-80 transition-opacity hover:opacity-100"
+            >
+              <YouTubeIcon size={22} />
             </a>
           </div>
         </div>

@@ -141,14 +141,14 @@ export default async function ServicesIndexPage({
               <SlashList className="mt-5" items={flagship.deliverables ?? []} />
 
               <HairGrid cols={2} className="mt-9 border-t border-hair">
-                <HairCell className="border-b-0 pe-5 pt-6">
+                <HairCell className="border-b-0 pt-6">
                   <StatCell
                     kind="text"
                     value={flagship.duration ?? null}
                     label={t.timeline}
                   />
                 </HairCell>
-                <HairCell className="border-b-0 pe-5 ps-5 pt-6">
+                <HairCell className="border-b-0 pt-6">
                   <StatCell kind="text" value={t.investmentValue} label={t.investment} />
                 </HairCell>
               </HairGrid>
@@ -172,7 +172,7 @@ export default async function ServicesIndexPage({
           <Shell className="sect">
             <HairGrid cols={1} mdCols={rest.length >= 3 ? 3 : 2} className="border-t border-hair">
               {rest.map((s, i) => (
-                <HairCell key={s.slug} className="px-0 py-8 md:px-6 md:first:ps-0">
+                <HairCell key={s.slug} className="py-8">
                   <div className="mono ltr-island text-eyebrow text-accent">
                     {String(i + 2).padStart(2, "0")}
                   </div>
@@ -220,12 +220,12 @@ export default async function ServicesIndexPage({
             {hasStat(care.duration) || care.tagline ? (
               <HairGrid cols={2} className="self-start border-t border-hair">
                 {care.duration ? (
-                  <HairCell className="border-b-0 pe-5 pt-6">
+                  <HairCell className="border-b-0 pt-6">
                     <StatCell kind="text" value={care.duration} label={t.timeline} />
                   </HairCell>
                 ) : null}
                 {care.tagline ? (
-                  <HairCell className="border-b-0 pe-5 ps-5 pt-6">
+                  <HairCell className="border-b-0 pt-6">
                     <StatCell kind="text" value={care.tagline} label={t.eyebrow} />
                   </HairCell>
                 ) : null}

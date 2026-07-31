@@ -31,7 +31,7 @@ export default function Capabilities({
 
         <HairGrid cols={1} mdCols={2} lgCols={4} className="mt-10 border-t border-hair">
           {list.map((type, i) => (
-            <HairCell key={type.title} className="py-7 pe-6">
+            <HairCell key={type.title} className="py-7">
               <span className="mono ltr-island text-eyebrow text-gold">
                 {String(i + 1).padStart(2, "0")}
               </span>

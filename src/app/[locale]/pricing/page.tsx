@@ -190,7 +190,7 @@ export default async function PricingPage({
           <SectionEyebrow>{t.includedTitle}</SectionEyebrow>
           <HairGrid cols={1} mdCols={2} lgCols={4} className="mt-9 border-t border-hair">
             {t.included.map((item) => (
-              <HairCell key={item.title} className="py-7 pe-6">
+              <HairCell key={item.title} className="py-7">
                 <h2 className="font-display text-[18px] font-semibold tracking-[-0.02em] text-fg">
                   {item.title}
                 </h2>

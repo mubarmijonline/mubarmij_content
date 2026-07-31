@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { cn, whatsappLink } from "@/lib/utils";
+import { WhatsAppIcon } from "./BrandIcons";
 
 type BaseProps = {
   children: ReactNode;
@@ -81,30 +82,24 @@ export function GhostButton({ size = "md", className, ...props }: BaseProps) {
 }
 
 /**
- * WhatsApp action. Same ink treatment as the primary, with an optional live
- * dot — the design's header CTA, not a green vendor-coloured button.
+ * WhatsApp action. Ink button carrying the WhatsApp mark in its own brand
+ * green, so the channel is recognisable at a glance on any surface.
  */
 export function WhatsAppButton({
   size = "md",
   className,
   message,
-  dot,
   children,
   ...props
-}: BaseProps & { message?: string; dot?: boolean }) {
+}: BaseProps & { message?: string; /** @deprecated the brand icon replaced it */ dot?: boolean }) {
   return (
     <Inner
       {...props}
       external
       href={props.href || whatsappLink(message)}
-      className={cn(BASE, SIZES[size], "group bg-ink text-white hover:bg-gold hover:text-ink", className)}
+      className={cn(BASE, SIZES[size], "bg-ink text-white hover:bg-gold hover:text-ink", className)}
     >
-      {dot ? (
-        <span
-          aria-hidden="true"
-          className="block h-[7px] w-[7px] rounded-full bg-live transition-colors group-hover:bg-ink"
-        />
-      ) : null}
+      <WhatsAppIcon size={18} />
       {children}
     </Inner>
   );

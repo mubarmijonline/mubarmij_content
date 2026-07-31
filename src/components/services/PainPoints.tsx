@@ -23,7 +23,7 @@ export default function PainPoints({ locale, items }: { locale: Locale; items?: 
 
         <HairGrid cols={1} mdCols={2} lgCols={3} className="mt-10 border-t border-hair">
           {list.map((p, i) => (
-            <HairCell key={p} className="py-6 pe-6">
+            <HairCell key={p} className="py-6">
               <div className="flex gap-4">
                 <span className="mono ltr-island shrink-0 text-[11px] text-fgfaint">
                   {String(i + 1).padStart(2, "0")}

@@ -165,7 +165,7 @@ export default async function CaseStudyDetailPage({
             {results.length ? (
               <HairGrid cols={2} className="mt-12 border-t border-hair">
                 {results.slice(0, 4).map((r) => (
-                  <HairCell key={r.label} className="py-6 pe-5">
+                  <HairCell key={r.label} className="py-6">
                     <StatCell value={r.metric} label={r.label} />
                   </HairCell>
                 ))}

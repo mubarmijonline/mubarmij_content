@@ -1,9 +1,8 @@
 import type { Locale } from "@/i18n/config";
 import type { ClientDetail } from "@/lib/v1";
-import { localePath, whatsappLink } from "@/lib/utils";
+import { localePath } from "@/lib/utils";
 import {
   BrowserFrame,
-  DarkButton,
   DarkPanel,
   GhostButton,
   HairCell,
@@ -12,6 +11,7 @@ import {
   PhoneFrame,
   Pill,
   StatCell,
+  WhatsAppButton,
   hasStat,
 } from "@/components/system";
 import { Arrow, GoldPeriod } from "@/components/system/Typo";
@@ -89,10 +89,10 @@ export default function Hero({
           <p className="mt-5 max-w-[29em] text-lede text-fgbody">{t.lede}</p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <DarkButton size="lg" external href={whatsappLink(t.primaryMsg)}>
+            <WhatsAppButton size="lg" message={t.primaryMsg}>
               {t.primary}
               <Arrow locale={locale} />
-            </DarkButton>
+            </WhatsAppButton>
             <GhostButton size="lg" href={localePath(locale, "/case-studies")}>
               {t.secondary}
             </GhostButton>
@@ -101,7 +101,7 @@ export default function Hero({
           {stats.length ? (
             <HairGrid cols={stats.length as 1 | 2 | 3} className="mt-12 border-t border-hair">
               {stats.map((s) => (
-                <HairCell key={s.label} className="border-b-0 pe-5 pt-6">
+                <HairCell key={s.label} className="border-b-0 pt-6">
                   <StatCell value={s.value} label={s.label} />
                 </HairCell>
               ))}
