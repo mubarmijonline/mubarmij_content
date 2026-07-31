@@ -7,6 +7,7 @@ import { CTAPanel } from "@/components/system";
 
 import ServiceHero from "./ServiceHero";
 import PainPoints from "./PainPoints";
+import ServiceProcess from "./ServiceProcess";
 import Capabilities from "./Capabilities";
 import Differentiators from "./Differentiators";
 import RoiCalculator from "./RoiCalculator";
@@ -51,6 +52,7 @@ export default async function ServicePage({ slug, locale }: { slug: string; loca
     <>
       <ServiceHero locale={locale} service={service} />
       <PainPoints locale={locale} items={service.pain_points} />
+      <ServiceProcess locale={locale} service={service} />
       <Capabilities locale={locale} types={service.types} />
       {service.has_roi_calculator ? <RoiCalculator locale={locale} /> : null}
       <Differentiators locale={locale} items={service.differentiators} />

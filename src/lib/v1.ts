@@ -54,7 +54,10 @@ export type ServiceSummary = {
   /** Typical delivery window, e.g. "5–8 weeks". Optional — older CMS builds omit it. */
   duration?: string;
 };
+export type ServiceStep = { title: string; body: string };
 export type ServiceDetail = ServiceSummary & {
+  /** How the engagement runs, stage by stage. */
+  process?: ServiceStep[];
   intro: string; hero_image_url?: string; pain_points: string[];
   types: { title: string; icon: string }[]; differentiators: string[];
   has_roi_calculator?: boolean;

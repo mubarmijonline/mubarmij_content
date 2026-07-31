@@ -16,7 +16,15 @@ export type ServiceSummary = {
   duration?: string
 }
 
+/** One stage of how a service is actually delivered, in client-facing terms. */
+export type ServiceStep = {
+  title: string
+  body: string
+}
+
 export type ServiceDetail = ServiceSummary & {
+  /** How the engagement runs, stage by stage. */
+  process?: ServiceStep[]
   intro: string
   hero_image_url?: string
   pain_points?: string[]
@@ -42,6 +50,7 @@ type ServiceContent = {
   pain_points?: { en: string[]; ar: string[] }
   types?: { title: Bilingual; icon: string }[]
   differentiators?: { en: string[]; ar: string[] }
+  process?: { title: Bilingual; body: Bilingual }[]
 }
 
 const PUBLIC_BASE = "https://www.mubarmijonline.com"
@@ -49,9 +58,39 @@ const PUBLIC_BASE = "https://www.mubarmijonline.com"
 const SERVICES: ServiceContent[] = [
   {
     slug: "ecommerce",
+    process: [
+      {
+        title: { en: "Scope & catalogue audit", ar: "تحديد النطاق ومراجعة الكتالوج" },
+        body: {
+          en: "We map your products, variants and how customers actually shop today. You get a written scope with a fixed price, a launch date and the list of what we need from you.",
+          ar: "بنراجع منتجاتك ومتغيراتها وطريقة شراء عملائك فعليًا. وبتاخد مستند نطاق مكتوب بسعر ثابت وتاريخ إطلاق وقائمة باللي محتاجينه منك.",
+        },
+      },
+      {
+        title: { en: "Storefront design", ar: "تصميم المتجر" },
+        body: {
+          en: "Clickable screens for home, category, product and checkout — approved by you before a single line of production code is written.",
+          ar: "شاشات قابلة للضغط للرئيسية والأقسام والمنتج والدفع — بتوافق عليها قبل ما نكتب سطر كود إنتاجي واحد.",
+        },
+      },
+      {
+        title: { en: "Build & integrations", ar: "التنفيذ والربط" },
+        body: {
+          en: "Catalogue structure, one-step checkout, local payment and shipping, Arabic RTL, and WhatsApp order updates. Weekly demos on a live staging link.",
+          ar: "ترتيب الكتالوج، شراء في خطوة واحدة، دفع وشحن محلي، عربي بدعم RTL، وتحديثات الطلبات على واتساب. مع عرض أسبوعي على رابط staging شغّال.",
+        },
+      },
+      {
+        title: { en: "Launch & handover", ar: "الإطلاق والتسليم" },
+        body: {
+          en: "Content load, real test orders, team training, documentation, and three months of care after go-live.",
+          ar: "رفع المحتوى، طلبات اختبار حقيقية، تدريب الفريق، توثيق، و3 شهور صيانة بعد الإطلاق.",
+        },
+      },
+    ],
     icon: "shopping-cart",
     order: 1,
-    hero_image_url: `${PUBLIC_BASE}/banners/banner-6.png`,
+    hero_image_url: `${PUBLIC_BASE}/services/ecommerce.webp`,
     title: {
       en: "E-commerce shops built to sell",
       ar: "متاجر إلكترونية مبنية عشان تبيع",
@@ -125,10 +164,40 @@ const SERVICES: ServiceContent[] = [
   },
   {
     slug: "automation",
+    process: [
+      {
+        title: { en: "Map the work", ar: "رسم خريطة الشغل" },
+        body: {
+          en: "We sit with the team and follow one real process end to end, counting the hours it currently costs.",
+          ar: "بنقعد مع الفريق ونتابع عملية حقيقية من أولها لآخرها، وبنحسب كام ساعة بتاخد دلوقتي.",
+        },
+      },
+      {
+        title: { en: "Design the flow", ar: "تصميم المسار" },
+        body: {
+          en: "You see the new flow on paper — what triggers it, what it decides, and where a human still steps in.",
+          ar: "بتشوف المسار الجديد على الورق — إيه اللي بيشغّله، وبيقرر إيه، وفين لسه محتاج تدخل بشري.",
+        },
+      },
+      {
+        title: { en: "Build & connect", ar: "التنفيذ والربط" },
+        body: {
+          en: "We wire your tools together — WhatsApp, CRM, sheets, invoicing — and run it beside the manual process until it matches.",
+          ar: "بنربط أدواتك ببعض — واتساب، CRM، الشيتات، الفواتير — وبنشغّله جنب الطريقة اليدوية لحد ما يطابقها.",
+        },
+      },
+      {
+        title: { en: "Run & measure", ar: "التشغيل والقياس" },
+        body: {
+          en: "It goes live with monitoring, and we report the hours it actually saved so the return is a number, not a promise.",
+          ar: "بيشتغل مع مراقبة، وبنقولك وفّر كام ساعة فعلًا — فالعائد رقم مش وعد.",
+        },
+      },
+    ],
     icon: "bolt",
     order: 4,
     duration: { en: "scoped", ar: "حسب النطاق" },
-    hero_image_url: `${PUBLIC_BASE}/banners/banner-2.png`,
+    hero_image_url: `${PUBLIC_BASE}/services/automation.webp`,
     has_roi_calculator: true,
     title: {
       en: "Automated systems that work for you",
@@ -184,10 +253,40 @@ const SERVICES: ServiceContent[] = [
   },
   {
     slug: "web-development",
+    process: [
+      {
+        title: { en: "Positioning & structure", ar: "تحديد الرسالة والهيكل" },
+        body: {
+          en: "We agree who the site is for and what it must make them do, then map the pages around that.",
+          ar: "بنتفق الموقع موجّه لمين وإيه المطلوب إن الزائر يعمله، وبعدين نرتّب الصفحات حوالين ده.",
+        },
+      },
+      {
+        title: { en: "Copy & design", ar: "المحتوى والتصميم" },
+        body: {
+          en: "Messaging and clickable screens in English and Arabic together, so the words and the layout are approved as one thing.",
+          ar: "الرسائل والشاشات القابلة للضغط بالعربي والإنجليزي مع بعض، فبتوافق على الكلام والتصميم كوحدة واحدة.",
+        },
+      },
+      {
+        title: { en: "Build, SEO & speed", ar: "التنفيذ والسيو والسرعة" },
+        body: {
+          en: "Production build on a stack that ranks and loads fast, with a CMS your team can edit without calling us.",
+          ar: "تنفيذ على ستاك بيظهر في البحث وبيحمّل بسرعة، مع لوحة تحكم فريقك يقدر يعدّل منها من غير ما يكلمنا.",
+        },
+      },
+      {
+        title: { en: "Launch & measure", ar: "الإطلاق والقياس" },
+        body: {
+          en: "Analytics wired in from day one so you can see which pages actually bring enquiries.",
+          ar: "ربط التحليلات من أول يوم عشان تشوف أنهي صفحات بتجيب استفسارات فعلًا.",
+        },
+      },
+    ],
     icon: "globe",
     order: 2,
     duration: { en: "4–6 weeks", ar: "4–6 أسابيع" },
-    hero_image_url: `${PUBLIC_BASE}/banners/banner-6.png`,
+    hero_image_url: `${PUBLIC_BASE}/services/web-development.webp`,
     title: {
       en: "Websites that bring clients, not just brochures",
       ar: "مواقع بتجيب عملاء، مش مجرد بروشور",
@@ -232,10 +331,40 @@ const SERVICES: ServiceContent[] = [
   },
   {
     slug: "mobile-apps",
+    process: [
+      {
+        title: { en: "Product scope", ar: "تحديد نطاق المنتج" },
+        body: {
+          en: "We cut the idea down to the version worth shipping first, and write what it does, what it costs and when it lands.",
+          ar: "بنقلّل الفكرة لأول نسخة تستاهل تنزل، ونكتب بتعمل إيه وبكام وهتنزل إمتى.",
+        },
+      },
+      {
+        title: { en: "Design & prototype", ar: "التصميم والنموذج" },
+        body: {
+          en: "Full screens plus a clickable prototype you can hand to a real user before we build anything.",
+          ar: "شاشات كاملة ونموذج قابل للضغط تقدر تجرّبه على مستخدم حقيقي قبل ما نبني حاجة.",
+        },
+      },
+      {
+        title: { en: "Build & integrations", ar: "التنفيذ والربط" },
+        body: {
+          en: "One codebase for iOS and Android with auth, push, payments and offline. Weekly builds you can install on your phone.",
+          ar: "كود واحد لـ iOS وأندرويد مع تسجيل الدخول والإشعارات والدفع والعمل أوفلاين. ونسخ أسبوعية تقدر تنزّلها على موبايلك.",
+        },
+      },
+      {
+        title: { en: "Store release & monitoring", ar: "النشر والمتابعة" },
+        body: {
+          en: "We handle App Store and Google Play submission, then keep crash reporting and analytics running after launch.",
+          ar: "بنتولى رفع التطبيق على App Store وجوجل بلاي، وبنكمّل متابعة الأعطال والتحليلات بعد الإطلاق.",
+        },
+      },
+    ],
     icon: "phone",
     order: 3,
     duration: { en: "8–14 weeks", ar: "8–14 أسبوع" },
-    hero_image_url: `${PUBLIC_BASE}/banners/banner-5.png`,
+    hero_image_url: `${PUBLIC_BASE}/services/mobile-apps.webp`,
     title: {
       en: "Mobile apps that grow your business",
       ar: "تطبيقات موبايل بتنمّي شغلك",
@@ -278,10 +407,40 @@ const SERVICES: ServiceContent[] = [
   },
   {
     slug: "maintenance",
+    process: [
+      {
+        title: { en: "Onboarding audit", ar: "مراجعة البداية" },
+        body: {
+          en: "We take stock of what you have — hosting, domains, dependencies, backups — and fix whatever is already at risk.",
+          ar: "بنراجع اللي عندك — استضافة ودومينات ومكتبات ونسخ احتياطية — وبنصلّح أي حاجة في خطر من دلوقتي.",
+        },
+      },
+      {
+        title: { en: "Monitoring & backups", ar: "المراقبة والنسخ الاحتياطي" },
+        body: {
+          en: "Uptime checks and automated backups run continuously, so a problem reaches us before it reaches your customers.",
+          ar: "فحص التشغيل والنسخ الاحتياطي بيشتغلوا باستمرار، فالمشكلة بتوصلنا قبل ما توصل لعملائك.",
+        },
+      },
+      {
+        title: { en: "Updates & patches", ar: "التحديثات والترقيعات" },
+        body: {
+          en: "Framework and security updates applied on a schedule, tested on staging before they touch the live site.",
+          ar: "تحديثات الأنظمة والأمان بتتطبق بجدول، وبتتجرّب على staging قبل ما تلمس الموقع الفعلي.",
+        },
+      },
+      {
+        title: { en: "Monthly report & improvements", ar: "تقرير شهري وتحسينات" },
+        body: {
+          en: "One report covering uptime and performance, plus a fixed allowance of hours for the changes you want next.",
+          ar: "تقرير واحد بيغطي التشغيل والأداء، مع عدد ساعات ثابت للتعديلات اللي عايزها بعد كده.",
+        },
+      },
+    ],
     icon: "shield-check",
     order: 5,
     duration: { en: "monthly", ar: "شهري" },
-    hero_image_url: `${PUBLIC_BASE}/banners/banner-4.png`,
+    hero_image_url: `${PUBLIC_BASE}/services/maintenance.webp`,
     title: { en: "Maintenance & Support", ar: "صيانة ودعم" },
     tagline: { en: "Priority support", ar: "دعم بأولوية" },
     summary: {
@@ -334,6 +493,7 @@ function detail(c: ServiceContent, locale: V1Locale): ServiceDetail {
     hero_image_url: c.hero_image_url,
     pain_points: c.pain_points?.[locale],
     types: c.types?.map((t) => ({ title: t.title[locale], icon: t.icon })),
+    process: c.process?.map((x) => ({ title: x.title[locale], body: x.body[locale] })),
     differentiators: c.differentiators?.[locale],
     has_roi_calculator: c.has_roi_calculator || undefined,
   }

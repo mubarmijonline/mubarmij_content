@@ -27,3 +27,15 @@ already-approved copy, no review needed.
 Further rows are appended as each phase lands (hero pill and lede, the
 Capabilities pull-quote, "Next builds", the Work-page highlights, and the
 contact form labels).
+
+## Service process stages (added with the Higgsfield imagery)
+
+Four stages per service in `cms/src/endpoints/v1/data/services.ts` — 20 title
+and body pairs across ecommerce, web-development, mobile-apps, automation and
+maintenance. All Arabic there is **draft** and needs a native pass. The
+English is the source of truth; the Arabic follows the same
+Egyptian-colloquial register as the rest of the site.
+
+Also draft: the section chrome in `src/components/services/ServiceProcess.tsx`
+— "إزاي بتشتغل" / "اللي بيحصل فعليًا، مرحلة مرحلة" / "مفيش صندوق مقفول…" /
+"المدة المتوقعة".
