@@ -82,7 +82,7 @@ export function SectionTitle({
   const Tag = as;
   const size = as === "h1" ? "text-d1" : "text-d2";
   return (
-    <Tag className={cn("font-display font-bold text-fg", size, className)}>
+    <Tag data-gsap="rise" className={cn("font-display font-bold text-fg", size, className)}>
       {children}
       {period ? <GoldPeriod /> : null}
     </Tag>

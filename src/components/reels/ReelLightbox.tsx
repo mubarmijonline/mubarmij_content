@@ -51,32 +51,51 @@ function toEmbedSrc(url: string): string {
   }
 }
 
-/** Hosted player: native MP4 when available, hls.js (lazy) for HLS streams. */
-function HostedPlayer({ reel, onComplete }: { reel: ReelItem; onComplete: () => void }) {
+/**
+ * Hosted player: native MP4 when available, hls.js (lazy) for HLS streams.
+ *
+ * Deliberately not `controls`. The native bar is a full-width desktop chrome
+ * strip pinned across the bottom of a 9:16 video — it covered the caption and
+ * looked bolted on. This exposes only what a reel needs: tap to play/pause, a
+ * mute toggle, and a progress line, all as overlays the caption can sit above.
+ */
+function HostedPlayer({
+  reel,
+  onComplete,
+  children,
+}: {
+  reel: ReelItem;
+  onComplete: () => void;
+  /** Caption overlay, rendered above the controls. */
+  children?: React.ReactNode;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mp4 = cmsMedia(reel.playback?.mp4);
   const hls = reel.playback?.hls || undefined;
+
+  const [playing, setPlaying] = useState(true);
+  const [muted, setMuted] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [waiting, setWaiting] = useState(true);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video || mp4 || !hls) return; // MP4 path is handled declaratively below
 
-    // Safari / iOS play HLS natively.
+    let instance: { destroy: () => void } | undefined;
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = hls;
       return;
     }
-
     let cancelled = false;
-    let instance: { destroy: () => void } | null = null;
     import("hls.js")
       .then(({ default: Hls }) => {
         if (cancelled) return;
         if (Hls.isSupported()) {
           const h = new Hls({ enableWorker: true });
+          instance = h;
           h.loadSource(hls);
           h.attachMedia(video);
-          instance = h;
         } else {
           video.src = hls;
         }
@@ -84,24 +103,101 @@ function HostedPlayer({ reel, onComplete }: { reel: ReelItem; onComplete: () => 
       .catch(() => {
         video.src = hls;
       });
-
     return () => {
       cancelled = true;
       instance?.destroy();
     };
   }, [mp4, hls]);
 
+  const toggle = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) void v.play();
+    else v.pause();
+  }, []);
+
   return (
-    <video
-      ref={videoRef}
-      src={mp4 || undefined}
-      poster={cmsMedia(reel.thumbnail?.url) || undefined}
-      controls
-      autoPlay
-      playsInline
-      onEnded={onComplete}
-      className="h-full w-full bg-black object-contain"
-    />
+    <div className="group relative h-full w-full bg-black">
+      <video
+        ref={videoRef}
+        src={mp4 || undefined}
+        poster={cmsMedia(reel.thumbnail?.url) || undefined}
+        // metadata, not auto: the poster carries the first paint and the file
+        // only streams what playback actually needs.
+        preload="metadata"
+        autoPlay
+        playsInline
+        onEnded={onComplete}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onWaiting={() => setWaiting(true)}
+        onPlaying={() => setWaiting(false)}
+        onCanPlay={() => setWaiting(false)}
+        onTimeUpdate={(e) => {
+          const v = e.currentTarget;
+          if (v.duration) setProgress((v.currentTime / v.duration) * 100);
+        }}
+        className="h-full w-full bg-black object-contain"
+      />
+
+      {/* Tap surface. A button so it is keyboard reachable. */}
+      <button
+        type="button"
+        onClick={toggle}
+        aria-label={playing ? "Pause" : "Play"}
+        className="absolute inset-0 flex items-center justify-center focus-gold"
+      >
+        {!playing ? (
+          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-ink shadow-lg backdrop-blur">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="ms-1 h-7 w-7 fill-current">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+        ) : null}
+      </button>
+
+      {waiting && playing ? (
+        <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <span className="h-9 w-9 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+        </span>
+      ) : null}
+
+      {/* Caption sits above the controls, inside the same gradient. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent pt-16">
+        <div className="pointer-events-auto px-4 pb-3">{children}</div>
+
+        <div className="flex items-center gap-3 px-4 pb-4">
+          <button
+            type="button"
+            onClick={() => {
+              const v = videoRef.current;
+              if (!v) return;
+              v.muted = !v.muted;
+              setMuted(v.muted);
+            }}
+            aria-label={muted ? "Unmute" : "Mute"}
+            className="pointer-events-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur transition-colors hover:bg-white/25 focus-gold"
+          >
+            {muted ? (
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3l2.7-2.7-1.4-1.4L15.2 10.6 12.5 7.9l-1.4 1.4 2.7 2.7-2.7 2.7 1.4 1.4 2.7-2.7 2.7 2.7 1.4-1.4-2.7-2.7z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05A4.47 4.47 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+              </svg>
+            )}
+          </button>
+
+          <span className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/25">
+            <span
+              className="block h-full rounded-full bg-white transition-[width] duration-200"
+              style={{ width: `${progress}%` }}
+            />
+          </span>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -274,10 +370,13 @@ export default function ReelLightbox({
         aria-modal="true"
         aria-label={reel.title}
         tabIndex={-1}
-        className="flex max-h-full w-full max-w-sm flex-col overflow-hidden rounded-card border border-hair bg-well shadow-2xl outline-none"
+        // The video is the surface. Height-first so a portrait reel fills the
+        // screen instead of sitting in a card with a text panel bolted below,
+        // which is what pushed the caption off-screen on a phone.
+        className="relative aspect-[9/16] max-h-[86vh] w-auto max-w-[min(94vw,430px)] overflow-hidden rounded-card bg-black shadow-2xl outline-none"
       >
-        <div className="relative aspect-[9/16] w-full shrink-0 bg-black">
-          {reel.source === "embed" && reel.embedUrl ? (
+        {reel.source === "embed" && reel.embedUrl ? (
+          <>
             <iframe
               key={reel.id}
               src={toEmbedSrc(reel.embedUrl)}
@@ -286,53 +385,93 @@ export default function ReelLightbox({
               allowFullScreen
               className="h-full w-full"
             />
-          ) : (
-            <HostedPlayer
-              key={reel.id}
+            <Caption
               reel={reel}
-              onComplete={() => trackEvent({ event: "reel_complete", reelId: reel.id, locale })}
+              locale={locale}
+              t={t}
+              index={index}
+              total={total}
+              onCta={onCta}
             />
-          )}
-        </div>
-
-        <div className="flex flex-col gap-3 p-5">
-          <div className="flex items-center justify-between gap-3">
-            {reel.client?.name ? (
-              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-                {reel.client.name}
-              </span>
-            ) : (
-              <span />
-            )}
-            {total > 1 ? (
-              <span className="font-mono text-[11px] text-fgbody">{t.counter(index + 1, total)}</span>
-            ) : null}
-          </div>
-
-          <h2 className="text-lg font-medium text-fg">{reel.title}</h2>
-          {reel.description ? <p className="text-sm text-fgbody">{reel.description}</p> : null}
-
-          <div className="mt-1 flex flex-wrap items-center gap-3">
-            <a
-              href={localePath(locale, "/book-call")}
-              onClick={onCta}
-              className="inline-flex items-center justify-center rounded-pill bg-gold px-5 py-2.5 text-sm font-medium text-gold-ink transition-colors hover:bg-gold-light focus-gold"
-            >
-              {t.cta}
-            </a>
-            {reel.client?.slug ? (
-              <a
-                href={localePath(locale, `/case-studies/${reel.client.slug}`)}
-                onClick={onCta}
-                className="inline-flex items-center justify-center rounded-pill border border-hair px-5 py-2.5 text-sm font-medium text-fg transition-colors hover:border-gold/60 focus-gold"
-              >
-                {t.caseStudy}
-              </a>
-            ) : null}
-          </div>
-        </div>
+          </>
+        ) : (
+          <HostedPlayer
+            key={reel.id}
+            reel={reel}
+            onComplete={() => trackEvent({ event: "reel_complete", reelId: reel.id, locale })}
+          >
+            <Caption
+              reel={reel}
+              locale={locale}
+              t={t}
+              index={index}
+              total={total}
+              onCta={onCta}
+            />
+          </HostedPlayer>
+        )}
       </div>
     </div>,
     document.body,
+  );
+}
+
+/** Title, client and actions, laid over the video rather than beneath it. */
+function Caption({
+  reel,
+  locale,
+  t,
+  index,
+  total,
+  onCta,
+}: {
+  reel: ReelItem;
+  locale: Locale;
+  t: (typeof COPY)[Locale];
+  index: number;
+  total: number;
+  onCta: () => void;
+}) {
+  return (
+    <div className="text-white">
+      <div className="flex items-center justify-between gap-3">
+        {reel.client?.name ? (
+          <span className="mono text-[10.5px] uppercase text-gold">{reel.client.name}</span>
+        ) : (
+          <span />
+        )}
+        {total > 1 ? (
+          <span className="mono ltr-island text-[10.5px] text-white/70">
+            {t.counter(index + 1, total)}
+          </span>
+        ) : null}
+      </div>
+
+      <h2 className="mt-1.5 font-display text-[17px] font-semibold leading-snug">{reel.title}</h2>
+      {reel.description ? (
+        <p className="mt-1 line-clamp-2 text-[13.5px] leading-relaxed text-white/75">
+          {reel.description}
+        </p>
+      ) : null}
+
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <a
+          href={localePath(locale, "/book-call")}
+          onClick={onCta}
+          className="focus-gold inline-flex items-center rounded-btn bg-white px-4 py-2 font-display text-[13.5px] font-semibold text-ink transition-colors hover:bg-gold"
+        >
+          {t.cta}
+        </a>
+        {reel.client?.slug ? (
+          <a
+            href={localePath(locale, `/case-studies/${reel.client.slug}`)}
+            onClick={onCta}
+            className="focus-gold inline-flex items-center rounded-btn border border-white/35 px-4 py-2 font-display text-[13.5px] font-semibold text-white transition-colors hover:border-white"
+          >
+            {t.caseStudy}
+          </a>
+        ) : null}
+      </div>
+    </div>
   );
 }

@@ -45,6 +45,9 @@ export function StatCell({
   if (!hasStat(value)) return null;
 
   const numeric = kind === "number" || (kind === "auto" && isNumericStat(value));
+  // Only a bare integer may count up. "24/7" and "4–8" read as numeric but
+  // would be destroyed by an animation that writes a running total.
+  const countable = numeric && /^\d+$/.test(String(value).trim());
 
   return (
     <div className={cn("min-w-0", className)}>
@@ -55,6 +58,7 @@ export function StatCell({
             ? "text-[30px] tracking-[-0.02em] tabular-nums"
             : "text-[17px] font-semibold leading-tight",
         )}
+        {...(countable ? { "data-count": String(value) } : {})}
       >
         {value}
       </div>

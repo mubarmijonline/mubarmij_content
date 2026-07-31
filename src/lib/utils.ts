@@ -40,5 +40,11 @@ export function localePath(locale: string, path = "/") {
  */
 export function cmsMedia(url?: string | null): string {
   if (!url) return "";
-  return url.replace(/^https?:\/\/localhost(:\d+)?/i, "").replace(/^https?:\/\/127\.0\.0\.1(:\d+)?/i, "");
+  return url
+    .replace(/^https?:\/\/localhost(:\d+)?/i, "")
+    .replace(/^https?:\/\/127\.0\.0\.1(:\d+)?/i, "")
+    // Reels come back pointing at the public origin. Left absolute, next/image
+    // optimises them by making a public HTTPS request back to this same server
+    // — a pointless round-trip through nginx and TLS on every cache miss.
+    .replace(/^https?:\/\/(www\.)?mubarmijonline\.com/i, "");
 }

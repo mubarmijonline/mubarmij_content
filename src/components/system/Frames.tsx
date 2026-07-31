@@ -71,5 +71,7 @@ export function PhoneFrame({
 
 /** Navy band with the 44px gold grid — the hero's right column. */
 export function DarkPanel({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("surf-dark grid-well relative", className)}>{children}</div>;
+  return (
+    <div className={cn("surf-dark grid-well relative", className)}>{children}</div>
+  );
 }

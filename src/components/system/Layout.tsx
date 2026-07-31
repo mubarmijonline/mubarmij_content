@@ -111,16 +111,17 @@ export function HairGrid({
     5: "lg:grid-cols-5",
   } as const;
 
-  // Inline gutter. -ms-5 is the padding; -me-[21px] is the padding plus the 1px
-  // of trailing rule. A single-column grid has no interior rules, so it only
+  // Inline gutter, symmetric at exactly the cell padding. It must not exceed
+  // the shell's own padding: an earlier -me-[21px] (padding + the trailing
+  // rule) pushed the grid 1px past the viewport and gave every mobile page a
+  // horizontal scroll. A single-column grid has no interior rules, so it only
   // takes the gutter once it actually splits into columns at md.
   const gutter =
-    cols > 1
-      ? "[&>*]:px-5 -ms-5 -me-[21px]"
-      : "-me-px md:[&>*]:px-5 md:-ms-5 md:-me-[21px]";
+    cols > 1 ? "[&>*]:px-5 -ms-5 -me-5" : "md:[&>*]:px-5 md:-ms-5 md:-me-5";
 
   return (
     <div
+      data-gsap="stagger"
       className={cn(
         "-mb-px grid",
         gutter,

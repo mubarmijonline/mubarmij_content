@@ -4,6 +4,7 @@ import { Poppins, DM_Sans, JetBrains_Mono, Cairo } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import dynamic from "next/dynamic";
 
 import { locales, localeDirection, type Locale } from "@/i18n/config";
 import { SITE_URL } from "@/lib/site";
@@ -12,6 +13,10 @@ import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
 import AnalyticsScripts from "@/components/layout/AnalyticsScripts";
 import VisitTracker from "@/components/layout/VisitTracker";
+
+const GsapEffects = dynamic(() => import("@/components/effects/GsapEffects"), {
+  ssr: false,
+});
 
 // Four families total (ADR-008). Poppins = display, DM Sans = body,
 // JetBrains Mono = mono accents, Cairo = every Arabic role.
@@ -146,6 +151,7 @@ export default async function LocaleLayout({
         </NextIntlClientProvider>
         <AnalyticsScripts />
         <VisitTracker locale={locale} />
+        <GsapEffects />
       </body>
     </html>
   );

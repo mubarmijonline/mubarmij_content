@@ -163,13 +163,26 @@ body {
   background-size: 44px 44px;
 }
 
-/* Marquee: one keyframe, sign-flipped per direction. */
+/* Marquee. Defined here rather than in the Tailwind config: Tailwind only
+   emits @keyframes for animations referenced by an animate-* utility, and
+   this one is driven by a plain class, so a config-side keyframe was never
+   generated and the track sat still. Two explicit keyframes instead of one
+   sign-flipped by a custom property — a var inside the translate is exactly
+   the kind of thing that silently fails to interpolate. */
+@keyframes mq-ltr {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes mq-rtl {
+  from { transform: translateX(0); }
+  to   { transform: translateX(50%); }
+}
 .mq-track {
-  animation: mq 36s linear infinite;
+  animation: mq-ltr 36s linear infinite;
   will-change: transform;
 }
 [dir="rtl"] .mq-track {
-  --mq-dir: -1;
+  animation-name: mq-rtl;
 }
 .mq-wrap:hover .mq-track {
   animation-play-state: paused;

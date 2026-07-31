@@ -20,7 +20,7 @@ export function SectionEyebrow({
   className?: string;
 }) {
   return (
-    <p className={cn("eyebrow mono text-eyebrow font-medium uppercase text-accent", className)}>
+    <p data-gsap="rise" className={cn("eyebrow mono text-eyebrow font-medium uppercase text-accent", className)}>
       {index ? (
         <>
           <span className="ltr-island">{index}</span>
