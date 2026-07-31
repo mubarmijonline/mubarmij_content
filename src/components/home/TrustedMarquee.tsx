@@ -54,15 +54,14 @@ export default function TrustedMarquee({
 }
 
 /**
- * Logos sit on a tinted chip. The design assumed flat grey wordmarks; the real
- * assets are full-colour PNGs at inconsistent aspect ratios, and some (AURA)
- * are pure white on transparent — invisible on any light surface.
+ * Logos render in their own brand colours, on a tinted chip.
  *
- * `darkCard` is the CMS's own flag for that case. It is currently unset on
- * every document, so the drop-shadow outline is what actually carries this:
- * it gives a white logo a visible edge while staying imperceptible on a dark
- * or coloured one. Ticking "dark card" in the CMS upgrades that logo to a
- * proper dark chip.
+ * The chip and the hairline outline exist because the real assets are
+ * full-colour PNGs at inconsistent aspect ratios, and some (AURA) are pure
+ * white on transparent — invisible on any light surface. The drop-shadow
+ * gives a white logo a visible edge while staying imperceptible on a dark or
+ * saturated one, so no logo depends on the CMS `darkCard` flag being set.
+ * Ticking "dark card" on a document still upgrades it to a proper dark chip.
  */
 function Logo({ entry }: { entry: LogoEntry }) {
   const src = cmsMedia(entry.src);
@@ -78,8 +77,8 @@ function Logo({ entry }: { entry: LogoEntry }) {
         alt={entry.name}
         fill
         sizes="132px"
-        className={`object-contain p-2 opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0 ${
-          entry.darkCard ? "" : "[filter:grayscale(1)_drop-shadow(0_0_1px_rgba(10,22,40,0.6))]"
+        className={`object-contain p-2 ${
+          entry.darkCard ? "" : "[filter:drop-shadow(0_0_1px_rgba(10,22,40,0.45))]"
         }`}
       />
     </span>

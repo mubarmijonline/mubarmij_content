@@ -80,9 +80,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     services.length ? "capabilities" : null,
     "stack",
     work.length ? "work" : null,
+    // Reels sit with Selected Work — the same projects, in motion — rather
+    // than near the foot of the page where they were rarely reached.
+    reels.length ? "reels" : null,
     hasProof ? "proof" : null,
     "process",
-    reels.length ? "reels" : null,
     faq.length ? "faq" : null,
   ].filter(Boolean) as string[];
   const n = (key: string) => {
@@ -105,9 +107,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <Capabilities locale={locale} index={n("capabilities")} services={services} />
       <Stack locale={locale} index={n("stack")} />
       <SelectedWork locale={locale} index={n("work")} clients={work} />
+      <ReelsRow locale={locale} reels={reels} index={n("reels")} showAll />
       <Proof locale={locale} index={n("proof")} about={about} testimonials={testimonials} />
       <Process locale={locale} index={n("process")} />
-      <ReelsRow locale={locale} reels={reels} index={n("reels")} showAll />
       <FaqSection locale={locale} index={n("faq")} items={faq} />
       <CTAPanel
         title={t.ctaTitle}
