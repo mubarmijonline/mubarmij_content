@@ -111,6 +111,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <Proof locale={locale} index={n("proof")} about={about} testimonials={testimonials} />
       <Process locale={locale} index={n("process")} />
       <FaqSection locale={locale} index={n("faq")} items={faq} />
+      {/* Second pass at the foot of the page — the logos are the last thing a
+          visitor sees before the closing call to action. */}
+      <TrustedMarquee locale={locale} logos={logos} variant="closing" />
       <CTAPanel
         title={t.ctaTitle}
         subtitle={t.ctaSub}

@@ -69,11 +69,7 @@ export function CTAPanel({
             <DarkButton size="lg" href={ctaHref}>
               {ctaLabel}
             </DarkButton>
-            <WhatsAppButton
-              size="lg"
-              message={whatsappMessage}
-              className="border border-hairbtn bg-transparent text-fg hover:border-ink hover:bg-transparent hover:text-fg"
-            >
+            <WhatsAppButton size="lg" tone="outline" message={whatsappMessage}>
               {whatsappLabel}
             </WhatsAppButton>
           </div>

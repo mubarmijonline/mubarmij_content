@@ -89,15 +89,30 @@ export function WhatsAppButton({
   size = "md",
   className,
   message,
+  tone = "solid",
   children,
   ...props
-}: BaseProps & { message?: string; /** @deprecated the brand icon replaced it */ dot?: boolean }) {
+}: BaseProps & {
+  message?: string;
+  /** Real variants, not className overrides — Tailwind resolves conflicting
+   *  utilities by stylesheet order, so an override could lose silently. */
+  tone?: "solid" | "outline";
+  /** @deprecated the brand icon replaced it */
+  dot?: boolean;
+}) {
   return (
     <Inner
       {...props}
       external
       href={props.href || whatsappLink(message)}
-      className={cn(BASE, SIZES[size], "bg-ink text-white hover:bg-gold hover:text-ink", className)}
+      className={cn(
+        BASE,
+        SIZES[size],
+        tone === "outline"
+          ? "border border-hairbtn text-fg hover:border-ink"
+          : "bg-ink text-white hover:bg-gold hover:text-ink",
+        className,
+      )}
     >
       <WhatsAppIcon size={18} />
       {children}
